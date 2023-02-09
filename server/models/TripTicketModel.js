@@ -6,8 +6,8 @@ const TripTicketSchema = new Schema(
     ambulance_personnel: {
       type: Schema.Types.ObjectId,
       ref: "Users",
-      required: true,
     },
+    ambulance: { type: Schema.Types.ObjectId, ref: "Ambulance" },
     destination: { type: String },
   },
   { timestamps: true }

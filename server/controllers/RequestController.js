@@ -5,9 +5,9 @@ const { sendHTTPResponse } = require("../helpers/sendResponseStatus");
 
 //GET all the requests
 const getAllRequests = async (req, res) => {
-  const all_requests = await Request.find().sort({ createdAt: 1 });
-
+  
   try {
+    const all_requests = await Request.find().sort({ createdAt: 1 });
     if (all_requests.length === 0) {
       return createError("No requests found.");
     }

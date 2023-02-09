@@ -6,6 +6,7 @@ const logger = require("morgan");
 const http = require("http");
 const requests = require("./routes/requests");
 const ambulance = require("./routes/ambulance");
+const ticket = require("./routes/ticket");
 
 require("dotenv").config();
 
@@ -21,6 +22,7 @@ app.use(logger("dev"));
 //routes
 app.use("/api/request", requests);
 app.use("/api/ambulance", ambulance);
+app.use("/api/ticket", ticket);
 
 mongoose.set("strictQuery", true);
 mongoose.connect(process.env.MONGODB_URI, {
