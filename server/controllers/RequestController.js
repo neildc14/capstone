@@ -55,7 +55,7 @@ const postRequest = async (req, res) => {
   }
 };
 
-//EDIT existing request
+//UPDATE existing request
 const putRequest = async (req, res) => {
   const { id } = req.params;
 
@@ -90,11 +90,6 @@ const deleteRequest = async (req, res) => {
   try {
     if (isNotValidObjectId(id)) {
       return createError("Invalid ID.");
-    }
-
-    const request = await Request.findOne({ _id: id }).exec();
-    if (!request) {
-      return createError("No request found.");
     }
 
     const deleted_request = await Request.findOneAndDelete({ _id: id });

@@ -1,11 +1,16 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+/*
+  @request_id: requuired 
+
+*/
+
 const RequestSchema = new Schema(
   {
     requestor_id: { type: Schema.Types.ObjectId, ref: "User" },
     location: { type: String, required: true },
-    status: {
+    status: {       
       type: String,
       default: "pending",
       enum: ["pending", "approved", "fulfilled"],
