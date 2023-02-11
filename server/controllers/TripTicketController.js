@@ -16,7 +16,7 @@ const getAllTripTicket = async (req, res) => {
 };
 
 //GET specific trip ticket
-const getTripTicket = async (req, res) => {
+const getTripTicket = async (req, res) => { 
   const { id } = req.params;
   try {
     if (isNotValidObjectId(id)) {

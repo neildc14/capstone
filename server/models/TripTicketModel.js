@@ -8,7 +8,7 @@ const TripTicketSchema = new Schema(
       ref: "Users",
     },
     ambulance: { type: Schema.Types.ObjectId, ref: "Ambulance" },
-    destination: { type: String },
+    destination: { type: String, required:true },
   },
   { timestamps: true }
 );

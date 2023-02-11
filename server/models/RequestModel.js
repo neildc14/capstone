@@ -8,13 +8,12 @@ const Schema = mongoose.Schema;
 
 const RequestSchema = new Schema(
   {
-    requestor_id: { type: Schema.Types.ObjectId, ref: "User" },
-    location: { type: String, required: true },
-    status: {       
+    requestor_id: { type: Schema.Types.ObjectId, ref: "User" }, //required
+    location: { type: String },
+    status: {
       type: String,
       default: "pending",
       enum: ["pending", "approved", "fulfilled"],
-      required: true,
     },
     referral_slip: { data: Buffer, contentType: String },
   },

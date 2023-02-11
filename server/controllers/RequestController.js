@@ -3,9 +3,9 @@ const createError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
 const { sendHTTPResponse } = require("../helpers/sendResponseStatus");
 
+
 //GET all the requests
 const getAllRequests = async (req, res) => {
-  
   try {
     const all_requests = await Request.find().sort({ createdAt: 1 });
     if (all_requests.length === 0) {
@@ -41,6 +41,7 @@ const postRequest = async (req, res) => {
   const { requestor_id, location, status } = req.body;
 
   try {
+
     const new_request = await Request.create({
       requestor_id,
       location,

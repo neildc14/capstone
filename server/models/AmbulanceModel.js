@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const AmbulanceSchema = new Schema(
   {
-    license_plate: { type: String, required: true },
+    license_plate: { type: String, required: true }, 
     status: {
       type: String,
       default: "available",
