@@ -1,14 +1,17 @@
 const TripTicket = require("../models/TripTicketModel");
-const createError = require("../helpers/createError");
+const throwError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const { isEmpty } = require("../helpers/validateRequest");
+const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 
 const getAllTripTicket = async (req, res) => {
   try {
     const all_trip_tickets = await TripTicket.find().sort({ createdAt: 1 });
+
+    let errorMessage = "No trip tickets were found";
     if (all_trip_tickets.length === 0) {
-      createError("No trip tickets were found");
+      throwError(errorMessage);
     }
     const success = new HTTPResponse(res, 200, all_trip_tickets);
     return success.sendResponse();
@@ -22,16 +25,15 @@ const getAllTripTicket = async (req, res) => {
 const getTripTicket = async (req, res) => {
   const { id } = req.params;
   try {
+    let errorMessage = "Invalid ID.";
     if (isNotValidObjectId(id)) {
-      createError("Invalid ID.");
+      throwError(errorMessage);
     }
 
     const trip_ticket = await TripTicket.findOne({ _id: id }).exec();
 
-    if (!trip_ticket) {
-      createError("Trip ticket not found.");
-    }
-
+    errorMessage = "Trip ticket not found.";
+    validateInstanceMethod(trip_ticket, errorMessage);
     const success = new HTTPResponse(res, 200, trip_ticket);
     return success.sendResponse();
   } catch (error) {
@@ -44,8 +46,8 @@ const getTripTicket = async (req, res) => {
 const postTripTicket = async (req, res) => {
   const { ambulance_personnel, ambulance, destination } = req.body;
   try {
-    //validate request body
-    isEmpty(destination, "Destination is not defined.");
+    let errorMessage = "Destination is not defined.";
+    isEmpty(destination, errorMessage);
 
     const new_trip_ticket = await TripTicket.create({
       ambulance_personnel,
@@ -53,10 +55,8 @@ const postTripTicket = async (req, res) => {
       destination,
     });
 
-    if (!new_trip_ticket) {
-      createError("Failed to create new trip ticket");
-    }
-
+    errorMessage = "Failed to create new trip ticket";
+    validateInstanceMethod(new_trip_ticket);
     const success = new HTTPResponse(res, 200, new_trip_ticket);
     return success.sendResponse();
   } catch (error) {
@@ -69,27 +69,27 @@ const postTripTicket = async (req, res) => {
 const putTripTicket = async (req, res) => {
   const { id } = req.params;
   try {
+    let errorMessage = "Invalid ID.";
     if (isNotValidObjectId(id)) {
-      createError("Invalid ID.");
+      throwError(errorMessage);
     }
 
     const trip_ticket = await TripTicket.findOne({ _id: id }).exec();
-    if (!trip_ticket) {
-      createError("Trip ticket not found.");
-    }
 
-    //validate request body
-    isEmpty(req.body.destination, "Destination is not defined.");
+    errorMessage = "Trip ticket not found.";
+    validateInstanceMethod(trip_ticket, errorMessage);
+
+    errorMessage = "Destination is not defined.";
+    const destination = req.body.destination;
+    isEmpty(destination, errorMessage);
 
     const updated_trip_ticket = await TripTicket.findOneAndUpdate({
       id,
       ...req.body,
     });
 
-    if (!updated_trip_ticket) {
-      createError("Failed to update trip ticket.");
-    }
-
+    errorMessage = "Failed to update trip ticket.";
+    validateInstanceMethod(updated_trip_ticket, errorMessage);
     const success = new HTTPResponse(res, 201, updated_trip_ticket);
     return success.sendResponse();
   } catch (error) {
@@ -102,12 +102,10 @@ const putTripTicket = async (req, res) => {
 const deleteTripTicket = async (req, res) => {
   const { id } = req.params;
   try {
-    const delete_trip_ticket = await TripTicket.findOneAndDelete({ _id: id });
+    const deleted_trip_ticket = await TripTicket.findOneAndDelete({ _id: id });
 
-    if (!delete_trip_ticket) {
-      createError("Failed to delete trip ticket.");
-    }
-
+    let errorMessage = "Failed to delete trip ticket.";
+    validateInstanceMethod(deleted_trip_ticket, errorMessage);
     const success = new HTTPResponse(res, 200, {
       message: "Trip ticket deleted successfully!",
     });

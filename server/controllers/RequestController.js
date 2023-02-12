@@ -3,13 +3,15 @@ const createError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const { isEmpty } = require("../helpers/validateRequest");
+const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 
 //GET all the requests
 const getAllRequests = async (req, res) => {
   try {
     const all_requests = await Request.find().sort({ createdAt: 1 });
+    let errorMessage = "No requests found.";
     if (all_requests.length === 0) {
-      return createError("No requests found.");
+      return createError(errorMessage);
     }
     const success = new HTTPResponse(res, 200, all_requests);
     return success.sendResponse();
@@ -24,14 +26,15 @@ const getRequest = async (req, res) => {
   const { id } = req.params;
 
   try {
+    let errorMessage = "Invalid ID";
     if (isNotValidObjectId(id)) {
-      return createError("Invalid ID");
+      return createError(errorMessage);
     }
 
     const request = await Request.findOne({ _id: id }).exec();
-    if (!request) {
-      return createError("No request found.");
-    }
+
+    errorMessage = "No request found.";
+    validateInstanceMethod(request, errorMessage);
     const success = new HTTPResponse(res, 200, request);
     return success.sendResponse();
   } catch (error) {
@@ -45,8 +48,8 @@ const postRequest = async (req, res) => {
   const { requestor_id, location, status } = req.body;
 
   try {
-    //validate request body
-    isEmpty(location, "Location is not defined");
+    let errorMessage = "Location is not defined";
+    isEmpty(location, errorMessage);
 
     const new_request = await Request.create({
       requestor_id,
@@ -54,10 +57,8 @@ const postRequest = async (req, res) => {
       status,
     });
 
-    if (!new_request) {
-      return createError("Failed to post request.");
-    }
-
+    errorMessage = "Failed to post request.";
+    validateInstanceMethod(new_request, errorMessage);
     const success = new HTTPResponse(res, 200, new_request);
     return success.sendResponse();
   } catch (error) {
@@ -71,27 +72,27 @@ const putRequest = async (req, res) => {
   const { id } = req.params;
 
   try {
+    let errorMessage = "Invalid ID";
     if (isNotValidObjectId(id)) {
-      return createError("Invalid ID");
+      return createError(errorMessage);
     }
 
     const request = await Request.findOne({ _id: id }).exec();
-    if (!request) {
-      return createError("No request found.");
-    }
 
-    //validate request body
-    isEmpty(req.body.location, "Location is not defined");
+    errorMessage = "No request found.";
+    validateInstanceMethod(request, errorMessage);
+
+    errorMessage = "Location is not defined";
+    const location = req.body.location;
+    isEmpty(location, errorMessage);
 
     const updated_request = await Request.findOneAndUpdate({
       id,
       ...req.body,
     });
 
-    if (!updated_request) {
-      return createError("Failed to update request.");
-    }
-
+    errorMessage = "Failed to update request.";
+    validateInstanceMethod(updated_request, errorMessage);
     const success = new HTTPResponse(res, 201, updated_request);
     return success.sendResponse();
   } catch (error) {
@@ -105,15 +106,15 @@ const deleteRequest = async (req, res) => {
   const { id } = req.params;
 
   try {
+    let errorMessage = "Invalid ID.";
     if (isNotValidObjectId(id)) {
-      return createError("Invalid ID.");
+      return createError(errorMessage);
     }
 
     const deleted_request = await Request.findOneAndDelete({ _id: id });
-    if (!deleted_request) {
-      return createError("Failed to delete request");
-    }
 
+    errorMessage = "Failed to delete request";
+    validateInstanceMethod(deleted_request, errorMessage);
     const success = new HTTPResponse(res, 200, {
       message: "Request deleted successfully!",
     });

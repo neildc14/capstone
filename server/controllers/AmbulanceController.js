@@ -84,7 +84,8 @@ const putAmbulance = async (req, res) => {
     validateInstanceMethod(ambulance, errorMessage);
 
     errorMessage = "License plate is not defined.";
-    isEmpty(req.body.license_plate, errorMessage);
+    const license_plate = req.body.license_plate;
+    isEmpty(license_plate, errorMessage);
 
     const updated_ambulance = await Ambulance.findOneAndUpdate({
       id,
@@ -124,7 +125,7 @@ const deleteAmbulance = async (req, res) => {
 };
 
 module.exports = {
-  getAllAmbulance, 
+  getAllAmbulance,
   getAmbulance,
   postAmbulance,
   putAmbulance,
