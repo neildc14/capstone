@@ -1,15 +1,17 @@
 const Ambulance = require("../models/AmbulanceModel");
 const { sendHTTPResponse } = require("../helpers/sendResponseStatus");
-const createError = require("../helpers/createError");
+const throwError = require("../helpers/createError");
 const isNotObjectId = require("../helpers/validateObjectId");
 const { isEmpty } = require("../helpers/validateRequest");
-
+const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 //GET all ambulance
 const getAllAmbulance = async (req, res) => {
   try {
     const all_ambulance = await Ambulance.find().sort({ createdAt: 1 });
+
+    let errorMessage = "No ambulances found";
     if (all_ambulance.length === 0) {
-      createError("No ambulances found");
+      throwError(errorMessage);
     }
     sendHTTPResponse(res, 200, all_ambulance);
   } catch (error) {
@@ -22,14 +24,15 @@ const getAmbulance = async (req, res) => {
   const { id } = req.params;
 
   try {
+    let errorMessage = "Invalid ID.";
     if (isNotObjectId(id)) {
-      createError("Invalid ID.");
+      throwError(errorMessage);
     }
 
     const ambulance = await Ambulance.findOne({ _id: id }).exec();
-    if (!ambulance) {
-      createError("No ambulance found");
-    }
+
+    errorMessage = "No ambulance found.";
+    validateInstanceMethod(ambulance, errorMessage);
     sendHTTPResponse(res, 200, ambulance);
   } catch (error) {
     sendHTTPResponse(res, 400, error.message);
@@ -40,17 +43,16 @@ const getAmbulance = async (req, res) => {
 const postAmbulance = async (req, res) => {
   const { license_plate, status } = req.body;
   try {
-    //validate request body
-    isEmpty(license_plate, "License plate is not defined.");
+    let errorMessage = "License plate is not defined.";
+    isEmpty(license_plate, errorMessage);
 
     const new_ambulance = await Ambulance.create({
       license_plate,
       status,
     });
 
-    if (!new_ambulance) {
-      createError("Failed to create new ambulance");
-    }
+    errorMessage = "Failed to create new ambulance";
+    validateInstanceMethod(new_ambulance, errorMessage);
     sendHTTPResponse(res, 200, new_ambulance);
   } catch (error) {
     sendHTTPResponse(res, 400, error.message);
@@ -61,25 +63,26 @@ const postAmbulance = async (req, res) => {
 const putAmbulance = async (req, res) => {
   const { id } = req.params;
   try {
+    let errorMessage = "Invalid ID.";
     if (isNotObjectId(id)) {
-      createError("Invalid ID.");
+      throwError(errorMessage);
     }
 
     const ambulance = await Ambulance.findOne({ _id: id }).exec();
-    if (!ambulance) {
-      createError("No ambulance found");
-    }
 
-    //validate request body
-    isEmpty(req.body.license_plate, "License plate is not defined.");
+    errorMessage = "No ambulance found";
+    validateInstanceMethod(ambulance, errorMessage);
+
+    errorMessage = "License plate is not defined.";
+    isEmpty(req.body.license_plate, errorMessage);
 
     const updated_ambulance = await Ambulance.findOneAndUpdate({
       id,
       ...req.body,
     });
-    if (!updated_ambulance) {
-      createError("Failed to update ambulance status.");
-    }
+
+    errorMessage = "Failed to update ambulance status.";
+    validateInstanceMethod(updated_ambulance, errorMessage);
     sendHTTPResponse(res, 201, updated_ambulance);
   } catch (error) {
     sendHTTPResponse(res, 400, error.message);
@@ -90,13 +93,14 @@ const putAmbulance = async (req, res) => {
 const deleteAmbulance = async (req, res) => {
   const { id } = req.params;
   try {
+    let errorMessage = "Invalid ID.";
     if (isNotObjectId(id)) {
-      createError("Invalid ID.");
+      throwError(errorMessage);
     }
     const deleted_ambulance = await Ambulance.findOneAndDelete({ _id: id });
-    if (!deleted_ambulance) {
-      createError("Failed to deleted ambulance");
-    }
+
+    errorMessage = "Failed to deleted ambulance";
+    validateInstanceMethod(deleted_ambulance, errorMessage);
     sendHTTPResponse(res, 200, { message: "Ambulance deleted successfully!" });
   } catch (error) {
     sendHTTPResponse(res, 400, error.message);
