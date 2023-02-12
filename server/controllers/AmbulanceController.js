@@ -1,8 +1,5 @@
 const Ambulance = require("../models/AmbulanceModel");
-const {
-  sendHTTPErrorResponse,
-  HTTPResponse,
-} = require("../helpers/sendResponseStatus");
+const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const throwError = require("../helpers/createError");
 const isNotObjectId = require("../helpers/validateObjectId");
 const { isEmpty } = require("../helpers/validateRequest");
@@ -112,7 +109,7 @@ const deleteAmbulance = async (req, res) => {
     }
     const deleted_ambulance = await Ambulance.findOneAndDelete({ _id: id });
 
-    errorMessage = "Failed to deleted ambulance";
+    errorMessage = "Failed to delete ambulance";
     validateInstanceMethod(deleted_ambulance, errorMessage);
     const success = new HTTPResponse(res, 200, {
       message: "Ambulance deleted successfully!",
