@@ -1,7 +1,7 @@
 const Request = require("../models/RequestModel");
 const createError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
-const { sendHTTPResponse } = require("../helpers/sendResponseStatus");
+const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const { isEmpty } = require("../helpers/validateRequest");
 
 //GET all the requests
@@ -11,9 +11,11 @@ const getAllRequests = async (req, res) => {
     if (all_requests.length === 0) {
       return createError("No requests found.");
     }
-    sendHTTPResponse(res, 200, all_requests);
+    const success = new HTTPResponse(res, 200, all_requests);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, { message: error.message });
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -30,9 +32,11 @@ const getRequest = async (req, res) => {
     if (!request) {
       return createError("No request found.");
     }
-    sendHTTPResponse(res, 200, request);
+    const success = new HTTPResponse(res, 200, request);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, { message: error.message });
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -49,12 +53,16 @@ const postRequest = async (req, res) => {
       location,
       status,
     });
+
     if (!new_request) {
       return createError("Failed to post request.");
     }
-    sendHTTPResponse(res, 200, new_request);
+
+    const success = new HTTPResponse(res, 200, new_request);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, { message: error.message });
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -83,9 +91,12 @@ const putRequest = async (req, res) => {
     if (!updated_request) {
       return createError("Failed to update request.");
     }
-    sendHTTPResponse(res, 201, updated_request);
+
+    const success = new HTTPResponse(res, 201, updated_request);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, { message: error.message });
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -102,11 +113,14 @@ const deleteRequest = async (req, res) => {
     if (!deleted_request) {
       return createError("Failed to delete request");
     }
-    sendHTTPResponse(res, 200, {
+
+    const success = new HTTPResponse(res, 200, {
       message: "Request deleted successfully!",
     });
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, { message: error.message });
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 

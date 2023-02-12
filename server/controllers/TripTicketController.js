@@ -1,7 +1,7 @@
 const TripTicket = require("../models/TripTicketModel");
 const createError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
-const { sendHTTPResponse } = require("../helpers/sendResponseStatus");
+const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const { isEmpty } = require("../helpers/validateRequest");
 
 const getAllTripTicket = async (req, res) => {
@@ -10,9 +10,11 @@ const getAllTripTicket = async (req, res) => {
     if (all_trip_tickets.length === 0) {
       createError("No trip tickets were found");
     }
-    sendHTTPResponse(res, 200, all_trip_tickets);
+    const success = new HTTPResponse(res, 200, all_trip_tickets);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, { message: error.message });
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -25,12 +27,16 @@ const getTripTicket = async (req, res) => {
     }
 
     const trip_ticket = await TripTicket.findOne({ _id: id }).exec();
+
     if (!trip_ticket) {
       createError("Trip ticket not found.");
     }
-    sendHTTPResponse(res, 200, trip_ticket);
+
+    const success = new HTTPResponse(res, 200, trip_ticket);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, { message: error.message });
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -46,12 +52,16 @@ const postTripTicket = async (req, res) => {
       ambulance,
       destination,
     });
+
     if (!new_trip_ticket) {
       createError("Failed to create new trip ticket");
     }
-    sendHTTPResponse(res, 200, new_trip_ticket);
+
+    const success = new HTTPResponse(res, 200, new_trip_ticket);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, { message: error.message });
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -75,12 +85,16 @@ const putTripTicket = async (req, res) => {
       id,
       ...req.body,
     });
+
     if (!updated_trip_ticket) {
       createError("Failed to update trip ticket.");
     }
-    sendHTTPResponse(res, 201, updated_trip_ticket);
+
+    const success = new HTTPResponse(res, 201, updated_trip_ticket);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, { message: error.message });
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -89,14 +103,18 @@ const deleteTripTicket = async (req, res) => {
   const { id } = req.params;
   try {
     const delete_trip_ticket = await TripTicket.findOneAndDelete({ _id: id });
+
     if (!delete_trip_ticket) {
       createError("Failed to delete trip ticket.");
     }
-    sendHTTPResponse(res, 200, {
+
+    const success = new HTTPResponse(res, 200, {
       message: "Trip ticket deleted successfully!",
     });
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, { message: error.message });
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
