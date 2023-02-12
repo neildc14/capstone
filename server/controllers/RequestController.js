@@ -2,7 +2,7 @@ const Request = require("../models/RequestModel");
 const createError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
 const { sendHTTPResponse } = require("../helpers/sendResponseStatus");
-
+const { isEmpty } = require("../helpers/validateRequest");
 
 //GET all the requests
 const getAllRequests = async (req, res) => {
@@ -41,6 +41,8 @@ const postRequest = async (req, res) => {
   const { requestor_id, location, status } = req.body;
 
   try {
+    //validate request body
+    isEmpty(location, "Location is not defined");
 
     const new_request = await Request.create({
       requestor_id,
@@ -69,6 +71,9 @@ const putRequest = async (req, res) => {
     if (!request) {
       return createError("No request found.");
     }
+
+    //validate request body
+    isEmpty(req.body.location, "Location is not defined");
 
     const updated_request = await Request.findOneAndUpdate({
       id,

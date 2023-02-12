@@ -2,6 +2,7 @@ const TripTicket = require("../models/TripTicketModel");
 const createError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
 const { sendHTTPResponse } = require("../helpers/sendResponseStatus");
+const { isEmpty } = require("../helpers/validateRequest");
 
 const getAllTripTicket = async (req, res) => {
   try {
@@ -16,7 +17,7 @@ const getAllTripTicket = async (req, res) => {
 };
 
 //GET specific trip ticket
-const getTripTicket = async (req, res) => { 
+const getTripTicket = async (req, res) => {
   const { id } = req.params;
   try {
     if (isNotValidObjectId(id)) {
@@ -37,6 +38,9 @@ const getTripTicket = async (req, res) => {
 const postTripTicket = async (req, res) => {
   const { ambulance_personnel, ambulance, destination } = req.body;
   try {
+    //validate request body
+    isEmpty(destination, "Destination is not defined.");
+
     const new_trip_ticket = await TripTicket.create({
       ambulance_personnel,
       ambulance,
@@ -63,6 +67,9 @@ const putTripTicket = async (req, res) => {
     if (!trip_ticket) {
       createError("Trip ticket not found.");
     }
+
+    //validate request body
+    isEmpty(req.body.destination, "Destination is not defined.");
 
     const updated_trip_ticket = await TripTicket.findOneAndUpdate({
       id,

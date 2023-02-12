@@ -9,7 +9,7 @@ const Schema = mongoose.Schema;
 const RequestSchema = new Schema(
   {
     requestor_id: { type: Schema.Types.ObjectId, ref: "User" }, //required
-    location: { type: String },
+    location: { type: String, required:true},
     status: {
       type: String,
       default: "pending",

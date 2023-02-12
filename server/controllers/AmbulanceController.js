@@ -2,6 +2,7 @@ const Ambulance = require("../models/AmbulanceModel");
 const { sendHTTPResponse } = require("../helpers/sendResponseStatus");
 const createError = require("../helpers/createError");
 const isNotObjectId = require("../helpers/validateObjectId");
+const { isEmpty } = require("../helpers/validateRequest");
 
 //GET all ambulance
 const getAllAmbulance = async (req, res) => {
@@ -39,6 +40,9 @@ const getAmbulance = async (req, res) => {
 const postAmbulance = async (req, res) => {
   const { license_plate, status } = req.body;
   try {
+    //validate request body
+    isEmpty(license_plate, "License plate is not defined.");
+
     const new_ambulance = await Ambulance.create({
       license_plate,
       status,
@@ -65,6 +69,9 @@ const putAmbulance = async (req, res) => {
     if (!ambulance) {
       createError("No ambulance found");
     }
+
+    //validate request body
+    isEmpty(req.body.license_plate, "License plate is not defined.");
 
     const updated_ambulance = await Ambulance.findOneAndUpdate({
       id,
