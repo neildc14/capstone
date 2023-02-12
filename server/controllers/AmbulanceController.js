@@ -1,9 +1,13 @@
 const Ambulance = require("../models/AmbulanceModel");
-const { sendHTTPResponse } = require("../helpers/sendResponseStatus");
+const {
+  sendHTTPErrorResponse,
+  HTTPResponse,
+} = require("../helpers/sendResponseStatus");
 const throwError = require("../helpers/createError");
 const isNotObjectId = require("../helpers/validateObjectId");
 const { isEmpty } = require("../helpers/validateRequest");
 const validateInstanceMethod = require("../helpers/validateInstanceMethod");
+
 //GET all ambulance
 const getAllAmbulance = async (req, res) => {
   try {
@@ -13,9 +17,11 @@ const getAllAmbulance = async (req, res) => {
     if (all_ambulance.length === 0) {
       throwError(errorMessage);
     }
-    sendHTTPResponse(res, 200, all_ambulance);
+    const success = new HTTPResponse(res, 200, all_ambulance);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, error.message);
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -33,9 +39,11 @@ const getAmbulance = async (req, res) => {
 
     errorMessage = "No ambulance found.";
     validateInstanceMethod(ambulance, errorMessage);
-    sendHTTPResponse(res, 200, ambulance);
+    const success = new HTTPResponse(res, 200, ambulance);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, error.message);
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -53,9 +61,11 @@ const postAmbulance = async (req, res) => {
 
     errorMessage = "Failed to create new ambulance";
     validateInstanceMethod(new_ambulance, errorMessage);
-    sendHTTPResponse(res, 200, new_ambulance);
+    const success = new HTTPResponse(res, 200, new_ambulance);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, error.message);
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -83,9 +93,11 @@ const putAmbulance = async (req, res) => {
 
     errorMessage = "Failed to update ambulance status.";
     validateInstanceMethod(updated_ambulance, errorMessage);
-    sendHTTPResponse(res, 201, updated_ambulance);
+    const success = new HTTPResponse(res, 201, updated_ambulance);
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, error.message);
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
@@ -101,14 +113,18 @@ const deleteAmbulance = async (req, res) => {
 
     errorMessage = "Failed to deleted ambulance";
     validateInstanceMethod(deleted_ambulance, errorMessage);
-    sendHTTPResponse(res, 200, { message: "Ambulance deleted successfully!" });
+    const success = new HTTPResponse(res, 200, {
+      message: "Ambulance deleted successfully!",
+    });
+    return success.sendResponse();
   } catch (error) {
-    sendHTTPResponse(res, 400, error.message);
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
   }
 };
 
 module.exports = {
-  getAllAmbulance,
+  getAllAmbulance, 
   getAmbulance,
   postAmbulance,
   putAmbulance,
