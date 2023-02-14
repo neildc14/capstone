@@ -16,3 +16,11 @@
 
 1. license_plate
 2. status(available, maintenance, travelling)
+
+//daily scheduled driver
+
+1. personnel from users
+
+//ambulance availability
+
+1. ambulance available
