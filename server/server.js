@@ -7,6 +7,7 @@ const http = require("http");
 const requests = require("./routes/requests");
 const ambulance = require("./routes/ambulance");
 const ticket = require("./routes/ticket");
+const users = require("./routes/users");
 
 require("dotenv").config();
 
@@ -23,6 +24,7 @@ app.use(logger("dev"));
 app.use("/api/request", requests);
 app.use("/api/ambulance", ambulance);
 app.use("/api/ticket", ticket);
+app.use("/api/auth", users);
 
 mongoose.set("strictQuery", true);
 mongoose.connect(process.env.MONGODB_URI, {
