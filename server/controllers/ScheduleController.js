@@ -38,7 +38,7 @@ const getSchedule = async (req, res) => {
 
     const schedule = await Schedule.findOne({ _id: id })
       .populate("scheduled_personnel", "firstname lastname")
-      .sort({ createdAt: 1 });
+      .sort({ createdAt: "desc" });
 
     errorMessage = "No schedule found.";
     validateInstanceMethod(schedule, errorMessage);

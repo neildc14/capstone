@@ -8,7 +8,7 @@ const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 //GET all ambulance
 const getAllAmbulance = async (req, res) => {
   try {
-    const all_ambulance = await Ambulance.find().sort({ createdAt: 1 });
+    const all_ambulance = await Ambulance.find().sort({ createdAt: "desc" });
 
     let errorMessage = "No ambulances found";
     if (all_ambulance.length === 0) {
