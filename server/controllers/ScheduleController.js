@@ -11,7 +11,7 @@ const getAllSchedule = async (req, res) => {
   try {
     const all_schedule = await Schedule.find()
       .populate("scheduled_personnel", "firstname lastname")
-      .sort({ createdAt: 1 });
+      .sort({ createdAt: "desc" });
 
     let errorMessage = "No schedules found.";
     if (all_schedule.length === 0) {

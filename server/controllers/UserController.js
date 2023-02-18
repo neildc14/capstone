@@ -1,7 +1,6 @@
 const User = require("../models/UserModel");
 const createToken = require("../helpers/createToken");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
-const validateInstacenMethod = require("../helpers/validateInstanceMethod");
 
 const signUp = async (req, res) => {
   const { firstname, lastname, email, password, user_type } = req.body;

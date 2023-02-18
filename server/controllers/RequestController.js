@@ -1,5 +1,5 @@
 const Request = require("../models/RequestModel");
-const createError = require("../helpers/createError");
+const throwError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const { isEmpty } = require("../helpers/validateRequest");
@@ -11,7 +11,7 @@ const getAllRequests = async (req, res) => {
     const all_requests = await Request.find().sort({ createdAt: 1 });
     let errorMessage = "No requests found.";
     if (all_requests.length === 0) {
-      return createError(errorMessage);
+      return throwError(errorMessage);
     }
     const success = new HTTPResponse(res, 200, all_requests);
     return success.sendResponse();
@@ -28,7 +28,7 @@ const getRequest = async (req, res) => {
   try {
     let errorMessage = "Invalid ID";
     if (isNotValidObjectId(id)) {
-      return createError(errorMessage);
+      return throwError(errorMessage);
     }
 
     const request = await Request.findOne({ _id: id }).exec();
@@ -74,7 +74,7 @@ const putRequest = async (req, res) => {
   try {
     let errorMessage = "Invalid ID";
     if (isNotValidObjectId(id)) {
-      return createError(errorMessage);
+      return throwError(errorMessage);
     }
 
     const request = await Request.findOne({ _id: id }).exec();
@@ -108,7 +108,7 @@ const deleteRequest = async (req, res) => {
   try {
     let errorMessage = "Invalid ID.";
     if (isNotValidObjectId(id)) {
-      return createError(errorMessage);
+      return throwError(errorMessage);
     }
 
     const deleted_request = await Request.findOneAndDelete({ _id: id });
