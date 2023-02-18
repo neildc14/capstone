@@ -3,19 +3,29 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 const throwError = require("../helpers/createError");
 
-const UserSchema = new Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  user_type: {
-    type: String,
-    default: "requestor",
-    enum: ["administrator", "ambulance_personnel", "requestor"],
+const UserSchema = new Schema(
+  {
+    firstname: { type: String, required: true },
+    lastname: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    user_type: {
+      type: String,
+      default: "requestor",
+      enum: ["administrator", "ambulance_personnel", "requestor"],
+    },
   },
-});
+  { toJSON: { virtuals: true } }
+);
 
+UserSchema.virtual("fullName").get(function () {
+  console.log(this.firstname, this.lastname);
+  return this.firstname + " " + this.lastname;
+});
+ 
 UserSchema.statics.signup = async function (
-  username,
+  firstname,
+  lastname,
   email,
   password,
   user_type
@@ -30,7 +40,8 @@ UserSchema.statics.signup = async function (
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
   const user = await this.create({
-    username,
+    firstname,
+    lastname,
     email,
     user_type,
     password: hash,

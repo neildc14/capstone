@@ -10,7 +10,7 @@ const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const getAllSchedule = async (req, res) => {
   try {
     const all_schedule = await Schedule.find()
-      .populate("scheduled_personnel", "username")
+      .populate("scheduled_personnel", "firstname lastname")
       .sort({ createdAt: 1 });
 
     let errorMessage = "No schedules found.";
@@ -37,9 +37,8 @@ const getSchedule = async (req, res) => {
     }
 
     const schedule = await Schedule.findOne({ _id: id })
-      .populate("scheduled_personnel", "username")
-      .sort({ createdAt: 1 })
-      .exec();
+      .populate("scheduled_personnel", "firstname lastname")
+      .sort({ createdAt: 1 });
 
     errorMessage = "No schedule found.";
     validateInstanceMethod(schedule, errorMessage);
