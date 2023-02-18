@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 const throwError = require("../helpers/createError");
-const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 
 const UserSchema = new Schema({
   username: { type: String, required: true },
