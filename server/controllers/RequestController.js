@@ -1,4 +1,5 @@
 const Request = require("../models/RequestModel");
+const User = require("../models/UserModel");
 const throwError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
@@ -8,7 +9,11 @@ const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 //GET all the requests
 const getAllRequests = async (req, res) => {
   try {
-    const all_requests = await Request.find().sort({ createdAt: 1 });
+    const all_requests = await Request.find()
+      .populate("requestor_id", "firstname lastname")
+      .sort({ createdAt: "desc" })
+      .exec();
+
     let errorMessage = "No requests found.";
     if (all_requests.length === 0) {
       return throwError(errorMessage);
@@ -31,7 +36,10 @@ const getRequest = async (req, res) => {
       return throwError(errorMessage);
     }
 
-    const request = await Request.findOne({ _id: id }).exec();
+    const request = await Request.findOne({ _id: id })
+      .populate("requestor_id", "firstname lastname")
+      .sort({ createdAt: "desc" })
+      .exec();
 
     errorMessage = "No request found.";
     validateInstanceMethod(request, errorMessage);
@@ -45,15 +53,24 @@ const getRequest = async (req, res) => {
 
 //POST new request
 const postRequest = async (req, res) => {
-  const { requestor_id, location, status } = req.body;
+  const { requestor_id, pickup_location, transfer_location, status } = req.body;
 
   try {
     let errorMessage = "Location is not defined";
-    isEmpty(location, errorMessage);
+    isEmpty(pickup_location, errorMessage);
+
+    errorMessage = "Requestor not found.";
+    if (isNotValidObjectId(requestor_id)) {
+      throwError(errorMessage);
+    }
+
+    const requestor = await User.findOne({ _id: requestor_id }).exec();
+    validateInstanceMethod(requestor, errorMessage);
 
     const new_request = await Request.create({
       requestor_id,
-      location,
+      pickup_location,
+      transfer_location,
       status,
     });
 
@@ -70,6 +87,7 @@ const postRequest = async (req, res) => {
 //UPDATE existing request
 const putRequest = async (req, res) => {
   const { id } = req.params;
+  const { pickup_location, requestor_id } = req.body;
 
   try {
     let errorMessage = "Invalid ID";
@@ -83,8 +101,15 @@ const putRequest = async (req, res) => {
     validateInstanceMethod(request, errorMessage);
 
     errorMessage = "Location is not defined";
-    const location = req.body.location;
-    isEmpty(location, errorMessage);
+    isEmpty(pickup_location, errorMessage);
+
+    errorMessage = "Requestor not found.";
+    if (isNotValidObjectId(requestor_id)) {
+      throwError(errorMessage);
+    }
+
+    const requestor = await User.findOne({ _id: requestor_id }).exec();
+    validateInstanceMethod(requestor, errorMessage);
 
     const updated_request = await Request.findOneAndUpdate({
       id,

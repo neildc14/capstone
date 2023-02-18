@@ -2,7 +2,7 @@ const Schedule = require("../models/ScheduleModel");
 const User = require("../models/UserModel");
 const throwError = require("../helpers/createError");
 const validateInstanceMethod = require("../helpers/validateInstanceMethod");
-const isNotObjectId = require("../helpers/validateObjectId");
+const isNotValidObjectId = require("../helpers/validateObjectId");
 const { isEmpty } = require("../helpers/validateRequest");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
 
@@ -32,7 +32,7 @@ const getSchedule = async (req, res) => {
 
   try {
     let errorMessage = "Invalid ID.";
-    if (isNotObjectId(id)) {
+    if (isNotValidObjectId(id)) {
       throwError(errorMessage);
     }
 
@@ -59,7 +59,7 @@ const postSchedule = async (req, res) => {
     isEmpty(scheduled_personnel, errorMessage);
 
     errorMessage = "Personnel not found.";
-    if (isNotObjectId(scheduled_personnel)) {
+    if (isNotValidObjectId(scheduled_personnel)) {
       throwError(errorMessage);
     }
 
@@ -88,7 +88,7 @@ const putSchedule = async (req, res) => {
 
   try {
     let errorMessage = "Invalid ID.";
-    if (isNotObjectId(id)) {
+    if (isNotValidObjectId(id)) {
       throwError(errorMessage);
     }
 
@@ -104,7 +104,7 @@ const putSchedule = async (req, res) => {
     isEmpty(status, errorMessage);
 
     errorMessage = "Personnel not found.";
-    if (isNotObjectId(scheduled_personnel)) {
+    if (isNotValidObjectId(scheduled_personnel)) {
       throwError(errorMessage);
     }
 
@@ -131,7 +131,7 @@ const deleteSchedule = async (req, res) => {
   const { id } = req.params;
   try {
     let errorMessage = "Invalid ID.";
-    if (isNotObjectId(id)) {
+    if (isNotValidObjectId(id)) {
       throwError(errorMessage);
     }
 
