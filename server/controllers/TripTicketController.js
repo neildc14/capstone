@@ -1,4 +1,6 @@
 const TripTicket = require("../models/TripTicketModel");
+const User = require("../models/UserModel");
+const Ambulance = require("../models/AmbulanceModel");
 const throwError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
@@ -7,7 +9,10 @@ const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 
 const getAllTripTicket = async (req, res) => {
   try {
-    const all_trip_tickets = await TripTicket.find().sort({ createdAt: 1 });
+    const all_trip_tickets = await TripTicket.find()
+      .populate("ambulance_personnel", "firstname lastname")
+      .populate("ambulance", "license_plate")
+      .sort({ createdAt: "desc" });
 
     let errorMessage = "No trip tickets were found";
     if (all_trip_tickets.length === 0) {
@@ -30,7 +35,11 @@ const getTripTicket = async (req, res) => {
       throwError(errorMessage);
     }
 
-    const trip_ticket = await TripTicket.findOne({ _id: id }).exec();
+    const trip_ticket = await TripTicket.findOne({ _id: id })
+      .populate("ambulance_personnel", "firstname lastname")
+      .populate("ambulance", "license_plate")
+      .sort({ createdAt: "desc" })
+      .exec();
 
     errorMessage = "Trip ticket not found.";
     validateInstanceMethod(trip_ticket, errorMessage);
@@ -45,9 +54,31 @@ const getTripTicket = async (req, res) => {
 //POST new trip ticket
 const postTripTicket = async (req, res) => {
   const { ambulance_personnel, ambulance, destination } = req.body;
+
   try {
     let errorMessage = "Destination is not defined.";
     isEmpty(destination, errorMessage);
+
+    errorMessage = "Invalid ambulance personnel ID.";
+    if (isNotValidObjectId(ambulance_personnel)) {
+      throwError(errorMessage);
+    }
+    errorMessage = "Invalid ambulance ID.";
+    if (isNotValidObjectId(ambulance)) {
+      throwError(errorMessage);
+    }
+
+    errorMessage = "Ambulance personnel not found";
+    isEmpty(destination, errorMessage);
+    const find_personnel = await User.findOne({
+      _id: ambulance_personnel,
+    }).exec();
+    validateInstanceMethod(find_personnel, errorMessage);
+
+    errorMessage = "Ambulance not found.";
+    isEmpty(ambulance, errorMessage);
+    const find_ambulance = await Ambulance.findOne({ _id: ambulance }).exec();
+    validateInstanceMethod(find_ambulance, errorMessage);
 
     const new_trip_ticket = await TripTicket.create({
       ambulance_personnel,
@@ -56,7 +87,7 @@ const postTripTicket = async (req, res) => {
     });
 
     errorMessage = "Failed to create new trip ticket";
-    validateInstanceMethod(new_trip_ticket);
+    validateInstanceMethod(new_trip_ticket, errorMessage);
     const success = new HTTPResponse(res, 200, new_trip_ticket);
     return success.sendResponse();
   } catch (error) {
@@ -68,20 +99,42 @@ const postTripTicket = async (req, res) => {
 //UPDATE trip ticket
 const putTripTicket = async (req, res) => {
   const { id } = req.params;
+  const { ambulance_personnel, ambulance, destination } = req.body;
+
   try {
-    let errorMessage = "Invalid ID.";
+    let errorMessage = "Invalid trip ticket ID.";
     if (isNotValidObjectId(id)) {
       throwError(errorMessage);
     }
 
-    const trip_ticket = await TripTicket.findOne({ _id: id }).exec();
+    errorMessage = "Invalid ambulance personnel ID.";
+    if (isNotValidObjectId(ambulance_personnel)) {
+      throwError(errorMessage);
+    }
 
-    errorMessage = "Trip ticket not found.";
-    validateInstanceMethod(trip_ticket, errorMessage);
+    errorMessage = "Invalid ambulance ID.";
+    if (isNotValidObjectId(ambulance)) {
+      throwError(errorMessage);
+    }
 
     errorMessage = "Destination is not defined.";
-    const destination = req.body.destination;
     isEmpty(destination, errorMessage);
+
+    errorMessage = "Ambulance personnel not found";
+    isEmpty(destination, errorMessage);
+    const find_personnel = await User.findOne({
+      _id: ambulance_personnel,
+    }).exec();
+    validateInstanceMethod(find_personnel, errorMessage);
+
+    errorMessage = "Ambulance not found.";
+    isEmpty(ambulance, errorMessage);
+    const find_ambulance = await Ambulance.findOne({ _id: ambulance }).exec();
+    validateInstanceMethod(find_ambulance, errorMessage);
+
+    errorMessage = "Trip ticket not found.";
+    const trip_ticket = await TripTicket.findOne({ _id: id }).exec();
+    validateInstanceMethod(trip_ticket, errorMessage);
 
     const updated_trip_ticket = await TripTicket.findOneAndUpdate({
       id,
