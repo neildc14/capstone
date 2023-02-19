@@ -1,0 +1,24 @@
+{
+  "name": "capstone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"cd ./server && nodemon devstart\" \"cd ./client && npm run dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neildc14/capstone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/neildc14/capstone/issues"
+  },
+  "homepage": "https://github.com/neildc14/capstone#readme",
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
