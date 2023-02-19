@@ -24,3 +24,8 @@
 //ambulance availability
 
 1. ambulance available
+
+
+//styles
+
+css framework = tailwindcss
