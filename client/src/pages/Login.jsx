@@ -11,7 +11,7 @@ const Login = () => {
     <div className="">
       <div className=" flex flex-col  md:flex-row-reverse justify-evenly md:justify-between h-screen mx-auto  md:px-0 ">
         <div className="md:w-1/3 grid place-items-center md:place-content-evenly gap-10 mx-6 md:mx-10 ">
-          <h1 className="w-full place-self-start text-xl md:text-3xl font-bold text-center text-green-1300">
+          <h1 className="w-full place-self-start text-3xl font-bold text-center text-green-1300">
             Log in to your account.
           </h1>
 
