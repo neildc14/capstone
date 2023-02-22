@@ -51,11 +51,20 @@ const Login = () => {
                 Login
               </button>
             </div>
-            <div className="grid">
+            <div className="grid mb-4">
               <a className="place-self-end text-blue-600 cursor-pointer">
                 Forgot password?
               </a>
             </div>
+            <p>
+              Doesn't have an account?{" "}
+              <a
+                href="/Signup"
+                className="cursor-pointer underline text-blue-600"
+              >
+                Signup
+              </a>
+            </p>
           </form>
         </div>
 

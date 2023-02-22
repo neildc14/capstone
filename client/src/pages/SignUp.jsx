@@ -95,6 +95,15 @@ const SignUp = () => {
                 Sign Up
               </button>
             </div>
+            <p>
+              Already have an account?{" "}
+              <a
+                href="/login"
+                className="cursor-pointer underline text-blue-600s"
+              >
+                Login
+              </a>
+            </p>
           </form>
         </div>
 
