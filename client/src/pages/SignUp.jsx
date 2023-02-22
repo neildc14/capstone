@@ -1,10 +1,22 @@
 import React, { useState } from "react";
-import FormInput from "../components/FormInput";
-import FormLabel from "../components/FormLabel";
 import useInput from "../hooks/useInput";
 import useSelect from "../hooks/useSelect";
 import TermsAndConditionsModal from "../components/TermsAndConditionsModal";
-import { useDisclosure } from "@chakra-ui/react";
+
+import {
+  FormControl,
+  FormLabel,
+  FormHelperText,
+  FormErrorMessage,
+  InputGroup,
+  InputRightElement,
+  Input,
+  Button,
+  Checkbox,
+  Select,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 const SignUp = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -16,15 +28,15 @@ const SignUp = () => {
   const [terms, bindTerms] = useInput();
 
   const [userType, changeUserType] = useSelect();
-
-  console.log(userType);
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
 
   return (
     <>
       <div className="">
         <div className=" flex flex-col  md:flex-row-reverse justify-evenly md:justify-between h-screen mx-auto  md:px-0 ">
           <div className="md:w-1/3 grid place-items-center md:place-content-evenly gap-10 mx-6 md:mx-10 ">
-            <h1 className="w-full place-self-start md:mt-14 text-3xl font-bold text-center text-green-1300">
+            <h1 className="w-full place-self-start md:mt-16 text-3xl font-bold text-center text-green-1300">
               Sign up an account.
             </h1>
 
@@ -33,63 +45,57 @@ const SignUp = () => {
               className="w-full place-self-center md:place-self-start md:mb-20"
             >
               <div className="flex flex-col md:max-w-md mb-4">
-                <FormLabel htmlFor="first_name" label="First Name" />
-                <FormInput
-                  type="text"
-                  name="first_name"
-                  autocomplete="off"
-                  onChangeHook={bindFirstName}
-                />
+                <FormControl>
+                  <FormLabel>First Name</FormLabel>
+                  <Input type="text" />
+                </FormControl>
               </div>
               <div className="flex flex-col md:max-w-md mb-4">
-                <FormLabel htmlFor="last_name" label="Last Name" />
-                <FormInput
-                  type="text"
-                  name="last_name"
-                  autocomplete="off"
-                  onChangeHook={bindLastName}
-                />
+                <FormControl>
+                  <FormLabel>Last Name</FormLabel>
+                  <Input type="text" />
+                </FormControl>
               </div>
               <div className="flex flex-col md:max-w-md mb-4">
-                <FormLabel htmlFor="email" label="Email" />
-                <FormInput
-                  type="email"
-                  name="email"
-                  autocomplete="off"
-                  onChangeHook={bindEmail}
-                />
+                <FormControl>
+                  <FormLabel>Email</FormLabel>
+                  <Input type="email" />
+                </FormControl>
               </div>
               <div className="flex flex-col md:max-w-md mb-4">
-                <FormLabel
-                  htmlFor="password"
-                  label="Password"
-                  onChangeHook={bindPassword}
-                />
-                <FormInput type="password" name="password" />
+                <FormControl>
+                  <FormLabel>Password</FormLabel>
+                  <InputGroup size="md">
+                    <Input pr="4.5rem" type={show ? "text" : "password"} />
+                    <InputRightElement width="4.5rem">
+                      <Button
+                        h="1.75rem"
+                        size="sm"
+                        variant="ghost"
+                        onClick={handleClick}
+                      >
+                        {show ? <ViewOffIcon /> : <ViewIcon />}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
               </div>
               <div className="flex flex-col md:max-w-md mb-4">
-                <FormLabel htmlFor="user_type" label="User Type" />
-                <select
-                  name="user_type"
-                  id="user_type"
-                  className="w-full py-2 px-2 border-2 active:border-3 focus:border-3 outline-2 active:outline-green-300 hover:outline-green-300 focus:outline-green-300  rounded font-semibold"
-                  onChange={changeUserType}
-                >
-                  <option value="Requestor">Requestor</option>
-                  <option value="Ambulance Personnel">
-                    Ambulance Personnel
-                  </option>
-                  <option value="Ambulance Personnel">Administrator</option>
-                </select>
+                <FormControl>
+                  <FormLabel>User Type</FormLabel>
+                  <Select onChange={changeUserType}>
+                    <option value="Requestor">Requestor</option>
+                    <option value="Ambulance Personnel">
+                      Ambulance Personnel
+                    </option>
+                    <option value="Ambulance Personnel">Administrator</option>
+                  </Select>
+                </FormControl>
               </div>
               <div className="flex flex-row md:max-w-md mb-4 gap-2">
-                <input
-                  type="checkbox"
-                  className="border checked:bg-blue-500 "
-                  name="terms"
-                  {...bindTerms}
-                />
-                <label htmlFor="terms" className="text-green-1000">
+                <Checkbox></Checkbox>
+                <label htmlFor="">
+                  {" "}
                   I have read the{" "}
                   <a className="underline" onClick={onOpen}>
                     terms and conditions
@@ -108,7 +114,7 @@ const SignUp = () => {
                 Already have an account?{" "}
                 <a
                   href="/login"
-                  className="cursor-pointer underline text-blue-600s"
+                  className="cursor-pointer underline text-blue-600"
                 >
                   Login
                 </a>
