@@ -84,7 +84,12 @@ const Login = () => {
           </Box>
           <Text fontSize="sm">
             Doesn't have an account?{" "}
-            <Link as={RouterLink} to="/account/signup" color="blue.500">
+            <Link
+              as={RouterLink}
+              to="/account/signup"
+              color="blue.500"
+              fontWeight="semibold"
+            >
               Signup
             </Link>
           </Text>

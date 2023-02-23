@@ -118,7 +118,12 @@ const SignUp = () => {
           </Box>
           <Text fontSize="sm">
             Already have an account?{" "}
-            <Link as={RouterLink} to="/account/login" color="blue.500">
+            <Link
+              as={RouterLink}
+              to="/account/login"
+              color="blue.500"
+              fontWeight="semibold"
+            >
               Login
             </Link>
           </Text>
