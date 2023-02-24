@@ -18,6 +18,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import useSelect from "../hooks/useSelect";
+import ThemeButton from "../components/ThemeButton";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
@@ -29,9 +30,9 @@ const SignUp = () => {
   const [password, bindPassword] = useInput();
   const [value, selectChange] = useSelect();
 
-  console.log(value);
   return (
-    <Container height="100%" maxW="full" px={0}>
+    <Container height="100%" maxW="full" px={0} position="relative">
+      <ThemeButton />
       <Flex
         flexDirection={{ base: "column", md: "row-reverse" }}
         justifyContent={{ base: "center", md: "space-between" }}
@@ -47,6 +48,7 @@ const SignUp = () => {
           <Heading as="h1" mt={6} mb={10} fontSize="2xl" textAlign="center">
             Sign up your account.
           </Heading>
+
           <Box as="form">
             <FormControl my={2}>
               <FormLabel>First Name</FormLabel>
@@ -56,6 +58,7 @@ const SignUp = () => {
                 {...bindFirstName}
               />
             </FormControl>
+
             <FormControl my={2}>
               <FormLabel>Last Name</FormLabel>
               <Input
@@ -64,6 +67,7 @@ const SignUp = () => {
                 {...bindLastName}
               />
             </FormControl>
+
             <FormControl my={2}>
               <FormLabel>Email</FormLabel>
               <Input
@@ -72,6 +76,7 @@ const SignUp = () => {
                 {...bindEmail}
               />
             </FormControl>
+
             <FormControl my={2}>
               <FormLabel>Password</FormLabel>
               <InputGroup size="md">
@@ -93,6 +98,7 @@ const SignUp = () => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+
             <FormControl my={2}>
               <FormLabel>User Type</FormLabel>
               <Select
@@ -105,6 +111,7 @@ const SignUp = () => {
                 <option value="Administrator">Administrator</option>
               </Select>
             </FormControl>
+
             <Button
               type="submit"
               w="100%"
@@ -116,6 +123,7 @@ const SignUp = () => {
               Sign up
             </Button>
           </Box>
+
           <Text fontSize="sm">
             Already have an account?{" "}
             <Link
@@ -128,6 +136,7 @@ const SignUp = () => {
             </Link>
           </Text>
         </Box>
+
         <Box
           height="100vh"
           width="100%"

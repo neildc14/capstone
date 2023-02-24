@@ -16,6 +16,7 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import useInput from "../hooks/useInput";
+import ThemeButton from "../components/ThemeButton";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -25,7 +26,8 @@ const Login = () => {
   const [password, bindPassword] = useInput();
 
   return (
-    <Container height="100%" maxW="full" px={0}>
+    <Container position="relative" height="100%" maxW="full" px={0}>
+      <ThemeButton />
       <Flex
         flexDirection={{ base: "column", md: "row-reverse" }}
         justifyContent={{ base: "center", md: "space-between" }}
@@ -41,6 +43,7 @@ const Login = () => {
           <Heading as="h1" mt={6} mb={10} fontSize="2xl" textAlign="center">
             Log in to your account.
           </Heading>
+
           <Box as="form">
             <FormControl my={2}>
               <FormLabel>Email</FormLabel>
@@ -50,6 +53,7 @@ const Login = () => {
                 {...bindEmail}
               />
             </FormControl>
+
             <FormControl my={2}>
               <FormLabel>Password</FormLabel>
               <InputGroup size="md">
@@ -71,6 +75,7 @@ const Login = () => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+
             <Button
               type="submit"
               w="100%"
@@ -82,6 +87,7 @@ const Login = () => {
               Log in
             </Button>
           </Box>
+
           <Text fontSize="sm">
             Doesn't have an account?{" "}
             <Link
@@ -94,6 +100,7 @@ const Login = () => {
             </Link>
           </Text>
         </Box>
+
         <Box
           height="100vh"
           width="100%"
