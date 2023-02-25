@@ -6,14 +6,17 @@ import {
   Divider,
   useMediaQuery,
   useDisclosure,
+  Text,
+  Button,
 } from "@chakra-ui/react";
 import Sidebar from "../components/Sidebar";
 import TopNav from "../components/TopNav";
 import MobileSidebar from "../components/MobileSideBar";
+import RequestForm from "../components/RequestForm";
+import ThemeButton from "../components/ThemeButton";
 
 const RequestorDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
-  const [showDashboard, setShowDashboard] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toggleDashboard = () => {
@@ -28,9 +31,10 @@ const RequestorDashboard = () => {
           <Divider />
         </>
       )}
-      <Box display="flex" flexDirection="row" gap={4}>
+      <ThemeButton />
+      <Box display="flex" flexDirection={{ base: "colum", lg: "row" }} gap={4}>
         {isLargerThan768 ? (
-          <Sidebar bgColor="teal.900" showDashboard={showDashboard}>
+          <Sidebar bgColor="teal.900">
             <Box pt="10">
               <Box px={4}>
                 <Heading
@@ -43,6 +47,27 @@ const RequestorDashboard = () => {
                 </Heading>
               </Box>
               <Divider />
+              <Box px={4} py={8}>
+                <Text color="whiteAlpha.900">Profile</Text>
+                <Box as="section" my={4}>
+                  <Button
+                    width="100%"
+                    my={4}
+                    borderRadius="none"
+                    fontSize={{ md: "sm", lg: "md" }}
+                  >
+                    Request Ambulance
+                  </Button>
+                  <Button
+                    width="100%"
+                    my={4}
+                    borderRadius="none"
+                    fontSize={{ md: "sm", lg: "md" }}
+                  >
+                    Locate Ambulance
+                  </Button>
+                </Box>
+              </Box>
             </Box>
           </Sidebar>
         ) : (
@@ -61,10 +86,8 @@ const RequestorDashboard = () => {
           </MobileSidebar>
         )}
 
-        <Box pt="10">
-          <Box as="form">
-            
-          </Box>
+        <Box width="100%" px={4} pt="10">
+          <RequestForm />
         </Box>
       </Box>
     </>
