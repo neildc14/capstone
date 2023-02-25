@@ -3,7 +3,13 @@ import React from "react";
 import MobileSidebar from "../MobileSideBar";
 import { Box, Heading, Divider, Text, Button, Flex } from "@chakra-ui/react";
 
-const RequestorMobileSidebar = ({ isOpen, onClose }) => {
+const RequestorMobileSidebar = ({
+  isOpen,
+  onClose,
+  handleRequestForm,
+  handleViewRequest,
+  handleViewMap,
+}) => {
   return (
     <MobileSidebar bgColor="teal.900" isOpen={isOpen} onClose={onClose}>
       <Box>
@@ -33,6 +39,7 @@ const RequestorMobileSidebar = ({ isOpen, onClose }) => {
             color: "blackAlpha.900",
             bgColor: "whiteAlpha.900",
           }}
+          onClick={handleViewRequest}
         >
           Requests
         </Button>
@@ -50,6 +57,7 @@ const RequestorMobileSidebar = ({ isOpen, onClose }) => {
             color: "blackAlpha.900",
             bgColor: "whiteAlpha.900",
           }}
+          onClick={handleRequestForm}
         >
           Request Ambulance
         </Button>
@@ -67,6 +75,7 @@ const RequestorMobileSidebar = ({ isOpen, onClose }) => {
             color: "blackAlpha.900",
             bgColor: "whiteAlpha.900",
           }}
+          onClick={handleViewMap}
         >
           Locate Ambulance
         </Button>

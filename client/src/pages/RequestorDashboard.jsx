@@ -18,9 +18,21 @@ import RequestorMobileSidebar from "../components/requestor/RequestorMobileSideb
 const RequestorDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOpenRequestForm, setOpenRequestForm] = useState(false);
 
   const toggleDashboard = () => {
     onOpen();
+  };
+
+  const handleRequestForm = () => {
+    setOpenRequestForm(true);
+  };
+
+  const handleViewRequest = () => {
+    setOpenRequestForm(false);
+  };
+  const handleViewMap = () => {
+    setOpenRequestForm(false);
   };
 
   return (
@@ -35,13 +47,23 @@ const RequestorDashboard = () => {
 
       <Flex flexDirection={{ base: "colum", lg: "row" }} gap={4}>
         {isLargerThan768 ? (
-          <RequestorSidebar />
+          <RequestorSidebar
+            handleRequestForm={handleRequestForm}
+            handleViewRequest={handleViewRequest}
+            handleViewMap={handleViewMap}
+          />
         ) : (
-          <RequestorMobileSidebar isOpen={isOpen} onClose={onClose} />
+          <RequestorMobileSidebar
+            isOpen={isOpen}
+            onClose={onClose}
+            handleRequestForm={handleRequestForm}
+            handleViewRequest={handleViewRequest}
+            handleViewMap={handleViewMap}
+          />
         )}
 
         <Box width="100%" px={4} pt="10">
-          <RequestForm />
+          {isOpenRequestForm && <RequestForm />}
         </Box>
       </Flex>
     </>

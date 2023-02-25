@@ -8,7 +8,7 @@ const Sidebar = ({ children, bgColor }) => {
         height={{ base: "100vh" }}
         width={{ base: "full", md: "10rem", lg: "3xs" }}
         bgColor={bgColor}
-        transition="all .5s ease-in-out"
+        boxShadow="6px 0px 0px 0px rgba(0,0,0,0.1)"
       >
         {children}
       </Box>

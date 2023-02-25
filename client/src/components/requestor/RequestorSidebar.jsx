@@ -5,7 +5,11 @@ import Sidebar from "../Sidebar";
 
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 
-const RequestorSidebar = () => {
+const RequestorSidebar = ({
+  handleRequestForm,
+  handleViewRequest,
+  handleViewMap,
+}) => {
   return (
     <Sidebar bgColor="teal.900">
       <Box pt="10">
@@ -48,6 +52,7 @@ const RequestorSidebar = () => {
                 color: "blackAlpha.900",
                 bgColor: "whiteAlpha.900",
               }}
+              onClick={handleViewRequest}
             >
               Requests
             </Button>
@@ -65,6 +70,7 @@ const RequestorSidebar = () => {
                 color: "blackAlpha.900",
                 bgColor: "whiteAlpha.900",
               }}
+              onClick={handleRequestForm}
             >
               Request Ambulance
             </Button>
@@ -82,6 +88,7 @@ const RequestorSidebar = () => {
                 color: "blackAlpha.900",
                 bgColor: "whiteAlpha.900",
               }}
+              onClick={handleViewMap}
             >
               Locate Ambulance
             </Button>
