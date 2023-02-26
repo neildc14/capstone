@@ -29,7 +29,11 @@ const RequestorDashboard = () => {
 
   return (
     <>
-      <Flex flexDirection={{ base: "column", md: "row" }} padding="0">
+      <Flex
+        flexDirection={{ base: "column", md: "row" }}
+        padding="0"
+        height={{ base: "100vh" }}
+      >
         {isLargerThan768 ? (
           <RequestorSidebar
             handleRequestForm={handleRequestForm}
@@ -46,7 +50,7 @@ const RequestorDashboard = () => {
           />
         )}
 
-        <Box width="100%">
+        <Box width="100%" overflowY="scroll" bg="gray.200">
           <DashboardContext.Provider value={toggleDashboard}>
             <Header />
           </DashboardContext.Provider>

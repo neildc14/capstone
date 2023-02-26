@@ -5,7 +5,7 @@ const Sidebar = ({ children, bgColor }) => {
   return (
     <>
       <Box
-        height={{ base: "100vh" }}
+        maxHeight="100%"
         width={{ base: "full", md: "xs", lg: "2xs" }}
         bgColor={bgColor}
         boxShadow="6px 0px 0px 0px rgba(0,0,0,0.1)"
