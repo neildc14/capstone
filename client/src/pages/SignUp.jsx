@@ -32,7 +32,9 @@ const SignUp = () => {
 
   return (
     <Container height="100%" maxW="full" px={0} position="relative">
-      <ThemeButton />
+      <Box position="absolute" top="5px" right="10px">
+        <ThemeButton />
+      </Box>
       <Flex
         flexDirection={{ base: "column", md: "row-reverse" }}
         justifyContent={{ base: "center", md: "space-between" }}

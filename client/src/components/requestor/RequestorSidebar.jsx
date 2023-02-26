@@ -1,9 +1,13 @@
 import React from "react";
-
 import { Box, Heading, Divider, Text, Button, Flex } from "@chakra-ui/react";
 import Sidebar from "../Sidebar";
-
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
+import requestFormWhite from "../../assets/icons/request-form-white.png";
+import requestFormBlack from "../../assets/icons/request-form-black.png";
+import requestWhite from "../../assets/icons/request-white.png";
+import requestBlack from "../../assets/icons/request-black.png";
+import mapWhite from "../../assets/icons/map-white.png";
+import mapBlack from "../../assets/icons/map-black.png";
 
 const RequestorSidebar = ({
   handleRequestForm,
@@ -40,7 +44,9 @@ const RequestorSidebar = ({
           <Box as="section" my={4}>
             <Button
               variant="ghost"
-              display="block"
+              display="flex"
+              justifyContent="flex-start"
+              gap=".5rem"
               width="100%"
               my={4}
               p="0"
@@ -54,11 +60,14 @@ const RequestorSidebar = ({
               }}
               onClick={handleViewRequest}
             >
+              <img src={requestWhite} alt="request icon" />
               Requests
             </Button>
             <Button
               variant="ghost"
-              display="block"
+              display="flex"
+              justifyContent="flex-start"
+              gap=".5rem"
               width="100%"
               my={4}
               p="0"
@@ -72,11 +81,14 @@ const RequestorSidebar = ({
               }}
               onClick={handleRequestForm}
             >
+              <img src={requestFormWhite} alt="form icon" />
               Request Ambulance
             </Button>
             <Button
               variant="ghost"
-              display="block"
+              display="flex"
+              justifyContent="flex-start"
+              gap=".5rem"
               width="100%"
               my={4}
               p="0"
@@ -90,6 +102,7 @@ const RequestorSidebar = ({
               }}
               onClick={handleViewMap}
             >
+              <img src={mapWhite} alt="map icon" />
               Locate Ambulance
             </Button>
           </Box>

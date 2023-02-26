@@ -11,9 +11,11 @@ import {
 import TopNav from "../components/TopNav";
 import RequestForm from "../components/requestor/RequestForm";
 import ThemeButton from "../components/ThemeButton";
+import Settings from "../components/Settings";
 
 import RequestorSidebar from "../components/requestor/RequestorSidebar";
 import RequestorMobileSidebar from "../components/requestor/RequestorMobileSidebar";
+import DateTime from "../components/DisplayTime";
 
 const RequestorDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -43,9 +45,8 @@ const RequestorDashboard = () => {
           <Divider />
         </React.Fragment>
       )}
-      <ThemeButton />
 
-      <Flex flexDirection={{ base: "colum", lg: "row" }} gap={4}>
+      <Flex flexDirection={{ base: "column", lg: "row" }} padding="0">
         {isLargerThan768 ? (
           <RequestorSidebar
             handleRequestForm={handleRequestForm}
@@ -62,7 +63,13 @@ const RequestorDashboard = () => {
           />
         )}
 
-        <Box width="100%" px={4} pt="10">
+        <Box width="100%" px={{ base: 0, mb: 4 }}>
+          <Flex justifyContent="flex-end" alignItems="center" gap="4px" me={10}>
+            <DateTime />
+            <Settings />
+            <ThemeButton />
+          </Flex>
+          <Divider mb={4} />
           {isOpenRequestForm && <RequestForm />}
         </Box>
       </Flex>
