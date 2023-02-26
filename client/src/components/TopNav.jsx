@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { IconButton } from "@chakra-ui/react";
-const TopNav = ({ toggleDashboard }) => {
+import { useDashboardContext } from "../pages/RequestorDashboard";
+
+const TopNav = () => {
+  const toggleDashboard = useDashboardContext();
   return (
     <>
       <IconButton

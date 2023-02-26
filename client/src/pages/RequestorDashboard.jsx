@@ -1,21 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { atom, useAtom } from "jotai";
-import {
-  Box,
-  Heading,
-  Divider,
-  useMediaQuery,
-  useDisclosure,
-  Flex,
-} from "@chakra-ui/react";
-import TopNav from "../components/TopNav";
+import React, { useState, useContext } from "react";
+import { Box, useMediaQuery, useDisclosure, Flex } from "@chakra-ui/react";
 import RequestForm from "../components/requestor/RequestForm";
-import ThemeButton from "../components/ThemeButton";
-import Settings from "../components/Settings";
-
+import Header from "../layouts/Header";
 import RequestorSidebar from "../components/requestor/RequestorSidebar";
 import RequestorMobileSidebar from "../components/requestor/RequestorMobileSidebar";
-import DateTime from "../components/DisplayTime";
+
+const DashboardContext = React.createContext();
 
 const RequestorDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -39,14 +29,7 @@ const RequestorDashboard = () => {
 
   return (
     <>
-      {!isLargerThan768 && (
-        <React.Fragment>
-          <TopNav toggleDashboard={toggleDashboard} />
-          <Divider />
-        </React.Fragment>
-      )}
-
-      <Flex flexDirection={{ base: "column", lg: "row" }} padding="0">
+      <Flex flexDirection={{ base: "column", md: "row" }} padding="0">
         {isLargerThan768 ? (
           <RequestorSidebar
             handleRequestForm={handleRequestForm}
@@ -63,18 +46,18 @@ const RequestorDashboard = () => {
           />
         )}
 
-        <Box width="100%" px={{ base: 0, mb: 4 }}>
-          <Flex justifyContent="flex-end" alignItems="center" gap="4px" me={10}>
-            <DateTime />
-            <Settings />
-            <ThemeButton />
-          </Flex>
-          <Divider mb={4} />
-          {isOpenRequestForm && <RequestForm />}
+        <Box width="100%">
+          <DashboardContext.Provider value={toggleDashboard}>
+            <Header />
+          </DashboardContext.Provider>
+          <Box as="main" px={{ base: 4 }}>
+            {isOpenRequestForm && <RequestForm />}
+          </Box>
         </Box>
       </Flex>
     </>
   );
 };
 
+export const useDashboardContext = () => useContext(DashboardContext);
 export default RequestorDashboard;
