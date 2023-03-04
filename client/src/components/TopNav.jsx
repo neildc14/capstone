@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { IconButton } from "@chakra-ui/react";
 import { useDashboardContext } from "../pages/RequestorDashboard";

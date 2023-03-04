@@ -1,5 +1,13 @@
 import React from "react";
-import { Box, Heading, Divider, Text, Button, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Divider,
+  Text,
+  Button,
+  Flex,
+  Link,
+} from "@chakra-ui/react";
 import Sidebar from "../Sidebar";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import requestFormWhite from "../../assets/icons/request-form-white.png";
@@ -8,6 +16,7 @@ import requestWhite from "../../assets/icons/request-white.png";
 import requestBlack from "../../assets/icons/request-black.png";
 import mapWhite from "../../assets/icons/map-white.png";
 import mapBlack from "../../assets/icons/map-black.png";
+import { Link as RouterLink } from "react-router-dom";
 
 const RequestorSidebar = ({
   handleRequestForm,
@@ -42,7 +51,9 @@ const RequestorSidebar = ({
           </Flex>
 
           <Box as="section" my={4}>
-            <Button
+            <Link
+              as={RouterLink}
+              to="/requestor/requests"
               variant="ghost"
               display="flex"
               justifyContent="flex-start"
@@ -58,12 +69,13 @@ const RequestorSidebar = ({
                 color: "blackAlpha.900",
                 bgColor: "whiteAlpha.900",
               }}
-              onClick={handleViewRequest}
             >
               <img src={requestWhite} alt="request icon" />
               Requests
-            </Button>
-            <Button
+            </Link>
+            <Link
+              as={RouterLink}
+              to="/requestor/request"
               variant="ghost"
               display="flex"
               justifyContent="flex-start"
@@ -79,12 +91,13 @@ const RequestorSidebar = ({
                 color: "blackAlpha.900",
                 bgColor: "whiteAlpha.900",
               }}
-              onClick={handleRequestForm}
             >
               <img src={requestFormWhite} alt="form icon" />
               Request Ambulance
-            </Button>
-            <Button
+            </Link>
+            <Link
+              as={RouterLink}
+              to="requestor/map"
               variant="ghost"
               display="flex"
               justifyContent="flex-start"
@@ -100,11 +113,10 @@ const RequestorSidebar = ({
                 color: "blackAlpha.900",
                 bgColor: "whiteAlpha.900",
               }}
-              onClick={handleViewMap}
             >
               <img src={mapWhite} alt="map icon" />
               Locate Ambulance
-            </Button>
+            </Link>
           </Box>
         </Box>
       </Box>

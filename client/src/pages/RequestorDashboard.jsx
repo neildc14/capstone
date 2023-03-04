@@ -1,32 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Box, useMediaQuery, useDisclosure, Flex } from "@chakra-ui/react";
-import RequestForm from "../components/requestor/RequestForm";
 import Header from "../layouts/Header";
 import RequestorSidebar from "../components/requestor/RequestorSidebar";
 import RequestorMobileSidebar from "../components/requestor/RequestorMobileSidebar";
+import { Outlet } from "react-router-dom";
 
 const DashboardContext = React.createContext();
 
 const RequestorDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isOpenRequestForm, setOpenRequestForm] = useState(false);
 
   const toggleDashboard = () => {
     onOpen();
   };
-
-  const handleRequestForm = () => {
-    setOpenRequestForm(true);
-  };
-
-  const handleViewRequest = () => {
-    setOpenRequestForm(false);
-  };
-  const handleViewMap = () => {
-    setOpenRequestForm(false);
-  };
-
   return (
     <>
       <Flex
@@ -35,27 +22,17 @@ const RequestorDashboard = () => {
         height={{ base: "100vh" }}
       >
         {isLargerThan768 ? (
-          <RequestorSidebar
-            handleRequestForm={handleRequestForm}
-            handleViewRequest={handleViewRequest}
-            handleViewMap={handleViewMap}
-          />
+          <RequestorSidebar />
         ) : (
-          <RequestorMobileSidebar
-            isOpen={isOpen}
-            onClose={onClose}
-            handleRequestForm={handleRequestForm}
-            handleViewRequest={handleViewRequest}
-            handleViewMap={handleViewMap}
-          />
+          <RequestorMobileSidebar isOpen={isOpen} onClose={onClose} />
         )}
 
-        <Box width="100%" overflowY="scroll" bg="gray.200">
+        <Box width="100%" height="100%" overflowY="scroll" bg="gray.200">
           <DashboardContext.Provider value={toggleDashboard}>
             <Header />
           </DashboardContext.Provider>
-          <Box as="main" px={{ base: 4 }}>
-            {isOpenRequestForm && <RequestForm />}
+          <Box as="main" px={{ base: 4 }} pt={{ base: 20, md: 10 }}>
+            <Outlet />
           </Box>
         </Box>
       </Flex>
