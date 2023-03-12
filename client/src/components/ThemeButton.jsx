@@ -12,9 +12,9 @@ const ThemeButton = () => {
         _hover={{ bgColor: "none" }}
         icon={
           colorMode === "light" ? (
-            <MoonIcon boxSize={6} />
+            <MoonIcon boxSize={4} />
           ) : (
-            <SunIcon boxSize={6} />
+            <SunIcon boxSize={4} />
           )
         }
         onClick={toggleColorMode}

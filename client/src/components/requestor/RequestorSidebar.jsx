@@ -8,12 +8,16 @@ import requestWhite from "../../assets/icons/request-white.png";
 import requestBlack from "../../assets/icons/request-black.png";
 import mapWhite from "../../assets/icons/map-white.png";
 import mapBlack from "../../assets/icons/map-black.png";
+import dashboardBlack from "../../assets/icons/request-black-dashboard.png";
+import dashboardWhite from "../../assets/icons/request-white-dashboard.png";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import useHover from "../../hooks/useHover";
+import { UilCreateDashboard } from "@iconscout/react-unicons";
 
 const RequestorSidebar = () => {
   const location = useLocation();
   console.log(location.pathname);
+  const [hoverRequestDashboard, bindHoverRequestDashboard] = useHover();
   const [hoverRequest, bindHoverRequest] = useHover();
   const [hoverRequestForm, bindHoverRequestForm] = useHover();
   const [hoverRequestMap, bindHoverRequestMap] = useHover();
@@ -21,8 +25,8 @@ const RequestorSidebar = () => {
   console.log(hoverRequest);
   return (
     <Sidebar bgColor="teal.900">
-      <Box pt="10">
-        <Box px={4}>
+      <Box>
+        {/* <Box px={4}>
           <Heading
             as="h2"
             fontSize={{ base: "lg", md: "md", lg: "md" }}
@@ -32,10 +36,10 @@ const RequestorSidebar = () => {
             Requestor Dashboard
           </Heading>
         </Box>
-        <Divider />
+        <Divider /> */}
 
         <Box ps={4} py={8}>
-          <Flex gap={2} alignItems="flex-end" mb={4} ps={2}>
+          {/* <Flex gap={2} alignItems="flex-end" mb={4} ps={2}>
             <Avatar size="sm">
               <AvatarBadge
                 boxSize="1.25em"
@@ -44,12 +48,12 @@ const RequestorSidebar = () => {
               />
             </Avatar>
             <Text color="whiteAlpha.900">First Name</Text>
-          </Flex>
+          </Flex> */}
 
           <Box as="section" my={4}>
             <Link
               as={RouterLink}
-              to="/requestor/requests"
+              to="/requestor"
               variant="ghost"
               display="flex"
               justifyContent="flex-start"
@@ -63,37 +67,35 @@ const RequestorSidebar = () => {
               fontSize={{ md: "sm", lg: "md" }}
               fontWeight="semibold"
               color={
-                location.pathname === "/requestor/requests"
+                location.pathname === "/requestor"
                   ? "blackAlpha.900"
                   : "whiteAlpha.900"
               }
-              bgColor={
-                location.pathname === "/requestor/requests" && "whiteAlpha.900"
-              }
+              bgColor={location.pathname === "/requestor" && "whiteAlpha.900"}
               _hover={{
                 color: "blackAlpha.900",
                 bgColor: "whiteAlpha.900",
               }}
-              {...bindHoverRequest}
+              {...bindHoverRequestDashboard}
             >
               <img
                 src={
-                  location.pathname === "/requestor/requests" && !hoverRequest
-                    ? requestBlack
-                    : location.pathname !== "/requestor/requests" &&
-                      hoverRequest
-                    ? requestBlack
-                    : location.pathname !== "/requestor/requests" &&
-                      !hoverRequest
-                    ? requestWhite
-                    : location.pathname === "/requestor/requests" &&
-                      hoverRequest
-                    ? requestBlack
-                    : requestWhite
+                  location.pathname === "/requestor" && !hoverRequestDashboard
+                    ? dashboardBlack
+                    : location.pathname !== "/requestor" &&
+                      hoverRequestDashboard
+                    ? dashboardBlack
+                    : location.pathname !== "/requestor" &&
+                      !hoverRequestDashboard
+                    ? dashboardWhite
+                    : location.pathname === "/requestor" &&
+                      hoverRequestDashboard
+                    ? dashboardBlack
+                    : dashboardWhite
                 }
-                alt="request icon"
+                alt="dashboard icon"
               />
-              Requests
+              Dashboard
             </Link>
 
             <Link
@@ -190,6 +192,55 @@ const RequestorSidebar = () => {
                 alt="map icon"
               />
               Locate Ambulance
+            </Link>
+
+            <Link
+              as={RouterLink}
+              to="/requestor/requests"
+              variant="ghost"
+              display="flex"
+              justifyContent="flex-start"
+              gap=".5rem"
+              width="100%"
+              my={4}
+              ps={2}
+              py={2}
+              borderRadius="none"
+              textAlign="left"
+              fontSize={{ md: "sm", lg: "md" }}
+              fontWeight="semibold"
+              color={
+                location.pathname === "/requestor/requests"
+                  ? "blackAlpha.900"
+                  : "whiteAlpha.900"
+              }
+              bgColor={
+                location.pathname === "/requestor/requests" && "whiteAlpha.900"
+              }
+              _hover={{
+                color: "blackAlpha.900",
+                bgColor: "whiteAlpha.900",
+              }}
+              {...bindHoverRequest}
+            >
+              <img
+                src={
+                  location.pathname === "/requestor/requests" && !hoverRequest
+                    ? requestBlack
+                    : location.pathname !== "/requestor/requests" &&
+                      hoverRequest
+                    ? requestBlack
+                    : location.pathname !== "/requestor/requests" &&
+                      !hoverRequest
+                    ? requestWhite
+                    : location.pathname === "/requestor/requests" &&
+                      hoverRequest
+                    ? requestBlack
+                    : requestWhite
+                }
+                alt="request icon"
+              />
+              Requests
             </Link>
           </Box>
         </Box>

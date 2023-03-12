@@ -7,7 +7,7 @@ const Settings = () => {
       <IconButton
         variant="ghost"
         _hover={{ bgColor: "none" }}
-        icon={<SettingsIcon boxSize={6} />}
+        icon={<SettingsIcon boxSize={4} />}
       />
     </Tooltip>
   );

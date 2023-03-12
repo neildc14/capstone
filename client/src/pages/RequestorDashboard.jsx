@@ -27,11 +27,11 @@ const RequestorDashboard = () => {
           <RequestorMobileSidebar isOpen={isOpen} onClose={onClose} />
         )}
 
-        <Box width="100%" height="100%" overflowY="scroll" bg="gray.200">
+        <Box width="100%" height="100%" overflowY="scroll" bgColor="white">
           <DashboardContext.Provider value={toggleDashboard}>
             <Header />
           </DashboardContext.Provider>
-          <Box as="main" px={{ base: 4 }} >
+          <Box as="main" px={{ base: 4 }}>
             <Outlet />
           </Box>
         </Box>
