@@ -1,7 +1,16 @@
 import React from "react";
 
 import MobileSidebar from "../MobileSideBar";
-import { Box, Heading, Divider, Text, Button, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Divider,
+  Text,
+  Button,
+  Flex,
+  Link,
+} from "@chakra-ui/react";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 
 const RequestorMobileSidebar = ({
   isOpen,
@@ -20,12 +29,14 @@ const RequestorMobileSidebar = ({
           fontWeight="normal"
           color="whiteAlpha.900"
         >
-          Requestor Dashboard
+          Requestor
         </Heading>
       </Box>
       <Divider />
       <Box as="section" my={4}>
-        <Button
+        <Link
+          as={RouterLink}
+          to="/requestor"
           variant="ghost"
           display="block"
           width="100%"
@@ -41,9 +52,11 @@ const RequestorMobileSidebar = ({
           }}
           onClick={handleViewRequest}
         >
-          Requests
-        </Button>
-        <Button
+          Dashboard
+        </Link>
+        <Link
+          as={RouterLink}
+          to="/requestor/request"
           variant="ghost"
           display="block"
           width="100%"
@@ -60,8 +73,10 @@ const RequestorMobileSidebar = ({
           onClick={handleRequestForm}
         >
           Request Ambulance
-        </Button>
-        <Button
+        </Link>
+        <Link
+          as={RouterLink}
+          to="/requestor/map"
           variant="ghost"
           display="block"
           width="100%"
@@ -78,7 +93,27 @@ const RequestorMobileSidebar = ({
           onClick={handleViewMap}
         >
           Locate Ambulance
-        </Button>
+        </Link>
+        <Link
+          as={RouterLink}
+          to="/requestor/requests"
+          variant="ghost"
+          display="block"
+          width="100%"
+          my={4}
+          p="0"
+          borderRadius="none"
+          textAlign="left"
+          fontSize={{ md: "sm", lg: "md" }}
+          color="whiteAlpha.900"
+          _hover={{
+            color: "blackAlpha.900",
+            bgColor: "whiteAlpha.900",
+          }}
+          onClick={handleViewRequest}
+        >
+          All Requests
+        </Link>
       </Box>
     </MobileSidebar>
   );

@@ -2,14 +2,6 @@ import React from "react";
 import { Box, Heading, Divider, Text, Flex, Link } from "@chakra-ui/react";
 import Sidebar from "../Sidebar";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
-import requestFormWhite from "../../assets/icons/request-form-white.png";
-import requestFormBlack from "../../assets/icons/request-form-black.png";
-import requestWhite from "../../assets/icons/request-white.png";
-import requestBlack from "../../assets/icons/request-black.png";
-import mapWhite from "../../assets/icons/map-white.png";
-import mapBlack from "../../assets/icons/map-black.png";
-import dashboardBlack from "../../assets/icons/request-black-dashboard.png";
-import dashboardWhite from "../../assets/icons/request-white-dashboard.png";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import useHover from "../../hooks/useHover";
 import {
@@ -27,7 +19,6 @@ const RequestorSidebar = () => {
   const [hoverRequestForm, bindHoverRequestForm] = useHover();
   const [hoverRequestMap, bindHoverRequestMap] = useHover();
 
-  console.log(hoverRequest);
   return (
     <Sidebar bgColor="teal.900">
       <Box>
@@ -183,7 +174,7 @@ const RequestorSidebar = () => {
               {...bindHoverRequest}
             >
               <UilFileInfoAlt />
-              Requests
+              All Requests
             </Link>
           </Box>
         </Box>
