@@ -12,7 +12,12 @@ import dashboardBlack from "../../assets/icons/request-black-dashboard.png";
 import dashboardWhite from "../../assets/icons/request-white-dashboard.png";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import useHover from "../../hooks/useHover";
-import { UilCreateDashboard } from "@iconscout/react-unicons";
+import {
+  UilCreateDashboard,
+  UilFileInfoAlt,
+  UilFilePlusAlt,
+  UilLocationPinAlt,
+} from "@iconscout/react-unicons";
 
 const RequestorSidebar = () => {
   const location = useLocation();
@@ -78,23 +83,7 @@ const RequestorSidebar = () => {
               }}
               {...bindHoverRequestDashboard}
             >
-              <img
-                src={
-                  location.pathname === "/requestor" && !hoverRequestDashboard
-                    ? dashboardBlack
-                    : location.pathname !== "/requestor" &&
-                      hoverRequestDashboard
-                    ? dashboardBlack
-                    : location.pathname !== "/requestor" &&
-                      !hoverRequestDashboard
-                    ? dashboardWhite
-                    : location.pathname === "/requestor" &&
-                      hoverRequestDashboard
-                    ? dashboardBlack
-                    : dashboardWhite
-                }
-                alt="dashboard icon"
-              />
+              <UilCreateDashboard />
               Dashboard
             </Link>
 
@@ -127,24 +116,7 @@ const RequestorSidebar = () => {
               }}
               {...bindHoverRequestForm}
             >
-              <img
-                src={
-                  location.pathname === "/requestor/request" &&
-                  !hoverRequestForm
-                    ? requestFormBlack
-                    : location.pathname !== "/requestor/request" &&
-                      hoverRequestForm
-                    ? requestFormBlack
-                    : location.pathname !== "/requestor/request" &&
-                      !hoverRequestForm
-                    ? requestFormWhite
-                    : location.pathname === "/requestor/request" &&
-                      hoverRequestForm
-                    ? requestFormBlack
-                    : requestFormWhite
-                }
-                alt="form icon"
-              />
+              <UilFilePlusAlt />
               Request Ambulance
             </Link>
 
@@ -177,20 +149,7 @@ const RequestorSidebar = () => {
               }}
               {...bindHoverRequestMap}
             >
-              <img
-                src={
-                  location.pathname === "/requestor/map" && !hoverRequestMap
-                    ? mapBlack
-                    : location.pathname !== "/requestor/map" && hoverRequestMap
-                    ? mapBlack
-                    : location.pathname !== "/requestor/map" && !hoverRequestMap
-                    ? mapWhite
-                    : location.pathname === "/requestor/map" && hoverRequestMap
-                    ? mapBlack
-                    : mapWhite
-                }
-                alt="map icon"
-              />
+              <UilLocationPinAlt />
               Locate Ambulance
             </Link>
 
@@ -223,23 +182,7 @@ const RequestorSidebar = () => {
               }}
               {...bindHoverRequest}
             >
-              <img
-                src={
-                  location.pathname === "/requestor/requests" && !hoverRequest
-                    ? requestBlack
-                    : location.pathname !== "/requestor/requests" &&
-                      hoverRequest
-                    ? requestBlack
-                    : location.pathname !== "/requestor/requests" &&
-                      !hoverRequest
-                    ? requestWhite
-                    : location.pathname === "/requestor/requests" &&
-                      hoverRequest
-                    ? requestBlack
-                    : requestWhite
-                }
-                alt="request icon"
-              />
+              <UilFileInfoAlt />
               Requests
             </Link>
           </Box>

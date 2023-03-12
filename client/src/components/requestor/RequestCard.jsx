@@ -9,6 +9,7 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
+import { UilEye, UilTrashAlt } from "@iconscout/react-unicons";
 
 const RequestCard = () => {
   return (
@@ -20,8 +21,15 @@ const RequestCard = () => {
             autem?
           </Text>
           <Flex gap="1rem">
-            <Button size="sm">View</Button>
-            <Button size="sm" bgColor="red.500" color="gray.50">
+            <Button size="sm" leftIcon={<UilEye />}>
+              View
+            </Button>
+            <Button
+              size="sm"
+              bgColor="red.500"
+              color="gray.50"
+              leftIcon={<UilTrashAlt />}
+            >
               Delete
             </Button>
           </Flex>

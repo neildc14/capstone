@@ -9,22 +9,25 @@ import {
   Divider,
   Flex,
   Heading,
+  Text,
 } from "@chakra-ui/react";
 import RequestCard from "./RequestCard";
+import { UilHistoryAlt } from "@iconscout/react-unicons";
 
 const RequestorAllRequests = () => {
   return (
     <Box p={{ md: 6 }}>
-      {/* <Box mb={10} sx={{ border: "1px solid gray.50" }}>
-        <RequestHeading label="Recent Request" />
-        <Divider />
-        <Box as="section" mt={4} p={4}>
-          <RequestCard />
-        </Box>
-      </Box> */}
-
       <Box>
-        <RequestHeading label="Request History" />
+        <Heading
+          as="h2"
+          p={2}
+          display="flex"
+          fontSize="xl"
+          fontWeight="semibold"
+          bgColor="white"
+        >
+          <UilHistoryAlt /> <Text as="span">Request History</Text>
+        </Heading>
         <Divider />
         <Box
           as="section"
@@ -40,14 +43,6 @@ const RequestorAllRequests = () => {
         </Box>
       </Box>
     </Box>
-  );
-};
-
-const RequestHeading = ({ label }) => {
-  return (
-    <Heading as="h2" p={2} fontSize="xl" fontWeight="semibold" bgColor="white">
-      {label}
-    </Heading>
   );
 };
 

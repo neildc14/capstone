@@ -12,7 +12,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import React from "react";
-
+import { UilFileInfoAlt } from "@iconscout/react-unicons";
 const RequestForm = () => {
   return (
     <Card
@@ -23,10 +23,12 @@ const RequestForm = () => {
       <Box as="form">
         <Heading
           mb={4}
+          display="flex"
+          alignItems="center"
           fontSize={{ base: "xl", md: "2xl" }}
           fontWeight="normal"
         >
-          Request Form
+          <UilFileInfoAlt /> <Text as="span">Request Form </Text>
         </Heading>
         <Flex flexDirection="row" gap="2rem">
           <FormControl my={2}>

@@ -1,6 +1,7 @@
 import React from "react";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { IconButton, useColorMode, Tooltip } from "@chakra-ui/react";
+import { UilMoonset } from "@iconscout/react-unicons";
 
 const ThemeButton = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -12,7 +13,7 @@ const ThemeButton = () => {
         _hover={{ bgColor: "none" }}
         icon={
           colorMode === "light" ? (
-            <MoonIcon boxSize={4} />
+            <UilMoonset boxSize={4} />
           ) : (
             <SunIcon boxSize={4} />
           )
