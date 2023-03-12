@@ -14,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/account/login" element={<Login />} />
         <Route path="/account/signup" element={<SignUp />} />
+        <Route path="map" element={<ViewMap />} />
         <Route path="requestor" element={<RequestorDashboard />}>
           <Route path="request" element={<RequestForm />} />
           <Route path="requests" element={<RequestorAllRequests />} />

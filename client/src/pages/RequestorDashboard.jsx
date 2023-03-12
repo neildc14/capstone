@@ -31,7 +31,7 @@ const RequestorDashboard = () => {
           <DashboardContext.Provider value={toggleDashboard}>
             <Header />
           </DashboardContext.Provider>
-          <Box as="main" px={{ base: 4 }} pt={{ base: 20, md: 10 }}>
+          <Box as="main" px={{ base: 4 }} >
             <Outlet />
           </Box>
         </Box>
