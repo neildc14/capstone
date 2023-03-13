@@ -7,6 +7,7 @@ import SignUp from "./pages/SignUp";
 import RequestForm from "./components/requestor/RequestForm";
 import RequestorAllRequests from "./components/requestor/RequestorAllRequests";
 import ViewMap from "./components/ViewMap";
+import RequestorDashboardPanel from "./components/requestor/RequestorDashboardPanel";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/account/signup" element={<SignUp />} />
         <Route path="map" element={<ViewMap />} />
         <Route path="requestor" element={<RequestorDashboard />}>
+          <Route path="" element={<RequestorDashboardPanel />} />
           <Route path="request" element={<RequestForm />} />
           <Route path="requests" element={<RequestorAllRequests />} />
           <Route path="map" element={<ViewMap />} />

@@ -11,13 +11,7 @@ const ThemeButton = () => {
         aria-label="Toggle theme"
         variant="ghost"
         _hover={{ bgColor: "none" }}
-        icon={
-          colorMode === "light" ? (
-            <UilMoonset boxSize={4} />
-          ) : (
-            <SunIcon boxSize={4} />
-          )
-        }
+        icon={colorMode === "light" ? <UilMoonset /> : <SunIcon />}
         onClick={toggleColorMode}
       />
     </Tooltip>

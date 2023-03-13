@@ -15,7 +15,12 @@ const RequestCard = () => {
   return (
     <Card as="form" my={2} bgColor="gray.50">
       <CardBody>
-        <Flex justifyContent="space-between">
+        <Flex
+          flexDirection={{ base: "column", md: "row" }}
+          justifyContent="space-between"
+          alignItems="center"
+          gap={{ base: 4 }}
+        >
           <Text>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam,
             autem?
