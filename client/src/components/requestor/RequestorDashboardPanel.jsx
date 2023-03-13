@@ -3,81 +3,84 @@ import { Box, Heading, Divider, Card, Flex } from "@chakra-ui/react";
 import RequestCard from "./RequestCard";
 import TripTicket from "../TripTicket";
 
+
 const RequestorDashboardPanel = () => {
   return (
-    <Box p={{ md: 6 }}>
-      <Box>
-        <Heading
-          as="h2"
-          py={2}
-          display="flex"
-          fontSize="xl"
-          fontWeight="semibold"
-          bgColor="white"
-        >
-          Dashboard Panel
-        </Heading>
-        <Divider />
-      </Box>
-      <Box as="section" my={8}>
-        <Flex
-          flexDirection={{ base: "column", md: "row" }}
-          justifyContent="space-evenly"
-          gap="2rem"
-        >
-          <Card
-            flex={{ md: "1" }}
-            height={{ base: "4rem", md: "7rem" }}
-            bgColor="blue.200"
+    <>
+      <Box p={{ md: 6 }}>
+        <Box>
+          <Heading
+            as="h2"
+            py={2}
+            display="flex"
+            fontSize="xl"
+            fontWeight="semibold"
+            bgColor="white"
           >
-            lorem10
-          </Card>
-          <Card
-            flex={{ md: "1" }}
-            height={{ base: "4rem", md: "7rem" }}
-            bgColor="green.200"
+            Dashboard Panel
+          </Heading>
+          <Divider />
+        </Box>
+        <Box as="section" my={8}>
+          <Flex
+            flexDirection={{ base: "column", md: "row" }}
+            justifyContent="space-evenly"
+            gap="2rem"
           >
-            lorem10
-          </Card>
-          <Card
-            flex={{ md: "1" }}
-            height={{ base: "4rem", md: "7rem" }}
-            bgColor="yellow.200"
-          >
-            lorem10
-          </Card>
-        </Flex>
-      </Box>
+            <Card
+              flex={{ md: "1" }}
+              height={{ base: "4rem", md: "7rem" }}
+              bgColor="blue.200"
+            >
+              lorem10
+            </Card>
+            <Card
+              flex={{ md: "1" }}
+              height={{ base: "4rem", md: "7rem" }}
+              bgColor="green.200"
+            >
+              lorem10
+            </Card>
+            <Card
+              flex={{ md: "1" }}
+              height={{ base: "4rem", md: "7rem" }}
+              bgColor="yellow.200"
+            >
+              lorem10
+            </Card>
+          </Flex>
+        </Box>
 
-      <Box as="section" mt={4}>
-        <Heading
-          as="h2"
-          py={2}
-          display="flex"
-          fontSize="xl"
-          fontWeight="semibold"
-          bgColor="white"
-        >
-          Recent Request
-        </Heading>
-        <Divider />
-        <RequestCard />
+        <Box as="section" mt={4}>
+          <Heading
+            as="h2"
+            py={2}
+            display="flex"
+            fontSize="xl"
+            fontWeight="semibold"
+            bgColor="white"
+          >
+            Recent Request
+          </Heading>
+          <Divider />
+          <RequestCard />
+        </Box>
+        <Box as="section" mt={4}>
+          <Heading
+            as="h2"
+            py={2}
+            display="flex"
+            fontSize="xl"
+            fontWeight="semibold"
+            bgColor="white"
+          >
+            Trip Ticket
+          </Heading>
+          <Divider />
+          <TripTicket />
+        </Box>
       </Box>
-      <Box as="section" mt={4}>
-        <Heading
-          as="h2"
-          py={2}
-          display="flex"
-          fontSize="xl"
-          fontWeight="semibold"
-          bgColor="white"
-        >
-          Trip Ticket
-        </Heading>
-        <Divider />
-        <TripTicket />
-      </Box>
-    </Box>
+    </>
   );
 };
 
