@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Heading, Divider, Card, Flex } from "@chakra-ui/react";
 import RequestCard from "./RequestCard";
 import TripTicket from "../TripTicket";
-
+import PanelCard from "../PanelCard";
 
 const RequestorDashboardPanel = () => {
   return (
@@ -27,27 +27,21 @@ const RequestorDashboardPanel = () => {
             justifyContent="space-evenly"
             gap="2rem"
           >
-            <Card
-              flex={{ md: "1" }}
-              height={{ base: "4rem", md: "7rem" }}
+            <PanelCard
+              cardHeader="Total Requests Made"
+              cardBody="10"
               bgColor="blue.200"
-            >
-              lorem10
-            </Card>
-            <Card
-              flex={{ md: "1" }}
-              height={{ base: "4rem", md: "7rem" }}
+            />
+            <PanelCard
+              cardHeader="Total Successful Transport"
+              cardBody="10"
               bgColor="green.200"
-            >
-              lorem10
-            </Card>
-            <Card
-              flex={{ md: "1" }}
-              height={{ base: "4rem", md: "7rem" }}
-              bgColor="yellow.200"
-            >
-              lorem10
-            </Card>
+            />
+            <PanelCard
+              cardHeader="Total Successful Transport"
+              cardBody="10"
+              bgColor="orange.200"
+            />
           </Flex>
         </Box>
 
