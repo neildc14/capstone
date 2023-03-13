@@ -11,6 +11,12 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import {
+  UilCreateDashboard,
+  UilFileInfoAlt,
+  UilFilePlusAlt,
+  UilLocationPinAlt,
+} from "@iconscout/react-unicons";
 
 const RequestorMobileSidebar = ({
   isOpen,
@@ -25,7 +31,7 @@ const RequestorMobileSidebar = ({
         <Heading
           as="h2"
           px="0"
-          fontSize={{ base: "lg", md: "md", lg: "md", xl: "xl" }}
+          fontSize={{ base: "2xl", md: "md", lg: "md", xl: "xl" }}
           fontWeight="normal"
           color="whiteAlpha.900"
         >
@@ -38,80 +44,90 @@ const RequestorMobileSidebar = ({
           as={RouterLink}
           to="/requestor"
           variant="ghost"
-          display="block"
+          display="flex"
+          alignItems="center"
+          gap=".5rem"
           width="100%"
-          my={4}
+          my={8}
           p="0"
           borderRadius="none"
           textAlign="left"
-          fontSize={{ md: "sm", lg: "md" }}
+          fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
             bgColor: "whiteAlpha.900",
           }}
-          onClick={handleViewRequest}
+          onClick={onClose}
         >
-          Dashboard
+          <UilCreateDashboard /> Dashboard
         </Link>
         <Link
           as={RouterLink}
           to="/requestor/request"
           variant="ghost"
-          display="block"
+          display="flex"
+          alignItems="center"
+          gap=".5rem"
           width="100%"
-          my={4}
+          my={8}
           p="0"
           borderRadius="none"
           textAlign="left"
-          fontSize={{ md: "sm", lg: "md" }}
+          fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
             bgColor: "whiteAlpha.900",
           }}
-          onClick={handleRequestForm}
+          onClick={onClose}
         >
-          Request Ambulance
+          <UilFilePlusAlt /> Request Ambulance
         </Link>
         <Link
           as={RouterLink}
           to="/requestor/map"
           variant="ghost"
-          display="block"
+          display="flex"
+          alignItems="center"
+          gap=".5rem"
           width="100%"
-          my={4}
+          my={8}
           p="0"
           borderRadius="none"
           textAlign="left"
-          fontSize={{ md: "sm", lg: "md" }}
+          fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
             bgColor: "whiteAlpha.900",
           }}
-          onClick={handleViewMap}
+          onClick={onClose}
         >
+          <UilLocationPinAlt />
           Locate Ambulance
         </Link>
         <Link
           as={RouterLink}
           to="/requestor/requests"
           variant="ghost"
-          display="block"
+          display="flex"
+          alignItems="center"
+          gap=".5rem"
           width="100%"
-          my={4}
+          my={8}
           p="0"
           borderRadius="none"
           textAlign="left"
-          fontSize={{ md: "sm", lg: "md" }}
+          fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
             bgColor: "whiteAlpha.900",
           }}
-          onClick={handleViewRequest}
+          onClick={onClose}
         >
+          <UilFileInfoAlt />
           All Requests
         </Link>
       </Box>

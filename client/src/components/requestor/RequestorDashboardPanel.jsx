@@ -28,28 +28,28 @@ const RequestorDashboardPanel = () => {
           <Card
             flex={{ md: "1" }}
             height={{ base: "4rem", md: "7rem" }}
-            bgColor="gray.50"
+            bgColor="blue.200"
           >
             lorem10
           </Card>
           <Card
             flex={{ md: "1" }}
             height={{ base: "4rem", md: "7rem" }}
-            bgColor="gray.50"
+            bgColor="green.200"
           >
             lorem10
           </Card>
           <Card
             flex={{ md: "1" }}
             height={{ base: "4rem", md: "7rem" }}
-            bgColor="gray.50"
+            bgColor="yellow.200"
           >
             lorem10
           </Card>
         </Flex>
       </Box>
 
-      <Box as="section" mt={4} overflowY="scroll">
+      <Box as="section" mt={4}>
         <Heading
           as="h2"
           py={2}
@@ -63,7 +63,7 @@ const RequestorDashboardPanel = () => {
         <Divider />
         <RequestCard />
       </Box>
-      <Box as="section" mt={4} overflowY="scroll">
+      <Box as="section" mt={4}>
         <Heading
           as="h2"
           py={2}

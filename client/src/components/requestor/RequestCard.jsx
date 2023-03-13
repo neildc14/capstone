@@ -11,9 +11,9 @@ import {
 } from "@chakra-ui/react";
 import { UilEye, UilTrashAlt } from "@iconscout/react-unicons";
 
-const RequestCard = () => {
+const RequestCard = ({ bgColor = "gray.50" }) => {
   return (
-    <Card as="form" my={2} bgColor="gray.50">
+    <Card as="form" my={2} bgColor={bgColor}>
       <CardBody>
         <Flex
           flexDirection={{ base: "column", md: "row" }}
