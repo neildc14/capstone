@@ -71,7 +71,7 @@ const RequestCard = ({
                 size="sm"
                 bgColor="red.500"
                 color="gray.50"
-                _hover={{ bgColor: "red.400" }}
+                _hover={{ bgColor: "red.600" }}
                 leftIcon={<UilTrashAlt />}
                 onClick={toggleDeleteConfirmationModal}
               >

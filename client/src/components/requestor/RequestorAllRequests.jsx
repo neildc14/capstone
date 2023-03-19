@@ -13,8 +13,26 @@ import {
 } from "@chakra-ui/react";
 import RequestCard from "./RequestCard";
 import { UilHistoryAlt } from "@iconscout/react-unicons";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const RequestorAllRequests = () => {
+  const fetchAllRequests = async () => {
+    const response = await axios.get(`${ENDPOINT}request`);
+    return response.data;
+  };
+
+  const { data, isLoading, isFetching, error } = useQuery(
+    ["ambulance_request_with_ticket"],
+    fetchAllRequests,
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
+  console.log(data);
+
   return (
     <Box p={{ md: 6 }}>
       <Box>
@@ -35,11 +53,14 @@ const RequestorAllRequests = () => {
           mt={4}
           overflowY="scroll"
         >
-          <RequestCard />
-          <RequestCard />
-          <RequestCard />
-          <RequestCard />
-          <RequestCard />
+          {data?.map((request) => (
+            <RequestCard
+              key={request._id}
+              request_data={request}
+              request_id={request._id}
+              request_status={request.status}
+            />
+          ))}
         </Box>
       </Box>
     </Box>
