@@ -100,6 +100,8 @@ const RequestCard = ({
             request_data={request_data}
           />
           <DeleteConfirmationModal
+            id={request_id}
+            URL="request"
             subject="request"
             isOpen={isOpenDeleteConfirmationModal}
             onClose={toggleDeleteConfirmationModal}

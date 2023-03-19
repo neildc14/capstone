@@ -12,7 +12,8 @@ import {
   Flex,
 } from "@chakra-ui/react";
 
-const DeleteConfirmationModal = ({ isOpen, onClose, subject }) => {
+const DeleteConfirmationModal = ({ id, URL, isOpen, onClose, subject }) => {
+  
   return (
     <Modal
       onClose={onClose}
