@@ -38,7 +38,7 @@ const RequestCard = ({
               </Heading>
               <Heading as="h5" display="block" fontSize="md">
                 status:{" "}
-                <Text as="span" fontWeight="normal">
+                <Text as="span" fontWeight="normal" textTransform="capitalize">
                   {request_status}
                 </Text>
               </Heading>
@@ -49,15 +49,16 @@ const RequestCard = ({
               justifyContent={{ base: "space-between", md: "end" }}
             >
               <Button size="sm" leftIcon={<UilEye />} onClick={onOpen}>
-                View
+                View Full Details
               </Button>
               <Button
                 size="sm"
                 bgColor="red.500"
                 color="gray.50"
+                _hover={{ bgColor: "red.400" }}
                 leftIcon={<UilTrashAlt />}
               >
-                Delete
+                Delete Request
               </Button>
             </Flex>
           </Flex>

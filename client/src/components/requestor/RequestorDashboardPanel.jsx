@@ -9,21 +9,30 @@ import axios from "axios";
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const RequestorDashboardPanel = () => {
-  const fetchRecentRequest = async () => {
-    const response = await axios.get(`${ENDPOINT}request`);
-    return response.data[0];
+  const fetchRecentRequestAndTicket = async () => {
+    const results = await Promise.allSettled([
+      axios.get(`${ENDPOINT}request`),
+      axios.get(`${ENDPOINT}ticket`),
+    ]);
+
+    return results;
   };
 
   const { data, isLoading, isFetching, error } = useQuery(
-    ["ambulance_request"],
-    fetchRecentRequest,
+    ["ambulance_request_with_ticket"],
+    fetchRecentRequestAndTicket,
     {
       refetchOnWindowFocus: true,
     }
   );
 
   {
-    !isLoading && console.log(data, data._id, data.status);
+    !isLoading &&
+      console.log(
+        data,
+        data[0].value.data[0]._id,
+        data[0].value.data[0].status
+      );
   }
 
   return (
@@ -84,9 +93,9 @@ const RequestorDashboardPanel = () => {
               <Divider />
               {!isLoading && (
                 <RequestCard
-                  request_data={data}
-                  request_id={data._id}
-                  request_status={data.status}
+                  request_data={data[0].value.data[0]}
+                  request_id={data[0].value.data[0]._id}
+                  request_status={data[0].value.data[0].status}
                 />
               )}
             </Box>
@@ -102,7 +111,18 @@ const RequestorDashboardPanel = () => {
                 Trip Ticket
               </Heading>
               <Divider />
-              <TripTicket />
+              {!isLoading && (
+                <TripTicket
+                  trip_ticket_data={data[1].value.data[0]}
+                  ambulance_personnel={
+                    data[1].value.data[0].ambulance_personnel["fullName"]
+                  }
+                  ambulance_plate={
+                    data[1].value.data[0].ambulance["license_plate"]
+                  }
+                  destination={data[1].value.data[0].destination}
+                />
+              )}
             </Box>
           </Box>
         </Flex>
