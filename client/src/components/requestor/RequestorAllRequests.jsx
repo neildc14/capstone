@@ -53,14 +53,15 @@ const RequestorAllRequests = () => {
           mt={4}
           overflowY="scroll"
         >
-          {data?.map((request) => (
-            <RequestCard
-              key={request._id}
-              request_data={request}
-              request_id={request._id}
-              request_status={request.status}
-            />
-          ))}
+          {!isFetching &&
+            data?.map((request) => (
+              <RequestCard
+                key={request._id}
+                request_data={request}
+                request_id={request._id}
+                request_status={request.status}
+              />
+            ))}
         </Box>
       </Box>
     </Box>

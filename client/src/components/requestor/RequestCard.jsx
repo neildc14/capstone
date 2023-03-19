@@ -42,14 +42,25 @@ const RequestCard = ({
             gap={{ base: 4 }}
           >
             <Box>
-              <Heading as="h5" display="block" pb={2} fontSize="md">
-                request_id:{" "}
+              <Heading
+                as="h5"
+                display="block"
+                pb={2}
+                fontSize="md"
+                fontWeight="semibold"
+              >
+                Request ID:{" "}
                 <Text as="span" fontWeight="normal">
                   {request_id}
                 </Text>
               </Heading>
-              <Heading as="h5" display="block" fontSize="md">
-                status:{" "}
+              <Heading
+                as="h5"
+                display="block"
+                fontSize="md"
+                fontWeight="semibold"
+              >
+                Status:{" "}
                 <Text as="span" fontWeight="normal" textTransform="capitalize">
                   {request_status}
                 </Text>
@@ -81,16 +92,20 @@ const RequestCard = ({
           </Flex>
         </CardBody>
       </Card>
-      <RequestCardDetailsModal
-        isOpen={isOpenRequestCardDetailsModal}
-        onClose={toggleRequestCardDetailsModal}
-        request_data={request_data}
-      />
-      <DeleteConfirmationModal
-        subject="request"
-        isOpen={isOpenDeleteConfirmationModal}
-        onClose={toggleDeleteConfirmationModal}
-      />
+      {request_data !== undefined && (
+        <>
+          <RequestCardDetailsModal
+            isOpen={isOpenRequestCardDetailsModal}
+            onClose={toggleRequestCardDetailsModal}
+            request_data={request_data}
+          />
+          <DeleteConfirmationModal
+            subject="request"
+            isOpen={isOpenDeleteConfirmationModal}
+            onClose={toggleDeleteConfirmationModal}
+          />
+        </>
+      )}
     </>
   );
 };

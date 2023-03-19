@@ -26,18 +26,9 @@ const RequestorDashboardPanel = () => {
     }
   );
 
-  {
-    !isLoading &&
-      console.log(
-        data,
-        data[0].value.data[0]._id,
-        data[0].value.data[0].status
-      );
-  }
-
   return (
     <>
-      <Box p={{ md: 6 }}>
+      <Box px={{ md: 6 }}>
         <Flex flexDirection={{ base: "column-reverse", md: "column" }}>
           <Box>
             <Box>
@@ -91,7 +82,7 @@ const RequestorDashboardPanel = () => {
                 Recent Request
               </Heading>
               <Divider />
-              {!isLoading && (
+              {!isFetching && (
                 <RequestCard
                   request_data={data[0].value.data[0]}
                   request_id={data[0].value.data[0]._id}
@@ -111,7 +102,7 @@ const RequestorDashboardPanel = () => {
                 Trip Ticket
               </Heading>
               <Divider />
-              {!isLoading && (
+              {!isFetching && (
                 <TripTicket
                   trip_ticket_data={data[1].value.data[0]}
                   ambulance_personnel={
