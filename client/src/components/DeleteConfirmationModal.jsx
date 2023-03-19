@@ -10,10 +10,43 @@ import {
   Text,
   Button,
   Flex,
+  useToast,
 } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const DeleteConfirmationModal = ({ id, URL, isOpen, onClose, subject }) => {
-  
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  const deleteRequest = async () => {
+    const delete_recent_request = await axios.delete(`${ENDPOINT}${URL}/${id}`);
+    return delete_recent_request;
+  };
+
+  const deleteURL = useMutation({
+    mutationFn: deleteRequest,
+    onSettled: () => {
+      queryClient.invalidateQueries(["ambulance_request_with_ticket"]);
+    },
+    onSuccess: () => {
+      toast({
+        title: "URL deleted.",
+        description: "Request is successfully deleted.",
+        status: "success",
+        duration: 1000,
+        isClosable: true,
+      });
+    },
+  });
+
+  const deleteRecentRequestFunction = (e) => {
+    e.preventDefault();
+    deleteURL.mutate(`${ENDPOINT}${URL}/${id}`);
+  };
+
   return (
     <Modal
       onClose={onClose}
@@ -38,6 +71,7 @@ const DeleteConfirmationModal = ({ id, URL, isOpen, onClose, subject }) => {
               bgColor="red.500"
               color="gray.50"
               _hover={{ bgColor: "red.400" }}
+              onClick={deleteRecentRequestFunction}
             >
               Delete Request
             </Button>
