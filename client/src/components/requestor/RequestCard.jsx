@@ -4,16 +4,20 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter,
-  CardHeader,
   Flex,
+  Heading,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { UilEye, UilTrashAlt } from "@iconscout/react-unicons";
 import RequestCardDetailsModal from "./RequestCardDetailsModal";
 
-const RequestCard = ({ bgColor = "gray.50" }) => {
+const RequestCard = ({
+  request_data,
+  request_id,
+  request_status,
+  bgColor = "gray.50",
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -21,15 +25,29 @@ const RequestCard = ({ bgColor = "gray.50" }) => {
         <CardBody>
           <Flex
             flexDirection={{ base: "column", md: "row" }}
-            justifyContent="space-between"
-            alignItems="center"
+            justifyContent={{ md: "space-between" }}
+            alignItems={{ md: "center" }}
             gap={{ base: 4 }}
           >
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam,
-              autem?
-            </Text>
-            <Flex width="100%" gap="1rem" justifyContent={{ base: "end" }}>
+            <Box>
+              <Heading as="h5" display="block" pb={2} fontSize="md">
+                request_id:{" "}
+                <Text as="span" fontWeight="normal">
+                  {request_id}
+                </Text>
+              </Heading>
+              <Heading as="h5" display="block" fontSize="md">
+                status:{" "}
+                <Text as="span" fontWeight="normal">
+                  {request_status}
+                </Text>
+              </Heading>
+            </Box>
+            <Flex
+              width="100%"
+              gap="1rem"
+              justifyContent={{ base: "space-between", md: "end" }}
+            >
               <Button size="sm" leftIcon={<UilEye />} onClick={onOpen}>
                 View
               </Button>
@@ -45,7 +63,11 @@ const RequestCard = ({ bgColor = "gray.50" }) => {
           </Flex>
         </CardBody>
       </Card>
-      <RequestCardDetailsModal isOpen={isOpen} onClose={onClose} />
+      <RequestCardDetailsModal
+        isOpen={isOpen}
+        onClose={onClose}
+        request_data={request_data}
+      />
     </>
   );
 };

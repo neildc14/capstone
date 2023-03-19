@@ -127,7 +127,7 @@ const RequestorMobileSidebar = ({
           }}
           onClick={onClose}
         >
-          <UilFileInfoAlt />
+           <UilFileInfoAlt />
           All Requests
         </Link>
       </Box>

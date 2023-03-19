@@ -21,7 +21,7 @@ const RequestorSidebar = () => {
 
   return (
     <Sidebar bgColor="teal.900">
-      <Box>
+      <Box >
         {/* <Box px={4}>
           <Heading
             as="h2"

@@ -61,4 +61,4 @@ const ViewMap = () => {
   );
 };
 
-export default ViewMap;
+export default React.memo(ViewMap);
