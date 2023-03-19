@@ -52,17 +52,17 @@ const RequestorDashboardPanel = () => {
               >
                 <PanelCard
                   cardHeader="Total Requests Made"
-                  cardBody="10"
+                  cardBody={!isFetching && data[0].value.data.length}
                   bgColor="blue.200"
                 />
-                <PanelCard
+                {/* <PanelCard
                   cardHeader="Total Successful Transport"
                   cardBody="10"
                   bgColor="green.200"
-                />
+                /> */}
                 <PanelCard
                   cardHeader="Total Successful Transport"
-                  cardBody="10"
+                  cardBody={!isFetching && data[1].value.data.length}
                   bgColor="orange.200"
                 />
               </Flex>
@@ -105,6 +105,7 @@ const RequestorDashboardPanel = () => {
               {!isFetching && (
                 <TripTicket
                   trip_ticket_data={data[1].value.data[0]}
+                  ticket_id={data[1].value.data[0]._id}
                   ambulance_personnel={
                     data[1].value.data[0].ambulance_personnel["fullName"]
                   }
