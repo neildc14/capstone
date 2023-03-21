@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Heading, Divider, Flex } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Box, Heading, Divider, Flex, Skeleton } from "@chakra-ui/react";
 import RequestCard from "./RequestCard";
 import TripTicket from "../TripTicket";
 import PanelCard from "../PanelCard";
@@ -9,6 +9,9 @@ import axios from "axios";
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const RequestorDashboardPanel = () => {
+  const [totalRequest, setTotalRequest] = useState("");
+  const [totalSuccessfulTransport, setTotalSuccessfulTransport] = useState("");
+
   const fetchRecentRequestAndTicket = async () => {
     const results = await Promise.allSettled([
       axios.get(`${ENDPOINT}request`),
@@ -18,13 +21,20 @@ const RequestorDashboardPanel = () => {
     return results;
   };
 
-  const { data, isLoading, isFetching, error } = useQuery(
+  const { data, isLoading, isFetching, error, isFetched } = useQuery(
     ["ambulance_request_with_ticket"],
     fetchRecentRequestAndTicket,
     {
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,
     }
   );
+
+  useEffect(() => {
+    if (!isLoading && !isFetching) {
+      setTotalRequest(data[0]?.value.data.length);
+      setTotalSuccessfulTransport(data[1]?.value.data.length);
+    }
+  }, [data, isLoading, isFetching]);
 
   return (
     <>
@@ -52,17 +62,13 @@ const RequestorDashboardPanel = () => {
               >
                 <PanelCard
                   cardHeader="Total Requests Made"
-                  cardBody={!isFetching && data[0].value.data.length}
+                  cardBody={totalRequest}
                   bgColor="blue.200"
                 />
-                {/* <PanelCard
-                  cardHeader="Total Successful Transport"
-                  cardBody="10"
-                  bgColor="green.200"
-                /> */}
+
                 <PanelCard
                   cardHeader="Total Successful Transport"
-                  cardBody={!isFetching && data[1].value.data.length}
+                  cardBody={totalSuccessfulTransport}
                   bgColor="orange.200"
                 />
               </Flex>
@@ -82,6 +88,7 @@ const RequestorDashboardPanel = () => {
                 Recent Request
               </Heading>
               <Divider />
+
               {!isFetching && (
                 <RequestCard
                   request_data={data[0].value.data[0]}
