@@ -33,7 +33,7 @@ const DeleteConfirmationModal = ({ id, URL, isOpen, onClose, subject }) => {
     },
     onSuccess: () => {
       toast({
-        title: "URL deleted.",
+        title: "Request deleted.",
         description: "Request is successfully deleted.",
         status: "success",
         duration: 1000,

@@ -31,7 +31,7 @@ const RequestCardDetailsModal = ({ request_data, onClose, isOpen }) => {
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
             Requestor Name:{" "}
             <Text as="span" fontWeight="normal" textTransform="capitalize">
-              {request_data["requestor_id"].fullName}
+              {`${request_data.first_name} ${request_data.last_name}`}
             </Text>
           </Heading>
           <Heading as="h6" mb={2} fontSize="md" fontWeight="semibold">

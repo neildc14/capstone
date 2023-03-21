@@ -10,17 +10,69 @@ import {
   Checkbox,
   Textarea,
   Flex,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { UilFileInfoAlt } from "@iconscout/react-unicons";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import useInput from "../../hooks/useInput";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const RequestForm = () => {
+  const [firstName, bindFirstName] = useInput();
+  const [lastName, bindLastName] = useInput();
+  const [location, bindLocation] = useInput();
+  const [destination, bindDestination] = useInput();
+  const [patientCondition, bindPatientCondition] = useInput();
+  const [referralSlip, bindReferralSlip] = useInput();
+
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  const makeRequest = (new_request) => {
+    return axios.post(`${ENDPOINT}request`, new_request);
+  };
+
+  const mutation = useMutation({
+    mutationFn: makeRequest,
+    onError: (error, variables, context) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Request created.",
+        description: "Request is successfully created.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+
+      navigate("/requestor/");
+    },
+  });
+
+  const onRequestSubmit = (e) => {
+    e.preventDefault();
+    const body = {
+      first_name: firstName,
+      last_name: lastName,
+      pickup_location: location,
+      transfer_location: destination,
+      referral_slip: referralSlip,
+      patient_condition: patientCondition,
+    };
+    mutation.mutate(body);
+  };
+
   return (
     <Card
       width={{ base: "100%", md: "90%", lg: "70%" }}
       mx={{ base: "auto" }}
       p={4}
     >
-      <Box as="form">
+      <Box as="form" onSubmit={onRequestSubmit}>
         <Heading
           mb={4}
           display="flex"
@@ -44,6 +96,7 @@ const RequestForm = () => {
               size={{ base: "sm", md: "md" }}
               border="1px solid green"
               _hover={{ borderColor: "blue.600" }}
+              {...bindFirstName}
             />
           </FormControl>
 
@@ -60,6 +113,7 @@ const RequestForm = () => {
               size={{ base: "sm", md: "md" }}
               border="1px solid green"
               _hover={{ borderColor: "blue.600" }}
+              {...bindLastName}
             />
           </FormControl>
         </Flex>
@@ -80,6 +134,7 @@ const RequestForm = () => {
             size={{ base: "sm", md: "md" }}
             border="1px solid green"
             _hover={{ borderColor: "blue.600" }}
+            {...bindLocation}
           />
         </FormControl>
 
@@ -99,6 +154,7 @@ const RequestForm = () => {
             size={{ base: "sm", md: "md" }}
             border="1px solid green"
             _hover={{ borderColor: "blue.600" }}
+            {...bindDestination}
           />
         </FormControl>
 
@@ -114,6 +170,7 @@ const RequestForm = () => {
             size={{ base: "sm", md: "md" }}
             border="1px solid green"
             _hover={{ borderColor: "blue.600" }}
+            {...bindPatientCondition}
           ></Textarea>
         </FormControl>
 

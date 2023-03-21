@@ -1,5 +1,5 @@
 const Request = require("../models/RequestModel");
-const User = require("../models/UserModel");
+
 const throwError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
@@ -10,7 +10,6 @@ const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 const getAllRequests = async (req, res) => {
   try {
     const all_requests = await Request.find()
-      .populate("requestor_id", "firstname lastname")
       .sort({ createdAt: "desc" })
       .exec();
 
@@ -37,7 +36,6 @@ const getRequest = async (req, res) => {
     }
 
     const request = await Request.findOne({ _id: id })
-      .populate("requestor_id", "firstname lastname")
       .sort({ createdAt: "desc" })
       .exec();
 
@@ -53,25 +51,29 @@ const getRequest = async (req, res) => {
 
 //POST new request
 const postRequest = async (req, res) => {
-  const { requestor_id, pickup_location, transfer_location, status } = req.body;
+  const {
+    requestor_id,
+    first_name,
+    last_name,
+    pickup_location,
+    transfer_location,
+    status,
+    patient_condition,
+  } = req.body;
+  console.log(req.body);
 
   try {
     let errorMessage = "Location is not defined";
     isEmpty(pickup_location, errorMessage);
 
-    errorMessage = "Requestor not found.";
-    if (isNotValidObjectId(requestor_id)) {
-      throwError(errorMessage);
-    }
-
-    const requestor = await User.findOne({ _id: requestor_id }).exec();
-    validateInstanceMethod(requestor, errorMessage);
-
     const new_request = await Request.create({
       requestor_id,
+      first_name,
+      last_name,
       pickup_location,
       transfer_location,
       status,
+      patient_condition,
     });
 
     errorMessage = "Failed to post request.";
@@ -102,14 +104,6 @@ const putRequest = async (req, res) => {
 
     errorMessage = "Location is not defined";
     isEmpty(pickup_location, errorMessage);
-
-    errorMessage = "Requestor not found.";
-    if (isNotValidObjectId(requestor_id)) {
-      throwError(errorMessage);
-    }
-
-    const requestor = await User.findOne({ _id: requestor_id }).exec();
-    validateInstanceMethod(requestor, errorMessage);
 
     const updated_request = await Request.findOneAndUpdate({
       id,

@@ -8,14 +8,16 @@ const Schema = mongoose.Schema;
 
 const RequestSchema = new Schema(
   {
-    requestor_id: { type: Schema.Types.ObjectId, ref: "User", required:true }, 
+    first_name: { type: String, required: true },
+    last_name: { type: String, required: true },
     pickup_location: { type: String, required: true },
-    transfer_loction: { type: String },
+    transfer_location: { type: String },
     status: {
       type: String,
       default: "pending",
       enum: ["pending", "approved", "fulfilled"],
     },
+    patient_condition: { type: String },
     referral_slip: { data: Buffer, contentType: String },
   },
   { timestamps: true }
