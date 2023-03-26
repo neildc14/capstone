@@ -31,11 +31,12 @@ const RequestorDashboardPanel = () => {
 
   useEffect(() => {
     if (!isLoading && !isFetching) {
-      setTotalRequest(data[0]?.value.data.length);
-      setTotalSuccessfulTransport(data[1]?.value.data.length);
+      setTotalRequest(data[0]?.value?.data.length || 0);
+      setTotalSuccessfulTransport(data[1]?.value?.data.length || 0);
     }
   }, [data, isLoading, isFetching]);
 
+  console.log(totalRequest, totalSuccessfulTransport, data);
   return (
     <>
       <Box px={{ md: 6 }}>
@@ -88,14 +89,20 @@ const RequestorDashboardPanel = () => {
                 Recent Request
               </Heading>
               <Divider />
-
-              {!isFetching && (
-                <RequestCard
-                  request_data={data[0].value.data[0]}
-                  request_id={data[0].value.data[0]._id}
-                  request_status={data[0].value.data[0].status}
-                />
-              )}
+              <Skeleton fadeDuration={1} isLoaded={!isLoading || !isFetching}>
+                {!isLoading &&
+                  !isFetching &&
+                  data[0]?.status === "fulfilled" && (
+                    <RequestCard
+                      request_data={data[0]?.value.data[0]}
+                      request_id={data[0]?.value.data[0]._id}
+                      request_status={data[0]?.value.data[0].status}
+                    />
+                  )}
+                {!isLoading &&
+                  !isFetching &&
+                  data[0]?.status === "rejected" && <p>No request found</p>}
+              </Skeleton>
             </Box>
             <Box as="section" mt={4}>
               <Heading
@@ -109,19 +116,26 @@ const RequestorDashboardPanel = () => {
                 Trip Ticket
               </Heading>
               <Divider />
-              {!isFetching && (
-                <TripTicket
-                  trip_ticket_data={data[1].value.data[0]}
-                  ticket_id={data[1].value.data[0]._id}
-                  ambulance_personnel={
-                    data[1].value.data[0].ambulance_personnel["fullName"]
-                  }
-                  ambulance_plate={
-                    data[1].value.data[0].ambulance["license_plate"]
-                  }
-                  destination={data[1].value.data[0].destination}
-                />
-              )}
+              <Skeleton fadeDuration={1} isLoaded={!isLoading || !isFetching}>
+                {!isLoading &&
+                  !isFetching &&
+                  data[1]?.status === "fulfilled" && (
+                    <TripTicket
+                      trip_ticket_data={data[1]?.value.data[0]}
+                      ticket_id={data[1]?.value.data[0]._id}
+                      ambulance_personnel={
+                        data[1]?.value.data[0].ambulance_personnel["fullName"]
+                      }
+                      ambulance_plate={
+                        data[1]?.value.data[0].ambulance["license_plate"]
+                      }
+                      destination={data[1]?.value.data[0].destination}
+                    />
+                  )}
+                {!isLoading &&
+                  !isFetching &&
+                  data[1]?.status === "rejected" && <p>No trip ticket found</p>}
+              </Skeleton>
             </Box>
           </Box>
         </Flex>
