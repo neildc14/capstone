@@ -1,15 +1,11 @@
 import React from "react";
 import {
   Box,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
   Divider,
-  Flex,
   Heading,
   Text,
+  Skeleton,
+  VStack,
 } from "@chakra-ui/react";
 import RequestCard from "./RequestCard";
 import { UilHistoryAlt } from "@iconscout/react-unicons";
@@ -25,13 +21,13 @@ const RequestorAllRequests = () => {
   };
 
   const { data, isLoading, isFetching, error } = useQuery(
-    ["ambulance_request_with_ticket"],
+    ["ambulance_request"],
     fetchAllRequests,
     {
       refetchOnWindowFocus: true,
     }
   );
-  console.log(data);
+  console.log(data, error);
 
   return (
     <Box p={{ md: 6 }}>
@@ -53,8 +49,8 @@ const RequestorAllRequests = () => {
           mt={4}
           overflowY="scroll"
         >
-          {!isFetching &&
-            data?.map((request) => (
+          <Skeleton isLoaded={!isLoading} height="40px">
+            {data?.map((request) => (
               <RequestCard
                 key={request._id}
                 request_data={request}
@@ -62,6 +58,9 @@ const RequestorAllRequests = () => {
                 request_status={request.status}
               />
             ))}
+
+            {error && <p>No Requests found</p>}
+          </Skeleton>
         </Box>
       </Box>
     </Box>

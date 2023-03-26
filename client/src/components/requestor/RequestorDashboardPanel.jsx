@@ -40,13 +40,16 @@ const RequestorDashboardPanel = () => {
   return (
     <>
       <Box px={{ md: 6 }}>
-        <Flex flexDirection={{ base: "column-reverse", md: "column" }}>
-          <Box>
+        <Flex
+          flexDirection={{ base: "column-reverse", md: "column" }}
+          justifyContent="space-between"
+          gap={{ base: "10rem", md: 0 }}
+        >
+          <Box as="section">
             <Box>
               <Heading
                 as="h2"
                 py={2}
-                display="flex"
                 fontSize="xl"
                 fontWeight="semibold"
                 bgColor="white"
@@ -55,7 +58,7 @@ const RequestorDashboardPanel = () => {
               </Heading>
               <Divider />
             </Box>
-            <Box as="section" my={8}>
+            <Box my={8}>
               <Flex
                 flexDirection={{ base: "column", md: "row" }}
                 justifyContent="space-evenly"
@@ -81,7 +84,6 @@ const RequestorDashboardPanel = () => {
               <Heading
                 as="h2"
                 py={2}
-                display="flex"
                 fontSize="xl"
                 fontWeight="semibold"
                 bgColor="white"
@@ -89,7 +91,11 @@ const RequestorDashboardPanel = () => {
                 Recent Request
               </Heading>
               <Divider />
-              <Skeleton fadeDuration={1} isLoaded={!isLoading || !isFetching}>
+              <Skeleton
+                fadeDuration={1}
+                isLoaded={!isLoading && !isFetching}
+                height="50px"
+              >
                 {!isLoading &&
                   !isFetching &&
                   data[0]?.status === "fulfilled" && (
@@ -108,7 +114,6 @@ const RequestorDashboardPanel = () => {
               <Heading
                 as="h2"
                 py={2}
-                display="flex"
                 fontSize="xl"
                 fontWeight="semibold"
                 bgColor="white"
@@ -116,7 +121,11 @@ const RequestorDashboardPanel = () => {
                 Trip Ticket
               </Heading>
               <Divider />
-              <Skeleton fadeDuration={1} isLoaded={!isLoading || !isFetching}>
+              <Skeleton
+                fadeDuration={1}
+                isLoaded={!isLoading && !isFetching}
+                height="50px"
+              >
                 {!isLoading &&
                   !isFetching &&
                   data[1]?.status === "fulfilled" && (

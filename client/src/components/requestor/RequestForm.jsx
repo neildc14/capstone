@@ -69,7 +69,7 @@ const RequestForm = () => {
       referral_slip: referralSlip,
       patient_condition: patientCondition,
     };
-    // mutation.mutate(body);
+    mutation.mutate(body);
   };
 
   return (
@@ -78,7 +78,7 @@ const RequestForm = () => {
       mx={{ base: "auto" }}
       p={4}
     >
-      <Box as="form" onSubmit={onRequestSubmit} enctype="multipart/form-data">
+      <Box as="form" onSubmit={onRequestSubmit} encType="multipart/form-data">
         <Heading
           mb={4}
           display="flex"
