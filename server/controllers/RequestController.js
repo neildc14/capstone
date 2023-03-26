@@ -1,4 +1,5 @@
 const Request = require("../models/RequestModel");
+const path = require("path");
 
 const throwError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
@@ -59,6 +60,7 @@ const postRequest = async (req, res) => {
     transfer_location,
     status,
     patient_condition,
+    referral_slip,
   } = req.body;
   console.log(req.body);
 
@@ -74,6 +76,12 @@ const postRequest = async (req, res) => {
       transfer_location,
       status,
       patient_condition,
+      referral_slip: {
+        data: fs.readFileSync(
+          path.join(__dirname + "/uploads/" + req.file.filename)
+        ),
+        contentType: "image/png",
+      },
     });
 
     errorMessage = "Failed to post request.";

@@ -55,6 +55,12 @@ const RequestForm = () => {
 
   const onRequestSubmit = (e) => {
     e.preventDefault();
+
+    let formData = new FormData();
+    formData.append("first_name", firstName);
+    formData.append("last_name", lastName);
+
+    console.log(formData.firstName);
     const body = {
       first_name: firstName,
       last_name: lastName,
@@ -63,7 +69,7 @@ const RequestForm = () => {
       referral_slip: referralSlip,
       patient_condition: patientCondition,
     };
-    mutation.mutate(body);
+    // mutation.mutate(body);
   };
 
   return (
@@ -72,7 +78,7 @@ const RequestForm = () => {
       mx={{ base: "auto" }}
       p={4}
     >
-      <Box as="form" onSubmit={onRequestSubmit}>
+      <Box as="form" onSubmit={onRequestSubmit} enctype="multipart/form-data">
         <Heading
           mb={4}
           display="flex"
@@ -92,6 +98,7 @@ const RequestForm = () => {
             </FormLabel>
             <Input
               type="text"
+              name="first_name"
               width="100%"
               size={{ base: "sm", md: "md" }}
               border="1px solid green"
@@ -109,6 +116,7 @@ const RequestForm = () => {
             </FormLabel>
             <Input
               type="text"
+              name="last_name"
               width="100%"
               size={{ base: "sm", md: "md" }}
               border="1px solid green"
@@ -130,6 +138,7 @@ const RequestForm = () => {
           </FormLabel>
           <Input
             type="text"
+            name="pickup_location"
             width="100%"
             size={{ base: "sm", md: "md" }}
             border="1px solid green"
@@ -150,6 +159,7 @@ const RequestForm = () => {
           </FormLabel>
           <Input
             type="text"
+            name="transfer_location"
             width="100%"
             size={{ base: "sm", md: "md" }}
             border="1px solid green"
@@ -167,6 +177,7 @@ const RequestForm = () => {
           </FormLabel>
           <Textarea
             width="100%"
+            name="patient_condtion"
             size={{ base: "sm", md: "md" }}
             border="1px solid green"
             _hover={{ borderColor: "blue.600" }}
@@ -183,6 +194,7 @@ const RequestForm = () => {
           </FormLabel>
           <Input
             type="file"
+            name="referral_slip"
             size={{ base: "sm", md: "md" }}
             border="1px solid green"
             _hover={{ borderColor: "blue.600" }}

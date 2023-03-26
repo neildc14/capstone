@@ -40,7 +40,7 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`USER CONNECTED ${socket.id}`);
 
-  socket.on("join_map", (data) => {   
+  socket.on("join_map", (data) => {
     socket.join(data);
   });
 
@@ -63,4 +63,4 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 // launch our backend into a port
 server.listen(process.env.API_PORT, () =>
   console.log(`Listening on port ${process.env.API_PORT}`)
-);  
+);

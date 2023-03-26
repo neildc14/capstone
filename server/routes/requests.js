@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const upload = require("../helpers/uploadImage");
+
 const {
   getAllRequests,
   getRequest,
@@ -9,7 +11,7 @@ const {
 } = require("../controllers/RequestController");
 
 router.get("/", getAllRequests);
-router.post("/", postRequest);
+router.post("/", upload.single("referral_slip"), postRequest);
 
 router.get("/:id", getRequest);
 router.put("/:id", putRequest);
