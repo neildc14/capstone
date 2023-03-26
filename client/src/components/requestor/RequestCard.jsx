@@ -70,6 +70,7 @@ const RequestCard = ({
               width="100%"
               gap="1rem"
               justifyContent={{ base: "space-between", md: "end" }}
+              flexDirection={{ base: "column", md: "row" }}
             >
               <Button
                 size="sm"

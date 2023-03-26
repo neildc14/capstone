@@ -5,7 +5,8 @@ import {
   Heading,
   Text,
   Skeleton,
-  VStack,
+  Card,
+  CardBody,
 } from "@chakra-ui/react";
 import RequestCard from "./RequestCard";
 import { UilHistoryAlt } from "@iconscout/react-unicons";
@@ -59,7 +60,11 @@ const RequestorAllRequests = () => {
               />
             ))}
 
-            {error && <p>No Requests found</p>}
+            {error && (
+              <Card bgColor="gray.50">
+                <CardBody>No requests found</CardBody>
+              </Card>
+            )}
           </Skeleton>
         </Box>
       </Box>

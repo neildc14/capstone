@@ -76,12 +76,13 @@ const postRequest = async (req, res) => {
       transfer_location,
       status,
       patient_condition,
-      referral_slip: {
+      /*referral_slip: {
         data: fs.readFileSync(
           path.join(__dirname + "/uploads/" + req.file.filename)
         ),
         contentType: "image/png",
-      },
+      },*/
+      
     });
 
     errorMessage = "Failed to post request.";
