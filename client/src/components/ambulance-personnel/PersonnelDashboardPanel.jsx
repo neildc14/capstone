@@ -34,29 +34,6 @@ const PersonnelDashboardPanel = () => {
             >
               Dashboard Panel
             </Heading>
-
-            <Menu>
-              <MenuButton
-                as={Button}
-                borderRadius={0}
-                size="sm"
-                bgColor="blue.400"
-                color="white"
-              >
-                Availability
-              </MenuButton>
-              <MenuList>
-                <MenuGroup title="Profile">
-                  <MenuItem>My Account</MenuItem>
-                  <MenuItem>Payments </MenuItem>
-                </MenuGroup>
-                <MenuDivider />
-                <MenuGroup title="Help">
-                  <MenuItem>Docs</MenuItem>
-                  <MenuItem>FAQ</MenuItem>
-                </MenuGroup>
-              </MenuList>
-            </Menu>
           </Flex>
           <Divider />
         </Box>

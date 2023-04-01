@@ -10,7 +10,7 @@ const TopNav = () => {
       <IconButton
         aria-label="Toggle dashboard"
         variant="ghost"
-        icon={<HamburgerIcon boxSize={6} />}
+        icon={<HamburgerIcon boxSize={6} color="custom.primary" />}
         onClick={toggleDashboard}
       />
     </>

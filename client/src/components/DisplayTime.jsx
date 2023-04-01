@@ -1,5 +1,7 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
+import clock from "../assets/icons/clock.png";
+import { UilClock } from "@iconscout/react-unicons";
 
 const DateTime = () => {
   const [dateTime, setDateTime] = useState(new Date());
@@ -18,7 +20,6 @@ const DateTime = () => {
     day: "numeric",
     hour: "numeric",
     minute: "numeric",
-    second: "numeric",
     hour12: true,
   };
 
@@ -26,7 +27,12 @@ const DateTime = () => {
     dateTime
   );
 
-  return <Box>{formattedDateTime}</Box>;
+  return (
+    <Box display="inline-flex" alignItems="center" gap={2}>
+      <UilClock color="#ff7a00" size="24px" />
+      {formattedDateTime}
+    </Box>
+  );
 };
 
 export default DateTime;
