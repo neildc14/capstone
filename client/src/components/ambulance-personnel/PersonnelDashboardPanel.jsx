@@ -13,8 +13,9 @@ import {
   MenuGroup,
   MenuOptionGroup,
   MenuDivider,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
-import PanelCard from "../PanelCard";
 import PersonnelPanelCard from "./PersonnelPanelCard";
 import RequestCard from "../RequestCard";
 
@@ -38,31 +39,61 @@ const PersonnelDashboardPanel = () => {
           <Divider />
         </Box>
         <Box my={8}>
-          <Flex
-            flexDirection={{ base: "column", md: "row" }}
-            justifyContent="space-evenly"
-            gap="2rem"
+          <Grid
+            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
+            gap={3}
           >
-            <PersonnelPanelCard
-              total={0}
-              title="Total Requests"
-              type="Pending"
-              bgColor="#E2E8F0"
-            />
+            <GridItem>
+              <PersonnelPanelCard
+                total={0}
+                title="Total Requests"
+                type="Pending"
+                bgColor="#E2E8F0"
+              />
+            </GridItem>
 
-            <PersonnelPanelCard
-              title="Total Requests"
-              total={0}
-              bgColor="#E2E8F0"
-              type="Approved"
-            />
-            <PersonnelPanelCard
-              title="Total Requests"
-              total={0}
-              bgColor="#E2E8F0"
-              type="Fulfilled"
-            />
-          </Flex>
+            <GridItem>
+              <PersonnelPanelCard
+                title="Total Requests"
+                total={0}
+                bgColor="#E2E8F0"
+                type="Approved"
+              />
+            </GridItem>
+
+            <GridItem>
+              <PersonnelPanelCard
+                title="Total Requests"
+                total={0}
+                bgColor="#E2E8F0"
+                type="Fulfilled"
+              />
+            </GridItem>
+            <GridItem>
+              <PersonnelPanelCard
+                title="Total Requests"
+                total={0}
+                bgColor="#E2E8F0"
+                type="Rejected"
+              />
+            </GridItem>
+            <GridItem>
+              <PersonnelPanelCard
+                title="Total Ambulance"
+                total={0}
+                bgColor="#E2E8F0"
+                type="Available"
+              />
+            </GridItem>
+            <GridItem>
+              <PersonnelPanelCard
+                title="Total Distance Travelled "
+                total={0}
+                bgColor="#E2E8F0"
+                type="Today"
+              />
+            </GridItem>
+          </Grid>
         </Box>
       </Box>
       <Box>
@@ -85,6 +116,7 @@ const PersonnelDashboardPanel = () => {
           <Divider />
         </Box>
         <Box>
+          <RequestCard />
           <RequestCard />
         </Box>
       </Box>
