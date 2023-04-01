@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Link } from "@chakra-ui/react";
+import { Box, Divider, Link, Text } from "@chakra-ui/react";
 import Sidebar from "../Sidebar";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import useHover from "../../hooks/useHover";
@@ -8,6 +8,7 @@ import {
   UilFileInfoAlt,
   UilFilePlusAlt,
   UilLocationPinAlt,
+  UilThLarge,
 } from "@iconscout/react-unicons";
 
 const PersonnelSidebar = () => {
@@ -21,6 +22,17 @@ const PersonnelSidebar = () => {
   return (
     <Sidebar bgColor="teal.900">
       <Box>
+        <Box py={4}>
+          <Text
+            textAlign="center"
+            fontSize="2xl"
+            fontWeight="bold"
+            color="#FF7A00"
+          >
+            LDRRMO-ARMS
+          </Text>
+          <Divider c />
+        </Box>
         <Box ps={4} py={8}>
           <Box as="section" my={4}>
             <Link
@@ -40,17 +52,18 @@ const PersonnelSidebar = () => {
               fontWeight="semibold"
               color={
                 location.pathname === "/ambulance_personnel"
-                  ? "blackAlpha.900"
+                  ? "#FF7A00"
                   : "whiteAlpha.900"
               }
-              bgColor={location.pathname === "/ambulance_personnel" && "whiteAlpha.900"}
+              bgColor={
+                location.pathname === "/ambulance_personnel" && "whiteAlpha.900"
+              }
               _hover={{
-                color: "blackAlpha.900",
-                bgColor: "whiteAlpha.900",
+                color: "#FF7A00",
               }}
               {...bindHoverRequestDashboard}
             >
-              <UilCreateDashboard />
+              <UilThLarge />
               Dashboard
             </Link>
 
@@ -71,20 +84,20 @@ const PersonnelSidebar = () => {
               fontWeight="semibold"
               color={
                 location.pathname === "/ambulance_personnel/requests"
-                  ? "blackAlpha.900"
+                  ? "#FF7A00"
                   : "whiteAlpha.900"
               }
               bgColor={
-                location.pathname === "/ambulance_personnel/requests" && "whiteAlpha.900"
+                location.pathname === "/ambulance_personnel/requests" &&
+                "whiteAlpha.900"
               }
               _hover={{
-                color: "blackAlpha.900",
-                bgColor: "whiteAlpha.900",
+                color: "#FF7A00",
               }}
               {...bindHoverRequest}
             >
               <UilFileInfoAlt />
-             Handled Requests
+              Handled Requests
             </Link>
 
             <Link
@@ -104,23 +117,21 @@ const PersonnelSidebar = () => {
               fontWeight="semibold"
               color={
                 location.pathname === "/ambulance_personnel/map"
-                  ? "blackAlpha.900"
+                  ? "#FF7A00"
                   : "whiteAlpha.900"
               }
               bgColor={
-                location.pathname === "/ambulance_personnel/map" && "whiteAlpha.900"
+                location.pathname === "/ambulance_personnel/map" &&
+                "whiteAlpha.900"
               }
               _hover={{
-                color: "blackAlpha.900",
-                bgColor: "whiteAlpha.900",
+                color: "#FF7A00",
               }}
               {...bindHoverRequestMap}
             >
               <UilLocationPinAlt />
               Locate Patient
             </Link>
-
-           
           </Box>
         </Box>
       </Box>
