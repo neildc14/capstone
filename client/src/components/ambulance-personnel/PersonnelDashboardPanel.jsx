@@ -5,19 +5,12 @@ import {
   Divider,
   Flex,
   Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
   Grid,
   GridItem,
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "./PersonnelPanelCard";
 import RequestCard from "../RequestCard";
+import PersonnelRecentRequestCard from "./PersonnelRecentRequestCard";
 
 const PersonnelDashboardPanel = () => {
   return (
@@ -96,9 +89,14 @@ const PersonnelDashboardPanel = () => {
           </Grid>
         </Box>
       </Box>
-      <Box>
+      <Box mb={8} border="1px solid #D9D9D9">
         <Box>
-          <Flex justifyContent="space-between" alignItems="center">
+          <Flex
+            px={4}
+            py={2}
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Heading
               as="h2"
               py={2}
@@ -107,17 +105,49 @@ const PersonnelDashboardPanel = () => {
               bgColor="white"
               color="gray.700"
             >
-              Pending Requests
+              Recent Approved Request
             </Heading>
-            <Button size="sm" borderRadius="0" px={6}>
-              View All
+            <Button
+              size="sm"
+              px={6}
+              border="1px solid #ff7a00"
+              borderRadius="sm"
+              color="custom.primary"
+              bgColor="white"
+              _hover={{ color: "white", bgColor: "custom.primary" }}
+            >
+              View All Requests
             </Button>
           </Flex>
           <Divider />
         </Box>
+        <Box px={4} py={2}>
+          <PersonnelRecentRequestCard />
+        </Box>
+      </Box>
+      <Box border="1px solid #D9D9D9">
         <Box>
-          <RequestCard />
-          <RequestCard />
+          <Flex
+            px={4}
+            py={2}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Heading
+              as="h2"
+              py={2}
+              fontSize="xl"
+              fontWeight="semibold"
+              bgColor="white"
+              color="gray.700"
+            >
+              Recent Pending Request
+            </Heading>
+          </Flex>
+          <Divider />
+        </Box>
+        <Box px={4} py={2}>
+          <PersonnelRecentRequestCard />
         </Box>
       </Box>
     </Box>
