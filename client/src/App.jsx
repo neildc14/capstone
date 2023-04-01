@@ -10,6 +10,8 @@ import ViewMap from "./components/ViewMap";
 import RequestorDashboardPanel from "./components/requestor/RequestorDashboardPanel";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import PersonnelDashboardPanel from "./components/ambulance-personnel/PersonnelDashboardPanel";
+import HandledRequest from "./components/ambulance-personnel/HandledRequest";
 
 function App() {
   const queryClient = new QueryClient();
@@ -29,9 +31,13 @@ function App() {
           </Route>
           <Route path="/administrator" element={<AdministratorDashboard />} />
           <Route
-            path="/ambulance_personnel"
+            path="ambulance_personnel"
             element={<AmbulancePersonnelDashboard />}
-          />
+          >
+            <Route path="" element={<PersonnelDashboardPanel />} />
+            <Route path="requests" element={<HandledRequest />} />
+            <Route path="map" element={<ViewMap />} />
+          </Route>
         </Routes>
       </div>
       <ReactQueryDevtools initialIsOpen={false} />

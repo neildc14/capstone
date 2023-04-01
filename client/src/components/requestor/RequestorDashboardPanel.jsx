@@ -8,7 +8,7 @@ import {
   Card,
   CardBody,
 } from "@chakra-ui/react";
-import RequestCard from "./RequestCard";
+import RequestCard from "../RequestCard";
 import TripTicket from "../TripTicket";
 import PanelCard from "../PanelCard";
 import { useQuery } from "@tanstack/react-query";
@@ -77,6 +77,11 @@ const RequestorDashboardPanel = () => {
                   bgColor="blue.200"
                 />
 
+                <PanelCard
+                  cardHeader="Total Successful Transport"
+                  cardBody={totalSuccessfulTransport}
+                  bgColor="orange.200"
+                />
                 <PanelCard
                   cardHeader="Total Successful Transport"
                   cardBody={totalSuccessfulTransport}

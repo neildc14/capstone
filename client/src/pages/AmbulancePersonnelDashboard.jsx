@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Box, useMediaQuery, useDisclosure, Flex } from "@chakra-ui/react";
 import Header from "../layouts/Header";
-import RequestorSidebar from "../components/requestor/RequestorSidebar";
+import PersonnelSidebar from "../components/ambulance-personnel/PersonnelSidebar";
 import RequestorMobileSidebar from "../components/requestor/RequestorMobileSidebar";
 import { Outlet } from "react-router-dom";
 
@@ -22,7 +22,7 @@ const AmbulancePersonnelDashboard = () => {
         height={{ base: "100vh" }}
       >
         {isLargerThan768 ? (
-          <RequestorSidebar />
+          <PersonnelSidebar />
         ) : (
           <RequestorMobileSidebar isOpen={isOpen} onClose={onClose} />
         )}

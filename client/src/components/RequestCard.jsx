@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { UilEye, UilTrashAlt } from "@iconscout/react-unicons";
 import RequestCardDetailsModal from "./RequestCardDetailsModal";
-import DeleteConfirmationModal from "../DeleteConfirmationModal";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
 const RequestCard = ({
   request_data,

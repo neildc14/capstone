@@ -7,11 +7,12 @@ import {
   CardHeader,
   CardBody,
   Flex,
+  Text,
 } from "@chakra-ui/react";
 
-const PanelCard = ({ value, cardHeader, cardBody, bgColor }) => {
+const PersonnelPanelCard = ({ total, title, type, bgColor }) => {
   return (
-    <Card flex={{ md: "1" }} py={4} bgColor={bgColor}>
+    <Card flex={{ md: "1" }} bgColor={bgColor} py={4}>
       <CardBody>
         <Flex
           flexDirection="column"
@@ -19,15 +20,16 @@ const PanelCard = ({ value, cardHeader, cardBody, bgColor }) => {
           alignItems="center"
         >
           <Heading as="h3" fontSize="3xl" color="orange.500">
-            {cardBody}
+            {total}
           </Heading>
           <Heading as="h2" fontSize="lg" fontWeight="semibold">
-            {cardHeader}
+            {title}
           </Heading>
+          <Text fontSize="sm">{type}</Text>
         </Flex>
       </CardBody>
     </Card>
   );
 };
 
-export default PanelCard;
+export default PersonnelPanelCard;
