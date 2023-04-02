@@ -12,13 +12,14 @@ const PersonnelTripTicketCard = () => {
           gap={{ base: 4, md: 0 }}
         >
           <Heading as="h5" display="block" fontSize="md" fontWeight="semibold">
-            Request ID:{" "}
+            Ticket ID:{" "}
             <Text as="span" fontWeight="normal">
               3210mfg3asdnfkn489fnf
             </Text>
           </Heading>
           <Button
             size="sm"
+            width={{ base: "100%", md: "inherit" }}
             px={6}
             bgColor="custom.primary"
             color="white"

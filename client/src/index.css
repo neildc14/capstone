@@ -11,20 +11,22 @@ body {
   width: 100%;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-  height: 4rem;
-}
-::-webkit-scrollbar:horizontal {
-  width: 4rem;
-  height: 10px;
-}
+@media screen and (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 4rem;
+  }
+  ::-webkit-scrollbar:horizontal {
+    width: 4rem;
+    height: 10px;
+  }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  background: #c2c9d2;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  border-radius: 8px;
-  background: #c2c9d2;
+  ::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #c2c9d2;
+  }
+  ::-webkit-scrollbar-thumb:horizontal {
+    border-radius: 8px;
+    background: #c2c9d2;
+  }
 }

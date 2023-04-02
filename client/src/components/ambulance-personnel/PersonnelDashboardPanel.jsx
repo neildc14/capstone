@@ -133,7 +133,7 @@ const PersonnelDashboardPanel = () => {
                   px={6}
                   width={{ base: "100%", md: "inherit" }}
                   border="1px solid #ff7a00"
-                  borderRadius="sm"
+                  borderRadius="md"
                   color="custom.primary"
                   bgColor="white"
                   _hover={{ color: "white", bgColor: "custom.primary" }}
@@ -168,8 +168,7 @@ const PersonnelDashboardPanel = () => {
                   bgColor="white"
                   color="gray.700"
                 >
-                  <UilDocumentInfo color="#FF7A00" /> Recent Pending
-                  Request
+                  <UilDocumentInfo color="#FF7A00" /> Recent Pending Request
                 </Heading>
               </Flex>
               <Divider />
