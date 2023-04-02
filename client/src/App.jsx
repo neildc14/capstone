@@ -12,12 +12,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import PersonnelDashboardPanel from "./components/ambulance-personnel/PersonnelDashboardPanel";
 import HandledRequest from "./components/ambulance-personnel/HandledRequest";
+import AllRequests from "./components/ambulance-personnel/AllRequests";
+import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTripTickets";
+import PersonnelAmbulancePage from "./components/ambulance-personnel/PersonnelAmbulancePage";
 
 function App() {
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient} >
+    <QueryClientProvider client={queryClient}>
       <div className="App">
         <Routes>
           <Route path="/account/login" element={<Login />} />
@@ -36,6 +39,9 @@ function App() {
           >
             <Route path="" element={<PersonnelDashboardPanel />} />
             <Route path="requests" element={<HandledRequest />} />
+            <Route path="all_requests" element={<AllRequests />} />
+            <Route path="trip_tickets" element={<PersonnelTripTickets />} />
+            <Route path="ambulance" element={<PersonnelAmbulancePage />} />
             <Route path="map" element={<ViewMap />} />
           </Route>
         </Routes>

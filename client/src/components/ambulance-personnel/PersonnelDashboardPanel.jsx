@@ -10,8 +10,14 @@ import {
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "./PersonnelPanelCard";
 import PersonnelRecentRequestCard from "./PersonnelRecentRequestCard";
+import { useNavigate } from "react-router-dom";
 
 const PersonnelDashboardPanel = () => {
+  const navigate = useNavigate();
+
+  const navigateToAllRequests = () => {
+    navigate("all_requests");
+  };
   return (
     <Box>
       <Flex
@@ -122,6 +128,7 @@ const PersonnelDashboardPanel = () => {
                   color="custom.primary"
                   bgColor="white"
                   _hover={{ color: "white", bgColor: "custom.primary" }}
+                  onClick={navigateToAllRequests}
                 >
                   View All Requests
                 </Button>
