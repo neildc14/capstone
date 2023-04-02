@@ -24,7 +24,7 @@ const PersonnelSidebar = () => {
   return (
     <Sidebar bgColor="teal.900">
       <Box>
-        <Box py={4}>
+        <Box py={1}>
           <Text
             textAlign="center"
             fontSize="2xl"
@@ -33,9 +33,9 @@ const PersonnelSidebar = () => {
           >
             LDRRMO-ARMS
           </Text>
-          <Divider c />
+          <Divider />
         </Box>
-        <Box ps={4} py={8}>
+        <Box ps={4} py={1}>
           <Box as="section" my={4}>
             <Link
               as={RouterLink}

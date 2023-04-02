@@ -51,7 +51,7 @@ const PersonnelDashboardPanel = () => {
           <Box my={8}>
             <Grid
               templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
-              gap={3}
+              gap={6}
             >
               <GridItem>
                 <PersonnelPanelCard

@@ -12,7 +12,7 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
-import PersonnelTripTicketCard from "./PersonelTripTicketCard";
+import PersonnelTripTicketCard from "./PersonnelTripTicketCard";
 import { UilHistory, UilFileInfoAlt } from "@iconscout/react-unicons";
 
 const PersonnelTripTickets = () => {
