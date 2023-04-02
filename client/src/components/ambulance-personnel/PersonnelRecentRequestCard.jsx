@@ -8,6 +8,7 @@ const PersonnelRecentRequestCard = () => {
         <Flex
           flexDirection={{ base: "column", md: "row" }}
           justifyContent="space-between"
+          alignItems="center"
           gap={{ base: 4, md: 0 }}
         >
           <Heading as="h5" display="block" fontSize="md" fontWeight="semibold">

@@ -128,7 +128,7 @@ const PersonnelDashboardPanel = () => {
               </Flex>
               <Divider />
             </Box>
-            <Box px={4} py={2}>
+            <Box px={4} py={4}>
               <PersonnelRecentRequestCard />
             </Box>
           </Box>
@@ -153,7 +153,7 @@ const PersonnelDashboardPanel = () => {
               </Flex>
               <Divider />
             </Box>
-            <Box px={4} py={2}>
+            <Box px={4} py={4}>
               <PersonnelRecentRequestCard />
             </Box>
           </Box>
