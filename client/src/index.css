@@ -11,7 +11,7 @@ body {
   width: 100%;
 }
 
-::-webkit-scrollbar:vertical {
+::-webkit-scrollbar {
   width: 10px;
   height: 4rem;
 }
@@ -21,6 +21,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background: #c2c9d2;
+}
+::-webkit-scrollbar-thumb:horizontal {
   border-radius: 8px;
   background: #c2c9d2;
 }

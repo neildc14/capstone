@@ -15,7 +15,7 @@ import {
   Select,
   Tbody,
 } from "@chakra-ui/react";
-import { UilSearch } from "@iconscout/react-unicons";
+import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
 
 const AllRequests = () => {
   return (
@@ -34,6 +34,8 @@ const AllRequests = () => {
               <Heading
                 as="h2"
                 flex="1"
+                display="inline-flex"
+                gap={2}
                 py={2}
                 fontSize="xl"
                 fontWeight="semibold"
@@ -41,7 +43,7 @@ const AllRequests = () => {
                 bgColor="white"
                 color="gray.700"
               >
-                All Requests
+                <UilLayerGroup color="#FF7A00" /> All Requests
               </Heading>
               <Box display="inline-flex" flex="1" gap={2}>
                 <Input

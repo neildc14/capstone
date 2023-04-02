@@ -11,6 +11,11 @@ import {
 import PersonnelPanelCard from "./PersonnelPanelCard";
 import PersonnelRecentRequestCard from "./PersonnelRecentRequestCard";
 import { useNavigate } from "react-router-dom";
+import {
+  UilFileCheckAlt,
+  UilThLarge,
+  UilDocumentInfo,
+} from "@iconscout/react-unicons";
 
 const PersonnelDashboardPanel = () => {
   const navigate = useNavigate();
@@ -30,13 +35,15 @@ const PersonnelDashboardPanel = () => {
             <Flex justifyContent="space-between" alignItems="center">
               <Heading
                 as="h2"
+                display="inline-flex"
+                gap={2}
                 py={2}
                 fontSize="xl"
                 fontWeight="semibold"
                 bgColor="white"
                 color="gray.700"
               >
-                Dashboard Panel
+                <UilThLarge color="#FF7A00" /> Dashboard Panel
               </Heading>
             </Flex>
             <Divider />
@@ -111,13 +118,15 @@ const PersonnelDashboardPanel = () => {
               >
                 <Heading
                   as="h2"
+                  display="inline-flex"
+                  gap={2}
                   py={2}
                   fontSize="xl"
                   fontWeight="semibold"
                   bgColor="white"
                   color="gray.700"
                 >
-                  Recent Approved Request
+                  <UilFileCheckAlt color="#FF7A00" /> Recent Approved Request
                 </Heading>
                 <Button
                   size="sm"
@@ -142,6 +151,8 @@ const PersonnelDashboardPanel = () => {
           <Box border="1px solid #D9D9D9">
             <Box>
               <Flex
+                display="inline-flex"
+                gap={2}
                 px={4}
                 py={2}
                 justifyContent="space-between"
@@ -149,13 +160,16 @@ const PersonnelDashboardPanel = () => {
               >
                 <Heading
                   as="h2"
+                  display="inline-flex"
+                  gap={2}
                   py={2}
                   fontSize="xl"
                   fontWeight="semibold"
                   bgColor="white"
                   color="gray.700"
                 >
-                  Recent Pending Request
+                  <UilDocumentInfo color="#FF7A00" /> Recent Pending
+                  Request
                 </Heading>
               </Flex>
               <Divider />
