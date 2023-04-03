@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, Card, CardBody, Flex, Heading, Text } from "@chakra-ui/react";
-import ModalContainer from "../ModalContainer";
+import ModalContainer from "./ModalContainer";
 
-const PersonnelRecentRequestCard = () => {
+const AdministrativeCardContainer = ({ card_header, card_header_detail }) => {
   const [isOpen, setOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -25,13 +25,14 @@ const PersonnelRecentRequestCard = () => {
               fontSize="md"
               fontWeight="semibold"
             >
-              Request ID:{" "}
+              {card_header}:
               <Text as="span" fontWeight="normal">
-                3210mfg3asdnfkn489fnf
+                {card_header_detail}
               </Text>
             </Heading>
             <Button
               size="sm"
+              width={{ base: "100%", md: "inherit" }}
               px={6}
               bgColor="custom.primary"
               color="white"
@@ -61,4 +62,4 @@ const PersonnelRecentRequestCard = () => {
   );
 };
 
-export default PersonnelRecentRequestCard;
+export default React.memo(AdministrativeCardContainer);

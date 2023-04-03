@@ -16,6 +16,7 @@ import {
   UilThLarge,
   UilDocumentInfo,
 } from "@iconscout/react-unicons";
+import AdministrativeCardContainer from "../AdministrativeCardContainer";
 
 const PersonnelDashboardPanel = () => {
   const navigate = useNavigate();
@@ -145,7 +146,10 @@ const PersonnelDashboardPanel = () => {
               <Divider />
             </Box>
             <Box px={4} py={4}>
-              <PersonnelRecentRequestCard />
+              <AdministrativeCardContainer
+                card_header="Request ID"
+                card_header_detail="dasdajhgsdfgdsgfd"
+              />
             </Box>
           </Box>
           <Box border="1px solid #D9D9D9">
@@ -174,7 +178,10 @@ const PersonnelDashboardPanel = () => {
               <Divider />
             </Box>
             <Box px={4} py={4}>
-              <PersonnelRecentRequestCard />
+              <AdministrativeCardContainer
+                card_header="Request ID"
+                card_header_detail="dasdajhgsdfgdsgfd"
+              />
             </Box>
           </Box>
         </Box>

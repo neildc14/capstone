@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Heading, Divider, Flex, Button } from "@chakra-ui/react";
 import PersonnelRecentRequestCard from "./PersonnelRecentRequestCard";
 import { UilHistory, UilUserCheck } from "@iconscout/react-unicons";
+import AdministrativeCardContainer from "../AdministrativeCardContainer";
 
 const HandledRequest = () => {
   return (
@@ -32,7 +33,10 @@ const HandledRequest = () => {
             <Divider />
           </Box>
           <Box px={4} py={4}>
-            <PersonnelRecentRequestCard />
+            <AdministrativeCardContainer
+              card_header="Request ID"
+              card_header_detail="dasdajhgsdfgdsgfd"
+            />
           </Box>
         </Box>
       </Box>
@@ -57,13 +61,22 @@ const HandledRequest = () => {
         </Box>
         <Box px={4} py={2} height={{ md: "55vh" }} overflowY="scroll">
           <Flex flexDirection="column" gap={4}>
-            <PersonnelRecentRequestCard />
-            <PersonnelRecentRequestCard />
-            <PersonnelRecentRequestCard />
-            <PersonnelRecentRequestCard />
-            <PersonnelRecentRequestCard />
-            <PersonnelRecentRequestCard />
-            <PersonnelRecentRequestCard />
+            <AdministrativeCardContainer
+              card_header="Request ID"
+              card_header_detail="dasdajhgsdfgdsgfd"
+            />
+            <AdministrativeCardContainer
+              card_header="Request ID"
+              card_header_detail="dasdajhgsdfgdsgfd"
+            />
+            <AdministrativeCardContainer
+              card_header="Request ID"
+              card_header_detail="dasdajhgsdfgdsgfd"
+            />
+            <AdministrativeCardContainer
+              card_header="Request ID"
+              card_header_detail="dasdajhgsdfgdsgfd"
+            />
           </Flex>
         </Box>
       </Box>
