@@ -8,7 +8,7 @@ const NotifBell = () => {
         variant="ghost"
         borderRadius={0}
         _hover={{ bgColor: "none" }}
-        icon={<UilBell boxSize={5} color="#ff7a00" />}
+        icon={<UilBell color="#ff7a00" />}
       />
     </Tooltip>
   );

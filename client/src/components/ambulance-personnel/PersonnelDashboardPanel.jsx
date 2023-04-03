@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Heading,
@@ -9,14 +9,14 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "./PersonnelPanelCard";
-import PersonnelRecentRequestCard from "./PersonnelRecentRequestCard";
 import { useNavigate } from "react-router-dom";
 import {
   UilFileCheckAlt,
   UilThLarge,
   UilDocumentInfo,
 } from "@iconscout/react-unicons";
-import AdministrativeCardContainer from "../AdministrativeCardContainer";
+
+import RequestCard from "./RequestCard";
 
 const PersonnelDashboardPanel = () => {
   const navigate = useNavigate();
@@ -24,6 +24,28 @@ const PersonnelDashboardPanel = () => {
   const navigateToAllRequests = () => {
     navigate("all_requests");
   };
+
+  const panel_card_data = [
+    { title: "Total Requests", total: 0, type: "Pending" },
+    {
+      title: "Total Requests",
+      total: 0,
+      type: "Approved",
+    },
+    { title: "Total Requests", total: 0, type: "Fulfilled" },
+    { title: "Total Requests", total: 0, type: "Rejected" },
+    {
+      title: "Total Ambulance",
+      total: 0,
+      type: "Available",
+    },
+    {
+      title: "Total Distance Travelled ",
+      total: 0,
+      type: "Today",
+    },
+  ];
+
   return (
     <Box>
       <Flex
@@ -54,56 +76,16 @@ const PersonnelDashboardPanel = () => {
               templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
               gap={6}
             >
-              <GridItem>
-                <PersonnelPanelCard
-                  total={0}
-                  title="Total Requests"
-                  type="Pending"
-                  bgColor="#E2E8F0"
-                />
-              </GridItem>
-
-              <GridItem>
-                <PersonnelPanelCard
-                  title="Total Requests"
-                  total={0}
-                  bgColor="#E2E8F0"
-                  type="Approved"
-                />
-              </GridItem>
-
-              <GridItem>
-                <PersonnelPanelCard
-                  title="Total Requests"
-                  total={0}
-                  bgColor="#E2E8F0"
-                  type="Fulfilled"
-                />
-              </GridItem>
-              <GridItem>
-                <PersonnelPanelCard
-                  title="Total Requests"
-                  total={0}
-                  bgColor="#E2E8F0"
-                  type="Rejected"
-                />
-              </GridItem>
-              <GridItem>
-                <PersonnelPanelCard
-                  title="Total Ambulance"
-                  total={0}
-                  bgColor="#E2E8F0"
-                  type="Available"
-                />
-              </GridItem>
-              <GridItem>
-                <PersonnelPanelCard
-                  title="Total Distance Travelled "
-                  total={0}
-                  bgColor="#E2E8F0"
-                  type="Today"
-                />
-              </GridItem>
+              {panel_card_data?.map((panel_card) => (
+                <GridItem key={panel_card.type}>
+                  <PersonnelPanelCard
+                    total={panel_card.total}
+                    title={panel_card.title}
+                    type={panel_card.type}
+                    bgColor="#E2E8F0"
+                  />
+                </GridItem>
+              ))}
             </Grid>
           </Box>
         </Box>
@@ -146,7 +128,7 @@ const PersonnelDashboardPanel = () => {
               <Divider />
             </Box>
             <Box px={4} py={4}>
-              <AdministrativeCardContainer
+              <RequestCard
                 card_header="Request ID"
                 card_header_detail="dasdajhgsdfgdsgfd"
               />
@@ -178,7 +160,7 @@ const PersonnelDashboardPanel = () => {
               <Divider />
             </Box>
             <Box px={4} py={4}>
-              <AdministrativeCardContainer
+              <RequestCard
                 card_header="Request ID"
                 card_header_detail="dasdajhgsdfgdsgfd"
               />
