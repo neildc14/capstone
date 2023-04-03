@@ -165,4 +165,4 @@ const PersonnelAmbulancePage = () => {
   );
 };
 
-export default PersonnelAmbulancePage;
+export default React.memo(PersonnelAmbulancePage);

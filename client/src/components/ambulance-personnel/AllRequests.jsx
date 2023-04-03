@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Box,
   Button,
@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
 import ModalContainer from "../global/ModalContainer";
+import { useTable } from "react-table";
 
 const AllRequests = () => {
   const [isOpen, setOpen] = useState(false);
@@ -26,31 +27,79 @@ const AllRequests = () => {
     setOpen(!isOpen);
   };
 
-  let count = 10;
+  const viewButton = (
+    <Button
+      size="sm"
+      px={6}
+      bgColor="custom.primary"
+      color="white"
+      _hover={{ bgColor: "orange.500" }}
+      onClick={handleOpenModal}
+    >
+      View
+    </Button>
+  );
 
-  const listItems = [];
-  for (let i = 0; i < count; i++) {
-    listItems.push(
-      <Tr>
-        <Td textAlign="center">sadasddsadasdasdasdgsdgf</Td>
-        <Td textAlign="center">Manila</Td>
-        <Td textAlign="center">Cavite</Td>
-        <Td textAlign="center">Pending</Td>
-        <Td display="inline-flex">
-          <Button
-            size="sm"
-            px={6}
-            bgColor="custom.primary"
-            color="white"
-            _hover={{ bgColor: "orange.500" }}
-            onClick={handleOpenModal}
-          >
-            View
-          </Button>
-        </Td>
-      </Tr>
-    );
-  }
+  const data = useMemo(
+    () => [
+      {
+        id: "sadasddsadasdasdasdgsdgf",
+        pickup_location: "Manila",
+        transfer_location: "San Jose",
+        status: "Pending",
+        action: viewButton,
+      },
+      {
+        id: "sadasddsadasdasdasdgsdgf",
+        pickup_location: "Manila",
+        transfer_location: "San Jose",
+        status: "Pending",
+        action: viewButton,
+      },
+      {
+        id: "sadasddsadasdasdasdgsdgf",
+        pickup_location: "Manila",
+        transfer_location: "San Jose",
+        status: "Pending",
+        action: viewButton,
+      },
+    ],
+    []
+  );
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Request ID",
+        accessor: "id",
+      },
+      {
+        Header: "Pickup Location",
+        accessor: "pickup_location",
+      },
+      {
+        Header: "Transfer Location",
+        accessor: "transfer_location",
+      },
+      {
+        Header: (
+          <Select size="xs" fontWeight="bold" placeholder="STATUS">
+            <option value="pending">PENDING</option>
+            <option value="approved">APPROVED</option>
+            <option value="fulfilled">FULFILLED</option>
+            <option value="rejected">REJECTED</option>
+          </Select>
+        ),
+        accessor: "status",
+      },
+      { Header: "Action", accessor: "action" },
+    ],
+    []
+  );
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({ columns, data });
+
   return (
     <>
       <Box>
@@ -99,24 +148,33 @@ const AllRequests = () => {
             overflowY="scroll"
             overflowX={{ base: "scroll", lg: "hidden" }}
           >
-            <Table variant="simple">
+            <Table {...getTableProps()}>
               <Thead>
-                <Tr>
-                  <Th textAlign="center">Request ID</Th>
-                  <Th textAlign="center">Pickup Location</Th>
-                  <Th textAlign="center">Transfer Location</Th>
-                  <Th textAlign="center">
-                    <Select placeholder="STATUS" size="xs" fontWeight="bold">
-                      <option value="pending">PENDING</option>
-                      <option value="approved">APPROVED</option>
-                      <option value="fulfilled">FULFILLED</option>
-                    </Select>
-                  </Th>
-                  <Th textAlign="center">Action</Th>
-                </Tr>
+                {headerGroups.map((headerGroup) => (
+                  <Tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <Th {...column.getHeaderProps()} textAlign="center">
+                        {column.render("Header")}
+                      </Th>
+                    ))}
+                  </Tr>
+                ))}
               </Thead>
-              <Tbody textAlign="center" fontSize={{ base: "sm", lg: "md" }}>
-                {listItems}
+              <Tbody {...getTableBodyProps()}>
+                {rows.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <Tr {...row.getRowProps()}>
+                      {row.cells.map((cell) => {
+                        return (
+                          <Td {...cell.getCellProps()} textAlign="center">
+                            {cell.render("Cell")}
+                          </Td>
+                        );
+                      })}
+                    </Tr>
+                  );
+                })}
               </Tbody>
             </Table>
           </TableContainer>
