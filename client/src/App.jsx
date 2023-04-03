@@ -14,7 +14,7 @@ import PersonnelDashboardPanel from "./components/ambulance-personnel/PersonnelD
 import HandledRequest from "./components/ambulance-personnel/HandledRequest";
 import AllRequests from "./components/ambulance-personnel/AllRequests";
 import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTripTickets";
-import PersonnelAmbulancePage from "./components/ambulance-personnel/PersonnelAmbulancePage";
+import PersonnelAmbulancePage from "./components/ambulance-personnel/PersonnelAmbulance";
 
 function App() {
   const queryClient = new QueryClient();
