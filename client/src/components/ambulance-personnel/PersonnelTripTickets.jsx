@@ -1,20 +1,17 @@
 import {
   Box,
-  Card,
-  CardBody,
   Divider,
   Flex,
   Grid,
   GridItem,
   Heading,
-  Text,
-  VStack,
   useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import PersonnelTripTicketCard from "./PersonnelTripTicketCard";
 import { UilHistory, UilFileInfoAlt } from "@iconscout/react-unicons";
-import AdministrativeCardContainer from "../AdministrativeCardContainer";
+
+import PersonnelTripTicketDetails from "./PersonnelTripTicketDetails";
 
 const PersonnelTripTickets = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -23,16 +20,7 @@ const PersonnelTripTickets = () => {
 
   const listItems = [];
   for (let i = 0; i < count; i++) {
-    listItems.push(
-      !isLargerThan768 ? (
-        <AdministrativeCardContainer
-          card_header="Request ID"
-          card_header_detail="dasdajhgsdfgdsgfd"
-        />
-      ) : (
-        <PersonnelTripTicketCard />
-      )
-    );
+    listItems.push(<PersonnelTripTicketCard />);
   }
   return (
     <>
@@ -94,75 +82,7 @@ const PersonnelTripTickets = () => {
                   </Flex>
                   <Divider />
                 </Box>
-                <Card background="gray.100">
-                  <CardBody>
-                    <VStack align="left" spacing={1} pb={3}>
-                      <Heading
-                        as="h5"
-                        display="block"
-                        fontSize="md"
-                        fontWeight="semibold"
-                      >
-                        Trip Ticket ID:
-                      </Heading>
-                      <Text as="span" fontWeight="normal">
-                        asdjfeqflkewqjhrrwin
-                      </Text>
-                    </VStack>
-                    <VStack align="left" spacing={1} pb={3}>
-                      <Heading
-                        as="h5"
-                        display="block"
-                        fontSize="md"
-                        fontWeight="semibold"
-                      >
-                        Driver:
-                      </Heading>
-                      <Text as="span" fontWeight="normal">
-                        Juan Dela Crux
-                      </Text>
-                    </VStack>
-                    <VStack align="left" spacing={1} pb={3}>
-                      <Heading
-                        as="h5"
-                        display="block"
-                        fontSize="md"
-                        fontWeight="semibold"
-                      >
-                        Ambulance Plate:
-                      </Heading>
-                      <Text as="span" fontWeight="normal">
-                        ABCM 342
-                      </Text>
-                    </VStack>
-                    <VStack align="left" spacing={1} pb={3}>
-                      <Heading
-                        as="h5"
-                        display="block"
-                        fontSize="md"
-                        fontWeight="semibold"
-                      >
-                        Destination:
-                      </Heading>
-                      <Text as="span" fontWeight="normal">
-                        Manila
-                      </Text>
-                    </VStack>
-                    <VStack align="left" spacing={1} pb={3}>
-                      <Heading
-                        as="h5"
-                        display="block"
-                        fontSize="md"
-                        fontWeight="semibold"
-                      >
-                        Patient Name:
-                      </Heading>
-                      <Text as="span" fontWeight="normal">
-                        Macaraeg Macaraeg
-                      </Text>
-                    </VStack>
-                  </CardBody>
-                </Card>
+                <PersonnelTripTicketDetails />
               </Box>
             </GridItem>
           )}
@@ -172,4 +92,4 @@ const PersonnelTripTickets = () => {
   );
 };
 
-export default PersonnelTripTickets;
+export default React.memo(PersonnelTripTickets);
