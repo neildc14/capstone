@@ -15,8 +15,7 @@ import {
   UilThLarge,
   UilDocumentInfo,
 } from "@iconscout/react-unicons";
-
-import RequestCard from "./RequestCard";
+import RequestCard from "../global/RequestCard";
 
 const PersonnelDashboardPanel = () => {
   const navigate = useNavigate();

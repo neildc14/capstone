@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Card, CardBody, Flex, Heading, Text } from "@chakra-ui/react";
-import ModalContainer from "../ModalContainer";
+import ModalContainer from "../global/ModalContainer";
 
 const PersonnelRecentRequestCard = () => {
   const [isOpen, setOpen] = useState(false);

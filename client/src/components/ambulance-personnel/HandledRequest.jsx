@@ -3,6 +3,7 @@ import { Box, Heading, Divider, Flex, Button } from "@chakra-ui/react";
 import PersonnelRecentRequestCard from "./PersonnelRecentRequestCard";
 import { UilHistory, UilUserCheck } from "@iconscout/react-unicons";
 import AdministrativeCardContainer from "../AdministrativeCardContainer";
+import RequestCard from "../global/RequestCard";
 
 const HandledRequest = () => {
   return (
@@ -61,19 +62,19 @@ const HandledRequest = () => {
         </Box>
         <Box px={4} py={2} height={{ md: "55vh" }} overflowY="scroll">
           <Flex flexDirection="column" gap={4}>
-            <AdministrativeCardContainer
+            <RequestCard
               card_header="Request ID"
               card_header_detail="dasdajhgsdfgdsgfd"
             />
-            <AdministrativeCardContainer
+            <RequestCard
               card_header="Request ID"
               card_header_detail="dasdajhgsdfgdsgfd"
             />
-            <AdministrativeCardContainer
+            <RequestCard
               card_header="Request ID"
               card_header_detail="dasdajhgsdfgdsgfd"
             />
-            <AdministrativeCardContainer
+            <RequestCard
               card_header="Request ID"
               card_header_detail="dasdajhgsdfgdsgfd"
             />

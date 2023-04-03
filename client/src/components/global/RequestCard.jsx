@@ -8,7 +8,7 @@ import {
   CardBody,
   Text,
 } from "@chakra-ui/react";
-import ModalContainer from "../ModalContainer";
+import ModalContainer from "./ModalContainer";
 
 const RequestCard = ({ card_header, card_header_detail }) => {
   const [isOpen, setOpen] = useState(false);

@@ -17,7 +17,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
-import ModalContainer from "../ModalContainer";
+import ModalContainer from "../global/ModalContainer";
 
 const AllRequests = () => {
   const [isOpen, setOpen] = useState(false);
