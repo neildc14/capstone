@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   Divider,
@@ -7,7 +8,6 @@ import {
   Heading,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
 import PersonnelTripTicketCard from "./PersonnelTripTicketCard";
 import { UilHistory, UilFileInfoAlt } from "@iconscout/react-unicons";
 
@@ -15,12 +15,19 @@ import PersonnelTripTicketDetails from "./PersonnelTripTicketDetails";
 
 const PersonnelTripTickets = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+  const [show, setShow] = useState(false);
+
+  const showTripTicketDetails = () => {
+    setShow(true);
+  };
 
   let count = 10;
 
   const listItems = [];
   for (let i = 0; i < count; i++) {
-    listItems.push(<PersonnelTripTicketCard />);
+    listItems.push(
+      <PersonnelTripTicketCard showTripTicketDetails={showTripTicketDetails} />
+    );
   }
   return (
     <>
@@ -56,7 +63,7 @@ const PersonnelTripTickets = () => {
             </Box>
           </GridItem>
 
-          {isLargerThan768 && (
+          {isLargerThan768 && show && (
             <GridItem colSpan={2}>
               <Box
                 as="aside"

@@ -10,12 +10,13 @@ import {
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
 
-const PersonnelTripTicketCard = () => {
+const PersonnelTripTicketCard = ({ showTripTicketDetails }) => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const [isOpen, setOpen] = useState(false);
 
   const handleOpenModal = () => {
     if (isLargerThan768) {
+      showTripTicketDetails();
       return;
     }
     setOpen(!isOpen);
