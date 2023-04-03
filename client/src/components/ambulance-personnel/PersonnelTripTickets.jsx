@@ -63,36 +63,34 @@ const PersonnelTripTickets = () => {
             </Box>
           </GridItem>
 
-          {isLargerThan768 && show && (
-            <GridItem colSpan={2}>
-              <Box
-                as="aside"
-                height="100%"
-                px={4}
-                py={4}
-                bgColor="gray.50"
-                borderLeft="1px solid #D9D9D9"
-              >
-                <Box pb={4}>
-                  <Flex justifyContent="space-between" alignItems="center">
-                    <Heading
-                      as="h2"
-                      display="inline-flex"
-                      gap={2}
-                      py={2}
-                      fontSize="lg"
-                      fontWeight="semibold"
-                      color="gray.700"
-                    >
-                      <UilFileInfoAlt color="#FF7A00" /> Trip Details
-                    </Heading>
-                  </Flex>
-                  <Divider />
-                </Box>
-                <PersonnelTripTicketDetails />
+          <GridItem colSpan={2}>
+            <Box
+              as="aside"
+              height="100%"
+              px={4}
+              py={4}
+              bgColor="gray.50"
+              borderLeft="1px solid #D9D9D9"
+            >
+              <Box pb={4}>
+                <Flex justifyContent="space-between" alignItems="center">
+                  <Heading
+                    as="h2"
+                    display="inline-flex"
+                    gap={2}
+                    py={2}
+                    fontSize="lg"
+                    fontWeight="semibold"
+                    color="gray.700"
+                  >
+                    <UilFileInfoAlt color="#FF7A00" /> Trip Details
+                  </Heading>
+                </Flex>
+                <Divider />
               </Box>
-            </GridItem>
-          )}
+              {isLargerThan768 && show && <PersonnelTripTicketDetails />}
+            </Box>
+          </GridItem>
         </Grid>
       </Box>
     </>
