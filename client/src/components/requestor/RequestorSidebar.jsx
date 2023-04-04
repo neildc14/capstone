@@ -1,11 +1,10 @@
 import React from "react";
 import { Box, Heading, Divider, Text, Flex, Link } from "@chakra-ui/react";
 import Sidebar from "../global/Sidebar";
-import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import useHover from "../../hooks/useHover";
 import {
-  UilCreateDashboard,
+  UilThLarge,
   UilFileInfoAlt,
   UilFilePlusAlt,
   UilLocationPinAlt,
@@ -21,31 +20,19 @@ const RequestorSidebar = () => {
 
   return (
     <Sidebar bgColor="teal.900">
-      <Box >
-        {/* <Box px={4}>
-          <Heading
-            as="h2"
-            fontSize={{ base: "lg", md: "md", lg: "md" }}
-            fontWeight="normal"
-            color="whiteAlpha.900"
-          >
-            Requestor Dashboard
-          </Heading>
-        </Box>
-        <Divider /> */}
-
-        <Box ps={4} py={8}>
-          {/* <Flex gap={2} alignItems="flex-end" mb={4} ps={2}>
-            <Avatar size="sm">
-              <AvatarBadge
-                boxSize="1.25em"
-                bg="green.500"
-                borderColor="papayawhip"
-              />
-            </Avatar>
-            <Text color="whiteAlpha.900">First Name</Text>
-          </Flex> */}
-
+      <Box py={1}>
+        <Text
+          textAlign="center"
+          fontSize="2xl"
+          fontWeight="bold"
+          color="#FF7A00"
+        >
+          LDRRMO-ARMS
+        </Text>
+        <Divider />
+      </Box>
+      <Box ps={4} py={1}>
+        <Box>
           <Box as="section" my={4}>
             <Link
               as={RouterLink}
@@ -64,17 +51,16 @@ const RequestorSidebar = () => {
               fontWeight="semibold"
               color={
                 location.pathname === "/requestor"
-                  ? "blackAlpha.900"
+                  ? "#FF7A00"
                   : "whiteAlpha.900"
               }
               bgColor={location.pathname === "/requestor" && "whiteAlpha.900"}
               _hover={{
-                color: "blackAlpha.900",
-                bgColor: "whiteAlpha.900",
+                color: "#FF7A00",
               }}
               {...bindHoverRequestDashboard}
             >
-              <UilCreateDashboard />
+              <UilThLarge />
               Dashboard
             </Link>
 
@@ -95,15 +81,14 @@ const RequestorSidebar = () => {
               fontWeight="semibold"
               color={
                 location.pathname === "/requestor/request"
-                  ? "blackAlpha.900"
+                  ? "#FF7A00"
                   : "whiteAlpha.900"
               }
               bgColor={
                 location.pathname === "/requestor/request" && "whiteAlpha.900"
               }
               _hover={{
-                color: "blackAlpha.900",
-                bgColor: "whiteAlpha.900",
+                color: "#FF7A00",
               }}
               {...bindHoverRequestForm}
             >
@@ -128,15 +113,14 @@ const RequestorSidebar = () => {
               fontWeight="semibold"
               color={
                 location.pathname === "/requestor/map"
-                  ? "blackAlpha.900"
+                  ? "#FF7A00"
                   : "whiteAlpha.900"
               }
               bgColor={
                 location.pathname === "/requestor/map" && "whiteAlpha.900"
               }
               _hover={{
-                color: "blackAlpha.900",
-                bgColor: "whiteAlpha.900",
+                color: "#FF7A00",
               }}
               {...bindHoverRequestMap}
             >
@@ -161,15 +145,14 @@ const RequestorSidebar = () => {
               fontWeight="semibold"
               color={
                 location.pathname === "/requestor/requests"
-                  ? "blackAlpha.900"
+                  ? "#FF7A00"
                   : "whiteAlpha.900"
               }
               bgColor={
                 location.pathname === "/requestor/requests" && "whiteAlpha.900"
               }
               _hover={{
-                color: "blackAlpha.900",
-                bgColor: "whiteAlpha.900",
+                color: "#FF7A00",
               }}
               {...bindHoverRequest}
             >
