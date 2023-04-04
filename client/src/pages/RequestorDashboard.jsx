@@ -4,6 +4,7 @@ import Header from "../layouts/Header";
 import RequestorSidebar from "../components/requestor/RequestorSidebar";
 import RequestorMobileSidebar from "../components/requestor/RequestorMobileSidebar";
 import { Outlet } from "react-router-dom";
+import NewHeader from "../layouts/NewHeader";
 
 const DashboardContext = React.createContext();
 
@@ -29,7 +30,7 @@ const RequestorDashboard = () => {
 
         <Box width="100%" height="100%" overflowY="scroll" bgColor="white">
           <DashboardContext.Provider value={toggleDashboard}>
-            <Header />
+            <NewHeader />
           </DashboardContext.Provider>
           <Box as="main" px={{ base: 4 }}>
             <Outlet />

@@ -6,7 +6,7 @@ import RequestorDashboard from "./pages/RequestorDashboard";
 import SignUp from "./pages/SignUp";
 import RequestForm from "./components/requestor/RequestForm";
 import RequestorAllRequests from "./components/requestor/RequestorAllRequests";
-import ViewMap from "./components/ViewMap";
+import ViewMap from "./components/global/ViewMap";
 import RequestorDashboardPanel from "./components/requestor/RequestorDashboardPanel";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";

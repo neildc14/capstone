@@ -16,7 +16,7 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import useInput from "../hooks/useInput";
-import ThemeButton from "../components/ThemeButton";
+import ThemeButton from "../components/global/ThemeButton";
 
 const Login = () => {
   const [show, setShow] = useState(false);
