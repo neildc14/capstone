@@ -8,7 +8,7 @@ import {
   Grid,
   GridItem,
 } from "@chakra-ui/react";
-import PersonnelPanelCard from "../global/PersonnelPanelCard";
+import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
 import {
   UilFileCheckAlt,

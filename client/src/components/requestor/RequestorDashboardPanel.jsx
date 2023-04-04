@@ -7,12 +7,16 @@ import {
   Skeleton,
   Card,
   CardBody,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
+import { UilThLarge } from "@iconscout/react-unicons";
 import RequestCard from "../RequestCard";
 import TripTicket from "../TripTicket";
 import PanelCard from "../PanelCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import PersonnelPanelCard from "../global/PanelCard";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -44,50 +48,62 @@ const RequestorDashboardPanel = () => {
     }
   }, [data, isLoading, isFetching]);
 
-  console.log(totalRequest, totalSuccessfulTransport, data);
+  const panel_card_data = [
+    { title: "Total Requests", total: 0, type: "Pending" },
+    {
+      title: "Total Requests",
+      total: 0,
+      type: "Approved",
+    },
+    { title: "Total Requests", total: totalRequest, type: "Fulfilled" },
+    { title: "Total Requests", total: 0, type: "Rejected" },
+  ];
+
   return (
     <>
-      <Box px={{ md: 6 }}>
+      <Box>
         <Flex
+          display="flex"
           flexDirection={{ base: "column-reverse", md: "column" }}
-          justifyContent="space-between"
+          gap={{ base: 4, md: 0 }}
         >
           <Box as="section">
             <Box>
-              <Heading
-                as="h2"
-                py={2}
-                fontSize="xl"
-                fontWeight="semibold"
-                bgColor="white"
-              >
-                Dashboard Panel
-              </Heading>
+              <Flex justifyContent="space-between" alignItems="center">
+                <Heading
+                  as="h2"
+                  display="inline-flex"
+                  gap={2}
+                  py={2}
+                  fontSize="xl"
+                  fontWeight="semibold"
+                  bgColor="white"
+                  color="gray.700"
+                >
+                  <UilThLarge color="#FF7A00" /> Dashboard Panel
+                </Heading>
+              </Flex>
               <Divider />
             </Box>
             <Box my={8}>
-              <Flex
-                flexDirection={{ base: "column", md: "row" }}
-                justifyContent="space-evenly"
-                gap="2rem"
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(4, 1fr)",
+                }}
+                gap={6}
               >
-                <PanelCard
-                  cardHeader="Total Requests Made"
-                  cardBody={totalRequest}
-                  bgColor="blue.200"
-                />
-
-                <PanelCard
-                  cardHeader="Total Successful Transport"
-                  cardBody={totalSuccessfulTransport}
-                  bgColor="orange.200"
-                />
-                <PanelCard
-                  cardHeader="Total Successful Transport"
-                  cardBody={totalSuccessfulTransport}
-                  bgColor="orange.200"
-                />
-              </Flex>
+                {panel_card_data?.map((panel_card) => (
+                  <GridItem key={panel_card.type}>
+                    <PersonnelPanelCard
+                      total={panel_card.total}
+                      title={panel_card.title}
+                      type={panel_card.type}
+                      bgColor="#E2E8F0"
+                    />
+                  </GridItem>
+                ))}
+              </Grid>
             </Box>
           </Box>
 

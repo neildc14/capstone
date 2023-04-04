@@ -1,16 +1,7 @@
 import React from "react";
-import {
-  Box,
-  Heading,
-  Divider,
-  Card,
-  CardHeader,
-  CardBody,
-  Flex,
-  Text,
-} from "@chakra-ui/react";
+import { Heading, Card, CardBody, Flex, Text } from "@chakra-ui/react";
 
-const PersonnelPanelCard = ({ total, title, type, bgColor }) => {
+const PanelCard = ({ total, title, type, bgColor }) => {
   return (
     <Card
       flex={{ md: "1" }}
@@ -37,4 +28,4 @@ const PersonnelPanelCard = ({ total, title, type, bgColor }) => {
   );
 };
 
-export default PersonnelPanelCard;
+export default PanelCard;
