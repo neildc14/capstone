@@ -10,8 +10,12 @@ import {
   Grid,
   GridItem,
 } from "@chakra-ui/react";
-import { UilThLarge } from "@iconscout/react-unicons";
-import RequestCard from "../RequestCard";
+import {
+  UilThLarge,
+  UilDocumentInfo,
+  UilTicket,
+} from "@iconscout/react-unicons";
+import RequestCard from "./RequestorRequestCard";
 import TripTicket from "../TripTicket";
 import PanelCard from "../PanelCard";
 import { useQuery } from "@tanstack/react-query";
@@ -108,60 +112,79 @@ const RequestorDashboardPanel = () => {
           </Box>
 
           <Box as="section" pb={4}>
-            <Box pt={4}>
+            <Box mb={8} border="1px solid #D9D9D9">
               <Heading
                 as="h2"
+                display="inline-flex"
+                gap={2}
+                px={4}
                 py={2}
                 fontSize="xl"
                 fontWeight="semibold"
                 bgColor="white"
               >
-                Recent Request
+                <UilDocumentInfo color="#FF7A00" /> Recent Request
               </Heading>
+
               <Divider />
-              {!isLoading && !isFetching && data[0]?.status === "fulfilled" && (
-                <RequestCard
-                  request_data={data[0]?.value.data[0]}
-                  request_id={data[0]?.value.data[0]._id}
-                  request_status={data[0]?.value.data[0].status}
-                />
-              )}
-              {!isLoading && !isFetching && data[0]?.status === "rejected" && (
-                <Card bgColor="gray.50">
-                  <CardBody>No request found</CardBody>
-                </Card>
-              )}
+              <Box px={4} py={4}>
+                {!isLoading &&
+                  !isFetching &&
+                  data[0]?.status === "fulfilled" && (
+                    <RequestCard
+                      request_data={data[0]?.value.data[0]}
+                      request_id={data[0]?.value.data[0]._id}
+                      request_status={data[0]?.value.data[0].status}
+                    />
+                  )}
+                {!isLoading &&
+                  !isFetching &&
+                  data[0]?.status === "rejected" && (
+                    <Card bgColor="gray.50">
+                      <CardBody>No request found</CardBody>
+                    </Card>
+                  )}
+              </Box>
             </Box>
             <Box as="section" pt={4}>
-              <Heading
-                as="h2"
-                py={2}
-                fontSize="xl"
-                fontWeight="semibold"
-                bgColor="white"
-              >
-                Trip Ticket
-              </Heading>
-              <Divider />
+              <Box mb={8} border="1px solid #D9D9D9">
+                <Heading
+                  as="h2"
+                  display="inline-flex"
+                  gap={2}
+                  px={4}
+                  py={2}
+                  fontSize="xl"
+                  fontWeight="semibold"
+                  bgColor="white"
+                >
+                  <UilTicket color="#FF7A00" /> Trip Ticket
+                </Heading>
+                <Divider />
 
-              {!isLoading && !isFetching && data[1]?.status === "fulfilled" && (
-                <TripTicket
-                  trip_ticket_data={data[1]?.value.data[0]}
-                  ticket_id={data[1]?.value.data[0]._id}
-                  ambulance_personnel={
-                    data[1]?.value.data[0].ambulance_personnel["fullName"]
-                  }
-                  ambulance_plate={
-                    data[1]?.value.data[0].ambulance["license_plate"]
-                  }
-                  destination={data[1]?.value.data[0].destination}
-                />
-              )}
-              {!isLoading && !isFetching && data[1]?.status === "rejected" && (
-                <Card bgColor="gray.50">
-                  <CardBody>No trip ticket found</CardBody>
-                </Card>
-              )}
+                {!isLoading &&
+                  !isFetching &&
+                  data[1]?.status === "fulfilled" && (
+                    <TripTicket
+                      trip_ticket_data={data[1]?.value.data[0]}
+                      ticket_id={data[1]?.value.data[0]._id}
+                      ambulance_personnel={
+                        data[1]?.value.data[0].ambulance_personnel["fullName"]
+                      }
+                      ambulance_plate={
+                        data[1]?.value.data[0].ambulance["license_plate"]
+                      }
+                      destination={data[1]?.value.data[0].destination}
+                    />
+                  )}
+                {!isLoading &&
+                  !isFetching &&
+                  data[1]?.status === "rejected" && (
+                    <Card bgColor="gray.50">
+                      <CardBody>No trip ticket found</CardBody>
+                    </Card>
+                  )}
+              </Box>
             </Box>
           </Box>
         </Flex>

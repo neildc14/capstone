@@ -9,8 +9,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { UilEye, UilTrashAlt } from "@iconscout/react-unicons";
-import RequestCardDetailsModal from "./RequestCardDetailsModal";
-import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import RequestCardDetailsModal from "../RequestCardDetailsModal";
+import DeleteConfirmationModal from "./RequestorDeleteConfirmationModal";
 
 const RequestCard = ({
   request_data,
@@ -74,16 +74,19 @@ const RequestCard = ({
             >
               <Button
                 size="sm"
+                bgColor="#FF7A00"
+                color="white"
+                _hover={{ bgColor: "orange.500" }}
                 leftIcon={<UilEye />}
                 onClick={toggleRequestCardDetailsModal}
               >
-                View Full Details
+                View Request
               </Button>
               <Button
                 size="sm"
-                bgColor="red.500"
-                color="gray.50"
-                _hover={{ bgColor: "red.600" }}
+                bgColor="gray.200"
+                color="black"
+                _hover={{ bgColor: "gray.300" }}
                 leftIcon={<UilTrashAlt />}
                 onClick={toggleDeleteConfirmationModal}
               >

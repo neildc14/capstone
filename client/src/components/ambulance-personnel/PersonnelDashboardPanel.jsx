@@ -135,27 +135,19 @@ const PersonnelDashboardPanel = () => {
           </Box>
           <Box border="1px solid #D9D9D9">
             <Box>
-              <Flex
+              <Heading
+                as="h2"
                 display="inline-flex"
                 gap={2}
                 px={4}
                 py={2}
-                justifyContent="space-between"
-                alignItems="center"
+                fontSize="xl"
+                fontWeight="semibold"
+                bgColor="white"
+                color="gray.700"
               >
-                <Heading
-                  as="h2"
-                  display="inline-flex"
-                  gap={2}
-                  py={2}
-                  fontSize="xl"
-                  fontWeight="semibold"
-                  bgColor="white"
-                  color="gray.700"
-                >
-                  <UilDocumentInfo color="#FF7A00" /> Recent Pending Request
-                </Heading>
-              </Flex>
+                <UilDocumentInfo color="#FF7A00" /> Recent Pending Request
+              </Heading>
               <Divider />
             </Box>
             <Box px={4} py={4}>

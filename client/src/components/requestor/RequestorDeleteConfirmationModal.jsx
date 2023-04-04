@@ -70,7 +70,7 @@ const DeleteConfirmationModal = ({ id, URL, isOpen, onClose, subject }) => {
               size="sm"
               bgColor="red.500"
               color="gray.50"
-              _hover={{ bgColor: "red.400" }}
+              _hover={{ bgColor: "red.600" }}
               onClick={deleteRecentRequestFunction}
             >
               Delete Request
