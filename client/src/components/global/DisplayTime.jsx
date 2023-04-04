@@ -1,6 +1,5 @@
-import { Box, Image } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import clock from "../assets/icons/clock.png";
 import { UilClock } from "@iconscout/react-unicons";
 
 const DateTime = () => {

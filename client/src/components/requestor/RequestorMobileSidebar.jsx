@@ -1,6 +1,6 @@
 import React from "react";
 
-import MobileSidebar from "../MobileSideBar";
+import MobileSidebar from "../global/MobileSidebar";
 import {
   Box,
   Heading,

@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Flex, Divider, useMediaQuery } from "@chakra-ui/react";
 import TopNav from "../components/TopNav";
-import DateTime from "../components/DisplayTime";
+import DateTime from "../components/global/DisplayTime";
 import Settings from "../components/Settings";
-import ThemeButton from "../components/ThemeButton";
+import ThemeButton from "../components/global/ThemeButton";
 
 const Header = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");

@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Heading, Divider, Text, Flex, Link } from "@chakra-ui/react";
-import Sidebar from "../Sidebar";
+import Sidebar from "../global/Sidebar";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import useHover from "../../hooks/useHover";

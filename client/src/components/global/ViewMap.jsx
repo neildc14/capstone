@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import osm from "../utils/osm-provider";
+import osm from "../../utils/osm-provider";
 import "leaflet/dist/leaflet.css";
 
 function findLocation() {
