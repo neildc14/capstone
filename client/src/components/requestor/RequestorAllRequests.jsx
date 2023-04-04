@@ -8,7 +8,7 @@ import {
   Card,
   CardBody,
 } from "@chakra-ui/react";
-import RequestCard from "../RequestCard";
+import RequestCard from "./RequestorRequestCard";
 import { UilHistoryAlt } from "@iconscout/react-unicons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";

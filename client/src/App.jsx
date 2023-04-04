@@ -11,8 +11,8 @@ import RequestorDashboardPanel from "./components/requestor/RequestorDashboardPa
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import PersonnelDashboardPanel from "./components/ambulance-personnel/PersonnelDashboardPanel";
-import HandledRequest from "./components/ambulance-personnel/HandledRequest";
-import AllRequests from "./components/ambulance-personnel/AllRequests";
+import HandledRequest from "./components/ambulance-personnel/PersonnelHandledRequest";
+import AllRequests from "./components/ambulance-personnel/PersonnelAllRequests";
 import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTripTickets";
 import PersonnelAmbulancePage from "./components/ambulance-personnel/PersonnelAmbulance";
 

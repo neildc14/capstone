@@ -146,8 +146,8 @@ const RequestorDashboardPanel = () => {
                   )}
               </Box>
             </Box>
-            <Box as="section" pt={4}>
-              <Box mb={8} border="1px solid #D9D9D9">
+            <Box as="section">
+              <Box border="1px solid #D9D9D9">
                 <Heading
                   as="h2"
                   display="inline-flex"
@@ -193,4 +193,4 @@ const RequestorDashboardPanel = () => {
   );
 };
 
-export default RequestorDashboardPanel;
+export default React.memo(RequestorDashboardPanel);
