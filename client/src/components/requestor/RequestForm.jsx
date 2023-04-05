@@ -86,7 +86,8 @@ const RequestForm = () => {
           fontSize={{ base: "xl", md: "2xl" }}
           fontWeight="normal"
         >
-          <UilFileInfoAlt /> <Text as="span">Request Form </Text>
+          <UilFileInfoAlt color="#FF7A00" />{" "}
+          <Text as="span">Request Form </Text>
         </Heading>
         <Flex flexDirection="row" gap="2rem">
           <FormControl my={2}>
@@ -101,8 +102,7 @@ const RequestForm = () => {
               name="first_name"
               width="100%"
               size={{ base: "sm", md: "md" }}
-              border="1px solid green"
-              _hover={{ borderColor: "blue.600" }}
+              border="1px solid #C2BDBD"
               {...bindFirstName}
             />
           </FormControl>
@@ -119,8 +119,7 @@ const RequestForm = () => {
               name="last_name"
               width="100%"
               size={{ base: "sm", md: "md" }}
-              border="1px solid green"
-              _hover={{ borderColor: "blue.600" }}
+              border="1px solid #C2BDBD"
               {...bindLastName}
             />
           </FormControl>
@@ -141,8 +140,7 @@ const RequestForm = () => {
             name="pickup_location"
             width="100%"
             size={{ base: "sm", md: "md" }}
-            border="1px solid green"
-            _hover={{ borderColor: "blue.600" }}
+            border="1px solid #C2BDBD"
             {...bindLocation}
           />
         </FormControl>
@@ -162,8 +160,7 @@ const RequestForm = () => {
             name="transfer_location"
             width="100%"
             size={{ base: "sm", md: "md" }}
-            border="1px solid green"
-            _hover={{ borderColor: "blue.600" }}
+            border="1px solid #C2BDBD"
             {...bindDestination}
           />
         </FormControl>
@@ -179,8 +176,7 @@ const RequestForm = () => {
             width="100%"
             name="patient_condtion"
             size={{ base: "sm", md: "md" }}
-            border="1px solid green"
-            _hover={{ borderColor: "blue.600" }}
+            border="1px solid #C2BDBD"
             {...bindPatientCondition}
           ></Textarea>
         </FormControl>
@@ -196,8 +192,7 @@ const RequestForm = () => {
             type="file"
             name="referral_slip"
             size={{ base: "sm", md: "md" }}
-            border="1px solid green"
-            _hover={{ borderColor: "blue.600" }}
+            border="1px solid #C2BDBD"
           />
         </FormControl>
 
@@ -215,19 +210,22 @@ const RequestForm = () => {
           <Button
             type="submit"
             variant="outline"
+            size={{ base: "sm", md: "md" }}
             width={{ base: "100%", md: "100%", lg: "50%" }}
             my={6}
-            bgColor="gray.200"
+            bgColor="gray.100"
+            _hover={{ bgColor: "gray.200" }}
           >
             Cancel
           </Button>
           <Button
             type="submit"
+            size={{ base: "sm", md: "md" }}
             width={{ base: "100%", md: "100%", lg: "50%" }}
             my={6}
-            bgColor="green.600"
+            bgColor="#FF7A00"
             color="white"
-            _hover={{ bgColor: "green.700" }}
+            _hover={{ bgColor: "orange.500" }}
           >
             Make Request
           </Button>

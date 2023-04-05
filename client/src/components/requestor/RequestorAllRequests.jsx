@@ -31,7 +31,7 @@ const RequestorAllRequests = () => {
   console.log(data, error);
 
   return (
-    <Box p={{ md: 6 }}>
+    <Box>
       <Box>
         <Heading
           as="h2"
@@ -41,7 +41,8 @@ const RequestorAllRequests = () => {
           fontWeight="semibold"
           bgColor="white"
         >
-          <UilHistoryAlt /> <Text as="span">Request History</Text>
+          <UilHistoryAlt color="#FF7A00" />{" "}
+          <Text as="span">Request History</Text>
         </Heading>
         <Divider />
         <Box
