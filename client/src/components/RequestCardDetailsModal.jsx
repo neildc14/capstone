@@ -49,6 +49,12 @@ const RequestCardDetailsModal = ({ request_data, onClose, isOpen }) => {
             </Text>
           </Heading>
           <Heading as="h6" mb={2} fontSize="md" fontWeight="semibold">
+            Patient Condition:{" "}
+            <Text as="span" fontWeight="normal" textTransform="capitalize">
+              {request_data.patient_condition && request_data.patient_condition}
+            </Text>
+          </Heading>
+          <Heading as="h6" mb={2} fontSize="md" fontWeight="semibold">
             Referral Slip:{" "}
           </Heading>
         </ModalBody>

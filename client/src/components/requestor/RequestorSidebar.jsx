@@ -8,6 +8,7 @@ import {
   UilFileInfoAlt,
   UilFilePlusAlt,
   UilLocationPinAlt,
+  UilTicket,
 } from "@iconscout/react-unicons";
 
 const RequestorSidebar = () => {
@@ -17,6 +18,7 @@ const RequestorSidebar = () => {
   const [hoverRequest, bindHoverRequest] = useHover();
   const [hoverRequestForm, bindHoverRequestForm] = useHover();
   const [hoverRequestMap, bindHoverRequestMap] = useHover();
+  const [hoverTripTickets, bindHoverTripTickets] = useHover();
 
   return (
     <Sidebar bgColor="teal.900">
@@ -158,6 +160,38 @@ const RequestorSidebar = () => {
             >
               <UilFileInfoAlt />
               All Requests
+            </Link>
+            <Link
+              as={RouterLink}
+              to="/requestor/trip_tickets"
+              variant="ghost"
+              display="flex"
+              justifyContent="flex-start"
+              gap=".5rem"
+              width="100%"
+              my={4}
+              ps={2}
+              py={2}
+              borderRadius="none"
+              textAlign="left"
+              fontSize={{ md: "sm", lg: "md" }}
+              fontWeight="semibold"
+              color={
+                location.pathname === "/requestor/trip_tickets"
+                  ? "#FF7A00"
+                  : "whiteAlpha.900"
+              }
+              bgColor={
+                location.pathname === "/requestor/trip_tickets" &&
+                "whiteAlpha.900"
+              }
+              _hover={{
+                color: "#FF7A00",
+              }}
+              {...bindHoverTripTickets}
+            >
+              <UilTicket />
+              Trip Tickets
             </Link>
           </Box>
         </Box>
