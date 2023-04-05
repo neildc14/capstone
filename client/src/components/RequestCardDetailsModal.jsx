@@ -8,6 +8,7 @@ import {
   ModalCloseButton,
   Text,
   Heading,
+  Divider,
 } from "@chakra-ui/react";
 
 const RequestCardDetailsModal = ({ request_data, onClose, isOpen }) => {
@@ -25,9 +26,10 @@ const RequestCardDetailsModal = ({ request_data, onClose, isOpen }) => {
           <Text as="span" fontWeight="normal">
             {request_data._id}
           </Text>
+          <Divider bgColor="#FF7A00" />
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody py={{ md: 6 }}>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
             Requestor Name:{" "}
             <Text as="span" fontWeight="normal" textTransform="capitalize">
