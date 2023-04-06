@@ -16,6 +16,7 @@ import AllRequests from "./components/ambulance-personnel/PersonnelAllRequests";
 import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTripTickets";
 import PersonnelAmbulancePage from "./components/ambulance-personnel/PersonnelAmbulance";
 import RequestorTripTickets from "./components/requestor/RequestorTripTickets";
+import AdministratorRequests from "./components/administrator/AdministratorRequests";
 
 function App() {
   const queryClient = new QueryClient();
@@ -34,7 +35,9 @@ function App() {
             <Route path="trip_tickets" element={<RequestorTripTickets />} />
             <Route path="map" element={<ViewMap />} />
           </Route>
-          <Route path="/administrator" element={<AdministratorDashboard />} />
+          <Route path="/administrator" element={<AdministratorDashboard />}>
+            <Route path="requests" element={<AdministratorRequests />} />
+          </Route>
           <Route
             path="ambulance_personnel"
             element={<AmbulancePersonnelDashboard />}

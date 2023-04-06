@@ -70,7 +70,7 @@ const AdministratorSidebar = () => {
 
             <Link
               as={RouterLink}
-              to="/administrator/all_requests"
+              to="/administrator/requests"
               variant="ghost"
               display="flex"
               justifyContent="flex-start"
@@ -84,12 +84,12 @@ const AdministratorSidebar = () => {
               fontSize={{ md: "sm", lg: "md" }}
               fontWeight="semibold"
               color={
-                location.pathname === "/administrator/all_requests"
+                location.pathname === "/administrator/requests"
                   ? "#FF7A00"
                   : "whiteAlpha.900"
               }
               bgColor={
-                location.pathname === "/administrator/all_requests" &&
+                location.pathname === "/administrator/requests" &&
                 "whiteAlpha.900"
               }
               _hover={{
