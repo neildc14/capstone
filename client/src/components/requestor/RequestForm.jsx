@@ -89,7 +89,10 @@ const RequestForm = () => {
           <UilFileInfoAlt color="#FF7A00" />{" "}
           <Text as="span">Request Form </Text>
         </Heading>
-        <Flex flexDirection="row" gap="2rem">
+        <Flex
+          flexDirection={{ base: "column", md: "row" }}
+          gap={{ md: "2rem" }}
+        >
           <FormControl my={2}>
             <FormLabel>
               First Name{" "}
