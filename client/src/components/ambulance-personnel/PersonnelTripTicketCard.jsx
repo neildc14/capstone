@@ -9,6 +9,7 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
+import { UilEye } from "@iconscout/react-unicons";
 
 const PersonnelTripTicketCard = ({ showTripTicketDetails }) => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -45,6 +46,8 @@ const PersonnelTripTicketCard = ({ showTripTicketDetails }) => {
             </Heading>
             <Button
               size="sm"
+              display="inline-flex"
+              gap={1}
               width={{ base: "100%", md: "inherit" }}
               px={6}
               bgColor="custom.primary"
@@ -52,7 +55,7 @@ const PersonnelTripTicketCard = ({ showTripTicketDetails }) => {
               _hover={{ bgColor: "orange.500" }}
               onClick={handleOpenModal}
             >
-              View
+              <UilEye color="white" /> View
             </Button>
           </Flex>
         </CardBody>

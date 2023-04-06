@@ -9,6 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import ModalContainer from "./ModalContainer";
+import { UilEye } from "@iconscout/react-unicons";
 
 const RequestCard = ({ card_header, card_header_detail }) => {
   const [isOpen, setOpen] = useState(false);
@@ -40,6 +41,8 @@ const RequestCard = ({ card_header, card_header_detail }) => {
             </Heading>
             <Button
               size="sm"
+              display="inline-flex"
+              gap={1}
               width={{ base: "100%", md: "inherit" }}
               px={6}
               bgColor="custom.primary"
@@ -47,7 +50,7 @@ const RequestCard = ({ card_header, card_header_detail }) => {
               _hover={{ bgColor: "orange.500" }}
               onClick={handleOpenModal}
             >
-              View
+              <UilEye color="white" /> View
             </Button>
           </Flex>
         </CardBody>

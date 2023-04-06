@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Heading, Divider, Flex } from "@chakra-ui/react";
 import { UilHistory, UilUserCheck } from "@iconscout/react-unicons";
-import AdministrativeCardContainer from "../AdministrativeCardContainer";
 import RequestCard from "../global/RequestCard";
 
 const HandledRequest = () => {
@@ -33,7 +32,7 @@ const HandledRequest = () => {
             <Divider />
           </Box>
           <Box px={4} py={4}>
-            <AdministrativeCardContainer
+            <RequestCard
               card_header="Request ID"
               card_header_detail="dasdajhgsdfgdsgfd"
             />
