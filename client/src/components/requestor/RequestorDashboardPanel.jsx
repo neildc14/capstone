@@ -68,26 +68,28 @@ const RequestorDashboardPanel = () => {
 
   (function totalRequestCounts() {
     if (Array.isArray(requestData)) {
-      pending = requestData?.filter((req) => req.status === "pending");
-      approved = requestData?.filter((req) => req.status === "approved");
-      fulfilled = requestData?.filter((req) => req.status === "fulfilled");
-      rejected = requestData?.filter((req) => req.status === "rejected");
+      pending = requestData?.filter((req) => req.status === "pending").length;
+      approved = requestData?.filter((req) => req.status === "approved").length;
+      fulfilled = requestData?.filter(
+        (req) => req.status === "fulfilled"
+      ).length;
+      rejected = requestData?.filter((req) => req.status === "rejected").length;
     }
   })();
 
   const panel_card_data = [
-    { title: "Total Requests", total: pending?.length ?? 0, type: "Pending" },
+    { title: "Total Requests", total: pending ?? 0, type: "Pending" },
     {
       title: "Total Requests",
-      total: approved?.length ?? 0,
+      total: approved ?? 0,
       type: "Approved",
     },
     {
       title: "Total Requests",
-      total: fulfilled?.length ?? 0,
+      total: fulfilled ?? 0,
       type: "Fulfilled",
     },
-    { title: "Total Requests", total: rejected?.length ?? 0, type: "Rejected" },
+    { title: "Total Requests", total: rejected ?? 0, type: "Rejected" },
   ];
 
   const navigate = useNavigate();
