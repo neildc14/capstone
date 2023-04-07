@@ -45,7 +45,7 @@ const RequestCard = ({
               fontWeight="semibold"
             >
               {card_header}:
-              <Text as="span" fontWeight="normal">
+              <Text as="span" ps={2} fontWeight="normal">
                 {card_header_detail}
               </Text>
             </Heading>

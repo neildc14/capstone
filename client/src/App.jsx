@@ -17,6 +17,7 @@ import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTrip
 import PersonnelAmbulancePage from "./components/ambulance-personnel/PersonnelAmbulance";
 import RequestorTripTickets from "./components/requestor/RequestorTripTickets";
 import AdministratorRequests from "./components/administrator/AdministratorRequests";
+import AdministratorAmbulance from "./components/administrator/AdministratorAmbulance";
 import AdministratorDashboardPanel from "./components/administrator/AdministratorDashboardPanel";
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path="/administrator" element={<AdministratorDashboard />}>
             <Route path="" element={<AdministratorDashboardPanel />} />
             <Route path="requests" element={<AdministratorRequests />} />
+            <Route path="ambulance" element={<AdministratorAmbulance />} />
           </Route>
           <Route
             path="ambulance_personnel"
