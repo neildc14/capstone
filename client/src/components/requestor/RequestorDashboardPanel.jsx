@@ -21,17 +21,17 @@ import RequestCard from "./RequestorRequestCard";
 import RequestorTripTicket from "./RequestorTripTicket";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import PersonnelPanelCard from "../global/PanelCard";
+import PanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const RequestorDashboardPanel = () => {
-  const [totalRequest, setTotalRequest] = useState("");
-  const [totalSuccessfulTransport, setTotalSuccessfulTransport] = useState("");
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const [displayMobileRequestbutton, setDisplayMobileRequestbutton] =
     useState(false);
+  const [requestData, setRequestData] = useState([]);
+  const [tripTicketData, setTripTicketData] = useState([]);
 
   const fetchRecentRequestAndTicket = async () => {
     const results = await Promise.allSettled([
@@ -52,8 +52,8 @@ const RequestorDashboardPanel = () => {
 
   useEffect(() => {
     if (!isLoading && !isFetching) {
-      setTotalRequest(data[0]?.value?.data.length || 0);
-      setTotalSuccessfulTransport(data[1]?.value?.data.length || 0);
+      setRequestData(data[0]?.value?.data);
+      setTripTicketData(data[1]?.value?.data);
     }
   }, [data, isLoading, isFetching]);
 
@@ -61,15 +61,33 @@ const RequestorDashboardPanel = () => {
     setDisplayMobileRequestbutton(true);
   }, []);
 
+  let pending;
+  let approved;
+  let fulfilled;
+  let rejected;
+
+  (function totalRequestCounts() {
+    if (Array.isArray(requestData)) {
+      pending = requestData?.filter((req) => req.status === "pending");
+      approved = requestData?.filter((req) => req.status === "approved");
+      fulfilled = requestData?.filter((req) => req.status === "fulfilled");
+      rejected = requestData?.filter((req) => req.status === "rejected");
+    }
+  })();
+
   const panel_card_data = [
-    { title: "Total Requests", total: 0, type: "Pending" },
+    { title: "Total Requests", total: pending?.length ?? 0, type: "Pending" },
     {
       title: "Total Requests",
-      total: 0,
+      total: approved?.length ?? 0,
       type: "Approved",
     },
-    { title: "Total Requests", total: totalRequest || 0, type: "Fulfilled" },
-    { title: "Total Requests", total: 0, type: "Rejected" },
+    {
+      title: "Total Requests",
+      total: fulfilled?.length ?? 0,
+      type: "Fulfilled",
+    },
+    { title: "Total Requests", total: rejected?.length ?? 0, type: "Rejected" },
   ];
 
   const navigate = useNavigate();
@@ -126,7 +144,7 @@ const RequestorDashboardPanel = () => {
               >
                 {panel_card_data?.map((panel_card) => (
                   <GridItem key={panel_card.type}>
-                    <PersonnelPanelCard
+                    <PanelCard
                       total={panel_card.total}
                       title={panel_card.title}
                       type={panel_card.type}
@@ -176,9 +194,9 @@ const RequestorDashboardPanel = () => {
                   !isFetching &&
                   data[0]?.status === "fulfilled" && (
                     <RequestCard
-                      request_data={data[0]?.value.data[0]}
-                      request_id={data[0]?.value.data[0]._id}
-                      request_status={data[0]?.value.data[0].status}
+                      request_data={requestData[0]}
+                      request_id={requestData[0]?._id}
+                      request_status={requestData[0]?.status}
                     />
                   )}
                 {!isLoading &&
@@ -210,15 +228,15 @@ const RequestorDashboardPanel = () => {
                   !isFetching &&
                   data[1]?.status === "fulfilled" && (
                     <RequestorTripTicket
-                      trip_ticket_data={data[1]?.value.data[0]}
-                      ticket_id={data[1]?.value.data[0]._id}
+                      trip_ticket_data={tripTicketData[0]}
+                      ticket_id={tripTicketData[0]?._id}
                       ambulance_personnel={
-                        data[1]?.value.data[0].ambulance_personnel["fullName"]
+                        tripTicketData[0]?.ambulance_personnel["fullName"]
                       }
                       ambulance_plate={
-                        data[1]?.value.data[0].ambulance["license_plate"]
+                        tripTicketData[0]?.ambulance["license_plate"]
                       }
-                      destination={data[1]?.value.data[0].destination}
+                      destination={tripTicketData[0]?.destination}
                     />
                   )}
                 {!isLoading &&
