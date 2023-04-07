@@ -19,7 +19,7 @@ import ModalContainer from "../global/ModalContainer";
 import RequestCard from "../global/RequestCard";
 import PaginatedItems from "../global/PaginatedItems";
 
-const AdministratorAmbulance = () => {
+const AdministratorDrivers = () => {
   const [isOpen, setOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
 
@@ -36,7 +36,7 @@ const AdministratorAmbulance = () => {
       items: [1, 2, 3, 4, 5, 6],
     },
     {
-      label: "Available",
+      label: "On-duty",
 
       items: [1, 2, 3],
       get counter() {
@@ -44,17 +44,9 @@ const AdministratorAmbulance = () => {
       },
     },
     {
-      label: "Travelling",
+      label: "Off-duty",
 
       items: [1, 2, 3, 4, 5],
-      get counter() {
-        return this.items.length;
-      },
-    },
-    {
-      label: "Maintenance",
-
-      items: [1, 2, 3, 4],
       get counter() {
         return this.items.length;
       },
@@ -94,7 +86,7 @@ const AdministratorAmbulance = () => {
                     type="search"
                     size="sm"
                     flex="1"
-                    placeholder="Search an ambulance"
+                    placeholder="Search driver"
                   />
                   <Button type="submit" display="inline-flex" gap={2} size="sm">
                     <UilSearch size="16px" /> Search
@@ -138,8 +130,8 @@ const AdministratorAmbulance = () => {
                                 key={item}
                                 bgColor="white"
                                 borderRadius="sm"
-                                card_header="License Plate number"
-                                card_header_detail="ABCD 124"
+                                card_header="Driver"
+                                card_header_detail="Juan Dela Cruz"
                               />
                             ))}
                         </Flex>
@@ -172,4 +164,4 @@ const AdministratorAmbulance = () => {
   );
 };
 
-export default AdministratorAmbulance;
+export default AdministratorDrivers;
