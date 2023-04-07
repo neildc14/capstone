@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -6,20 +6,18 @@ import {
   Heading,
   Flex,
   Input,
-  Table,
-  TableContainer,
-  Thead,
-  Tr,
-  Th,
-  Td,
-  Select,
-  Tbody,
   Text,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
   ModalBody,
 } from "@chakra-ui/react";
 import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
 import ModalContainer from "../global/ModalContainer";
-import { useTable } from "react-table";
+import RequestCard from "../global/RequestCard";
+import PaginatedItems from "../global/PaginatedItems";
 
 const AdministratorRequests = () => {
   const [isOpen, setOpen] = useState(false);
@@ -28,84 +26,14 @@ const AdministratorRequests = () => {
     setOpen(!isOpen);
   };
 
-  const viewButton = (
-    <Button
-      size="sm"
-      px={6}
-      bgColor="custom.primary"
-      color="white"
-      _hover={{ bgColor: "orange.500" }}
-      onClick={handleOpenModal}
-    >
-      View
-    </Button>
-  );
-
-  const data = useMemo(
-    () => [
-      {
-        id: "sadasddsadasdasdasdgsdgf",
-        pickup_location: "Manila",
-        transfer_location: "San Jose",
-        status: "Pending",
-        action: viewButton,
-      },
-      {
-        id: "sadasddsadasdasdasdgsdgf",
-        pickup_location: "Manila",
-        transfer_location: "San Jose",
-        status: "Pending",
-        action: viewButton,
-      },
-      {
-        id: "sadasddsadasdasdasdgsdgf",
-        pickup_location: "Manila",
-        transfer_location: "San Jose",
-        status: "Pending",
-        action: viewButton,
-      },
-    ],
-    []
-  );
-
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Request ID",
-        accessor: "id",
-      },
-      {
-        Header: "Pickup Location",
-        accessor: "pickup_location",
-      },
-      {
-        Header: "Transfer Location",
-        accessor: "transfer_location",
-      },
-      {
-        Header: (
-          <Select size="xs" fontWeight="bold" placeholder="STATUS">
-            <option value="pending">PENDING</option>
-            <option value="approved">APPROVED</option>
-            <option value="fulfilled">FULFILLED</option>
-            <option value="rejected">REJECTED</option>
-          </Select>
-        ),
-        accessor: "status",
-      },
-      { Header: "Action", accessor: "action" },
-    ],
-    []
-  );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+  // Example items, to simulate fetching from another resources.
+  const items = [1, 2, 3, 4, 5, 6];
 
   return (
     <>
       <Box>
         <Box as="section">
-          <Box mb={8}>
+          <Box mb={4}>
             <Box>
               <Flex
                 px={4}
@@ -144,41 +72,117 @@ const AdministratorRequests = () => {
               <Divider />
             </Box>
           </Box>
-          <TableContainer
-            height="76vh"
-            overflowY="scroll"
-            overflowX={{ base: "scroll", lg: "hidden" }}
-          >
-            <Table {...getTableProps()}>
-              <Thead>
-                {headerGroups.map((headerGroup) => (
-                  <Tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
-                      <Th {...column.getHeaderProps()} textAlign="center">
-                        {column.render("Header")}
-                      </Th>
-                    ))}
-                  </Tr>
-                ))}
-              </Thead>
-              <Tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <Tr {...row.getRowProps()}>
-                      {row.cells.map((cell) => {
-                        return (
-                          <Td {...cell.getCellProps()} textAlign="center">
-                            {cell.render("Cell")}
-                          </Td>
-                        );
-                      })}
-                    </Tr>
-                  );
-                })}
-              </Tbody>
-            </Table>
-          </TableContainer>
+          <Tabs variant="enclosed" isLazy>
+            <TabList>
+              <Tab
+                fontSize={{ base: "xs", md: "md" }}
+                _selected={{ color: "orange.500", fontWeight: "semibold" }}
+              >
+                All
+              </Tab>
+              <Tab
+                fontSize={{ base: "xs", md: "md" }}
+                _selected={{ color: "orange.500", fontWeight: "semibold" }}
+              >
+                Pending
+              </Tab>
+              <Tab
+                fontSize={{ base: "xs", md: "md" }}
+                _selected={{ color: "orange.500", fontWeight: "semibold" }}
+              >
+                Approved
+              </Tab>
+              <Tab
+                fontSize={{ base: "xs", md: "md" }}
+                _selected={{ color: "orange.500", fontWeight: "semibold" }}
+              >
+                Fulfilled
+              </Tab>
+            </TabList>
+
+            <TabPanels bgColor="custom.secondary" mt={4} py={2}>
+              <TabPanel>
+                <Flex flexDirection="column" gap={4}>
+                  <PaginatedItems itemsPerPage={4} items={items}>
+                    {(currentItems) => (
+                      <Flex flexDirection="column" gap={2}>
+                        {currentItems &&
+                          currentItems.map((item) => (
+                            <RequestCard
+                              key={item}
+                              bgColor="white"
+                              borderRadius="sm"
+                              card_header="Request ID"
+                              card_header_detail="dasdajhgsdfgdsgfd"
+                            />
+                          ))}
+                      </Flex>
+                    )}
+                  </PaginatedItems>
+                </Flex>
+              </TabPanel>
+              <TabPanel>
+                <Flex flexDirection="column" gap={4}>
+                  <PaginatedItems itemsPerPage={4} items={items}>
+                    {(currentItems) => (
+                      <Flex flexDirection="column" gap={2}>
+                        {currentItems &&
+                          currentItems.map((item) => (
+                            <RequestCard
+                              key={item}
+                              bgColor="white"
+                              borderRadius="sm"
+                              card_header="Request ID"
+                              card_header_detail="dasdajhgsdfgdsgfd"
+                            />
+                          ))}
+                      </Flex>
+                    )}
+                  </PaginatedItems>
+                </Flex>
+              </TabPanel>
+              <TabPanel>
+                <Flex flexDirection="column" gap={4}>
+                  <PaginatedItems itemsPerPage={4} items={items}>
+                    {(currentItems) => (
+                      <Flex flexDirection="column" gap={2}>
+                        {currentItems &&
+                          currentItems.map((item) => (
+                            <RequestCard
+                              key={item}
+                              bgColor="white"
+                              borderRadius="sm"
+                              card_header="Request ID"
+                              card_header_detail="dasdajhgsdfgdsgfd"
+                            />
+                          ))}
+                      </Flex>
+                    )}
+                  </PaginatedItems>
+                </Flex>
+              </TabPanel>
+              <TabPanel>
+                <Flex flexDirection="column" gap={4}>
+                  <PaginatedItems itemsPerPage={4} items={items}>
+                    {(currentItems) => (
+                      <Flex flexDirection="column" gap={2}>
+                        {currentItems &&
+                          currentItems.map((item) => (
+                            <RequestCard
+                              key={item}
+                              bgColor="white"
+                              borderRadius="sm"
+                              card_header="Request ID"
+                              card_header_detail="dasdajhgsdfgdsgfd"
+                            />
+                          ))}
+                      </Flex>
+                    )}
+                  </PaginatedItems>
+                </Flex>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </Box>
       </Box>
 

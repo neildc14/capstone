@@ -3,7 +3,7 @@ import ReactPaginate from "react-paginate";
 import AdministratorRequestCard from "../administrator/AdministratorRequestCard";
 import { Box, Flex } from "@chakra-ui/react";
 
-const PaginatedItems = ({ itemsPerPage, items }) => {
+const PaginatedItems = ({ itemsPerPage, items, children }) => {
   const [itemOffset, setItemOffset] = useState(0);
 
   const endOffset = itemOffset + itemsPerPage;
@@ -17,7 +17,7 @@ const PaginatedItems = ({ itemsPerPage, items }) => {
 
   return (
     <>
-      <Items currentItems={currentItems} />
+      {children(currentItems)}
       <Box mt={4}>
         <ReactPaginate
           breakLabel="..."
@@ -41,22 +41,5 @@ const PaginatedItems = ({ itemsPerPage, items }) => {
     </>
   );
 };
-
-function Items({ currentItems }) {
-  return (
-    <>
-      <Flex flexDirection="column" gap={2}>
-        {currentItems &&
-          currentItems.map((item) => (
-            <AdministratorRequestCard
-              key={item}
-              bgColor="white"
-              borderRadius="sm"
-            />
-          ))}
-      </Flex>
-    </>
-  );
-}
 
 export default React.memo(PaginatedItems);

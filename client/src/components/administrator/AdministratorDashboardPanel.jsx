@@ -19,6 +19,7 @@ import {
   UilAngleRight,
 } from "@iconscout/react-unicons";
 import PaginatedItems from "../global/PaginatedItems";
+import AdministratorRequestCard from "./AdministratorRequestCard";
 
 const AdministratorDashboardPanel = () => {
   const navigate = useNavigate();
@@ -136,7 +137,20 @@ const AdministratorDashboardPanel = () => {
               <Divider />
             </Box>
             <Box px={4} py={4}>
-              <PaginatedItems itemsPerPage={4} items={items} />
+              <PaginatedItems itemsPerPage={4} items={items}>
+                {(currentItems) => (
+                  <Flex flexDirection="column" gap={2}>
+                    {currentItems &&
+                      currentItems.map((item) => (
+                        <AdministratorRequestCard
+                          key={item}
+                          bgColor="white"
+                          borderRadius="sm"
+                        />
+                      ))}
+                  </Flex>
+                )}
+              </PaginatedItems>
             </Box>
           </Box>
         </Box>
