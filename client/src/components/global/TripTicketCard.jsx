@@ -9,7 +9,7 @@ import {
   ModalBody,
   useMediaQuery,
 } from "@chakra-ui/react";
-import ModalContainer from "../global/ModalContainer";
+import ModalContainer from "./ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
 
 const PersonnelTripTicketCard = ({ showTripTicketDetails }) => {

@@ -18,13 +18,11 @@ import {
   UilTicket,
 } from "@iconscout/react-unicons";
 import RequestCard from "./RequestorRequestCard";
-import TripTicket from "../TripTicket";
+import RequestorTripTicket from "./RequestorTripTicket";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
-
-const CTAButton = React.lazy(() => import("../global/CTAButton"));
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -211,7 +209,7 @@ const RequestorDashboardPanel = () => {
                 {!isLoading &&
                   !isFetching &&
                   data[1]?.status === "fulfilled" && (
-                    <TripTicket
+                    <RequestorTripTicket
                       trip_ticket_data={data[1]?.value.data[0]}
                       ticket_id={data[1]?.value.data[0]._id}
                       ambulance_personnel={

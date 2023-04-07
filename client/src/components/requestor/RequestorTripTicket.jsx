@@ -8,7 +8,7 @@ const TripTicket = ({
   destination,
 }) => {
   return (
-    <Card my={2} bgColor="gray.50">
+    <Card m={4} bgColor="gray.50">
       <CardBody>
         <Heading as="h5" py={1} fontSize="md" fontWeight="semibold">
           Ticket ID:

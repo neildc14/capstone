@@ -13,7 +13,7 @@ import {
 
 const RequestorSidebar = () => {
   const location = useLocation();
-  console.log(location.pathname);
+
   const [hoverRequestDashboard, bindHoverRequestDashboard] = useHover();
   const [hoverRequest, bindHoverRequest] = useHover();
   const [hoverRequestForm, bindHoverRequestForm] = useHover();

@@ -8,10 +8,10 @@ import {
   Heading,
   useMediaQuery,
 } from "@chakra-ui/react";
-import PersonnelTripTicketCard from "./PersonnelTripTicketCard";
+import TripTicketCard from "../global/TripTicketCard";
 import { UilHistory, UilFileInfoAlt } from "@iconscout/react-unicons";
 
-import PersonnelTripTicketDetails from "./PersonnelTripTicketDetails";
+import TripTicketDetails from "../global/TripTicketDetails";
 
 const PersonnelTripTickets = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -26,7 +26,7 @@ const PersonnelTripTickets = () => {
   const listItems = [];
   for (let i = 0; i < count; i++) {
     listItems.push(
-      <PersonnelTripTicketCard showTripTicketDetails={showTripTicketDetails} />
+      <TripTicketCard showTripTicketDetails={showTripTicketDetails} />
     );
   }
   return (
@@ -88,7 +88,7 @@ const PersonnelTripTickets = () => {
                 </Flex>
                 <Divider />
               </Box>
-              {isLargerThan768 && show && <PersonnelTripTicketDetails />}
+              {isLargerThan768 && show && <TripTicketDetails />}
             </Box>
           </GridItem>
         </Grid>

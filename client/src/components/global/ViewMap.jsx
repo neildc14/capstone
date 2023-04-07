@@ -5,7 +5,7 @@ import osm from "../../utils/osm-provider";
 import "leaflet/dist/leaflet.css";
 
 function findLocation() {
-  let positionCoords
+  let positionCoords;
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -20,10 +20,9 @@ function findLocation() {
   } else {
     console.log("Geolocation not supported.");
   }
-};
+}
 
-const  positionCoords  = findLocation();
-console.log(positionCoords, "coords");
+const positionCoords = findLocation();
 
 const latitude = 15.975838;
 const longitude = 121.03351;
