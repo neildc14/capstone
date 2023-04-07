@@ -16,6 +16,7 @@ import AllRequests from "./components/ambulance-personnel/PersonnelAllRequests";
 import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTripTickets";
 import PersonnelAmbulancePage from "./components/ambulance-personnel/PersonnelAmbulance";
 import RequestorTripTickets from "./components/requestor/RequestorTripTickets";
+import AdministratorTripTickets from "./components/administrator/AdministratorTripTickets";
 import AdministratorRequests from "./components/administrator/AdministratorRequests";
 import AdministratorAmbulance from "./components/administrator/AdministratorAmbulance";
 import AdministratorDrivers from "./components/administrator/AdministratorDrivers";
@@ -43,6 +44,8 @@ function App() {
             <Route path="requests" element={<AdministratorRequests />} />
             <Route path="ambulance" element={<AdministratorAmbulance />} />
             <Route path="drivers" element={<AdministratorDrivers />} />
+            <Route path="trip_tickets" element={<AdministratorTripTickets />} />
+            <Route path="map" element={<ViewMap />} />
           </Route>
           <Route
             path="ambulance_personnel"

@@ -6,6 +6,7 @@ import {
   Flex,
   Heading,
   Text,
+  ModalBody,
   useMediaQuery,
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
