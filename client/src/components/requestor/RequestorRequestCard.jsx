@@ -116,4 +116,4 @@ const RequestCard = ({
   );
 };
 
-export default RequestCard;
+export default React.memo(RequestCard);

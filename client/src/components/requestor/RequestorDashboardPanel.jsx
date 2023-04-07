@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Heading,
@@ -33,14 +33,14 @@ const RequestorDashboardPanel = () => {
   const [requestData, setRequestData] = useState([]);
   const [tripTicketData, setTripTicketData] = useState([]);
 
-  const fetchRecentRequestAndTicket = async () => {
+  const fetchRecentRequestAndTicket = useCallback(async () => {
     const results = await Promise.allSettled([
       axios.get(`${ENDPOINT}request`),
       axios.get(`${ENDPOINT}ticket`),
     ]);
 
     return results;
-  };
+  }, []);
 
   const { data, isLoading, isFetching, error, isFetched } = useQuery(
     ["ambulance_request_with_ticket"],
@@ -66,7 +66,7 @@ const RequestorDashboardPanel = () => {
   let fulfilled;
   let rejected;
 
-  (function totalRequestCounts() {
+  const totalRequestCounts = useCallback(() => {
     if (Array.isArray(requestData)) {
       pending = requestData?.filter((req) => req.status === "pending").length;
       approved = requestData?.filter((req) => req.status === "approved").length;
@@ -75,7 +75,8 @@ const RequestorDashboardPanel = () => {
       ).length;
       rejected = requestData?.filter((req) => req.status === "rejected").length;
     }
-  })();
+  }, [requestData]);
+  totalRequestCounts();
 
   const panel_card_data = [
     { title: "Total Requests", total: pending ?? 0, type: "Pending" },

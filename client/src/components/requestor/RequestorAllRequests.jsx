@@ -25,7 +25,7 @@ const RequestorAllRequests = () => {
     ["ambulance_request"],
     fetchAllRequests,
     {
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,
     }
   );
   console.log(data, error);
@@ -73,4 +73,4 @@ const RequestorAllRequests = () => {
   );
 };
 
-export default RequestorAllRequests;
+export default React.memo(RequestorAllRequests);

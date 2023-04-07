@@ -28,4 +28,4 @@ const PanelCard = ({ total, title, type, bgColor }) => {
   );
 };
 
-export default PanelCard;
+export default React.memo(PanelCard);
