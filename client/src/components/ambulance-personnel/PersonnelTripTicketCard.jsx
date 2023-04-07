@@ -68,12 +68,14 @@ const PersonnelTripTicketCard = ({ showTripTicketDetails }) => {
           isOpen={isOpen}
           onClose={handleOpenModal}
         >
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Requestor Name:
-            <Text as="span" fontWeight="normal" textTransform="capitalize">
-              Nero Nero
-            </Text>
-          </Heading>
+          <ModalBody>
+            <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+              Requestor Name:
+              <Text as="span" fontWeight="normal" textTransform="capitalize">
+                Nero Nero
+              </Text>
+            </Heading>
+          </ModalBody>
         </ModalContainer>
       )}
     </>

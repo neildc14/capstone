@@ -32,7 +32,7 @@ const ModalContainer = ({
           </Text>
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>{children}</ModalBody>
+        {children}
       </ModalContent>
     </Modal>
   );

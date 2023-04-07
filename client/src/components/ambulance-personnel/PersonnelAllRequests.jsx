@@ -15,6 +15,7 @@ import {
   Select,
   Tbody,
   Text,
+  ModalBody,
 } from "@chakra-ui/react";
 import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
 import ModalContainer from "../global/ModalContainer";
@@ -187,12 +188,14 @@ const AllRequests = () => {
         isOpen={isOpen}
         onClose={handleOpenModal}
       >
+      <ModalBody>
         <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
           Requestor Name:
           <Text as="span" fontWeight="normal" textTransform="capitalize">
             Nero Nero
           </Text>
         </Heading>
+        </ModalBody>
       </ModalContainer>
     </>
   );

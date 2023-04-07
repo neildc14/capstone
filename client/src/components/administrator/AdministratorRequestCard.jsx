@@ -14,6 +14,7 @@ import {
   Th,
   Td,
   Tbody,
+  ModalBody,
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
@@ -131,12 +132,14 @@ const AdministratorRequestCard = ({
         isOpen={isOpen}
         onClose={handleOpenModal}
       >
-        <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-          Requestor Name:
-          <Text as="span" fontWeight="normal" textTransform="capitalize">
-            Nero Nero
-          </Text>
-        </Heading>
+        <ModalBody>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Requestor Name:
+            <Text as="span" fontWeight="normal" textTransform="capitalize">
+              Nero Nero
+            </Text>
+          </Heading>
+        </ModalBody>
       </ModalContainer>
     </>
   );
