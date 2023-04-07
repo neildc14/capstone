@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react";
 import {
-  Box,
   Heading,
   Flex,
   Button,
@@ -15,6 +14,8 @@ import {
   Td,
   Tbody,
   ModalBody,
+  ModalFooter,
+  Divider,
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
@@ -74,7 +75,7 @@ const AdministratorRequestCard = ({
         accessor: "transfer_location",
       },
       {
-        Header: "",
+        Header: "Action",
         accessor: "action",
       },
     ],
@@ -135,11 +136,73 @@ const AdministratorRequestCard = ({
         <ModalBody>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
             Requestor Name:
-            <Text as="span" fontWeight="normal" textTransform="capitalize">
-              Nero Nero
+            <Text
+              as="span"
+              ps={2}
+              fontWeight="normal"
+              textTransform="capitalize"
+            >
+              Juan Dela Cruz
             </Text>
           </Heading>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Pick-up Location:
+            <Text
+              as="span"
+              ps={2}
+              fontWeight="normal"
+              textTransform="capitalize"
+            >
+              San Jose City
+            </Text>
+          </Heading>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Transfer Location:
+            <Text
+              as="span"
+              ps={2}
+              fontWeight="normal"
+              textTransform="capitalize"
+            >
+              Cabanatuan City
+            </Text>
+          </Heading>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Patient Condition:
+            <Text
+              as="span"
+              ps={2}
+              fontWeight="normal"
+              textTransform="capitalize"
+            >
+              Migraine
+            </Text>
+          </Heading>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Referral Slip:
+          </Heading>
         </ModalBody>
+        <Divider />
+        <ModalFooter>
+          <Flex width="100%" justifyContent="space-between">
+            <Button
+              size="sm"
+              bgColor="yellow.500"
+              color="white"
+              _hover={{ bgColor: "yellow.600" }}
+            >
+              Decline
+            </Button>
+            <Button
+              size="sm"
+              bgColor="green.500"
+              color="white"
+              _hover={{ bgColor: "green.600" }}
+            >
+              Approve
+            </Button>
+          </Flex>
+        </ModalFooter>
       </ModalContainer>
     </>
   );
