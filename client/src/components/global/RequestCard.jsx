@@ -11,7 +11,12 @@ import {
 import ModalContainer from "./ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
 
-const RequestCard = ({ card_header, card_header_detail }) => {
+const RequestCard = ({
+  card_header,
+  card_header_detail,
+  bgColor = "#F5F5F5",
+  borderRadius = "md",
+}) => {
   const [isOpen, setOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -20,7 +25,11 @@ const RequestCard = ({ card_header, card_header_detail }) => {
 
   return (
     <>
-      <Card boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)" bgColor="#F5F5F5">
+      <Card
+        boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
+        bgColor={bgColor}
+        borderRadius={borderRadius}
+      >
         <CardBody>
           <Flex
             flexDirection={{ base: "column", md: "row" }}

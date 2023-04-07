@@ -17,6 +17,7 @@ import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTrip
 import PersonnelAmbulancePage from "./components/ambulance-personnel/PersonnelAmbulance";
 import RequestorTripTickets from "./components/requestor/RequestorTripTickets";
 import AdministratorRequests from "./components/administrator/AdministratorRequests";
+import AdministratorDashboardPanel from "./components/administrator/AdministratorDashboardPanel";
 
 function App() {
   const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ function App() {
             <Route path="map" element={<ViewMap />} />
           </Route>
           <Route path="/administrator" element={<AdministratorDashboard />}>
+            <Route path="" element={<AdministratorDashboardPanel />} />
             <Route path="requests" element={<AdministratorRequests />} />
           </Route>
           <Route

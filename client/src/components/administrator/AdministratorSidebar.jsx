@@ -18,6 +18,7 @@ const AdministratorSidebar = () => {
   const [hoverRequest, bindHoverRequest] = useHover();
   const [hoverAllRequests, bindHoverAllRequests] = useHover();
   const [hoverTripTickets, bindHoverTripTickets] = useHover();
+  const [hoveDrivers, bindHoverDrivers] = useHover();
   const [hoverRequestMap, bindHoverRequestMap] = useHover();
 
   return (
@@ -136,7 +137,7 @@ const AdministratorSidebar = () => {
 
             <Link
               as={RouterLink}
-              to="/administrator/trip_tickets"
+              to="/administrator/drivers"
               variant="ghost"
               display="flex"
               justifyContent="flex-start"
@@ -150,18 +151,18 @@ const AdministratorSidebar = () => {
               fontSize={{ md: "sm", lg: "md" }}
               fontWeight="semibold"
               color={
-                location.pathname === "/administrator/trip_tickets"
+                location.pathname === "/administrator/drivers"
                   ? "#FF7A00"
                   : "whiteAlpha.900"
               }
               bgColor={
-                location.pathname === "/administrator/trip_tickets" &&
+                location.pathname === "/administrator/drivers" &&
                 "whiteAlpha.900"
               }
               _hover={{
                 color: "#FF7A00",
               }}
-              {...bindHoverTripTickets}
+              {...bindHoverDrivers}
             >
               <UilUserSquare />
               Drivers
