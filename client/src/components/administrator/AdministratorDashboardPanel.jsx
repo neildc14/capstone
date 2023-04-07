@@ -11,9 +11,14 @@ import {
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
-import { UilFileCheckAlt, UilThLarge } from "@iconscout/react-unicons";
-
-import AdministratorRequestCard from "./AdministratorRequestCard";
+import ReactPaginate from "react-paginate";
+import {
+  UilFileCheckAlt,
+  UilThLarge,
+  UilAngleLeft,
+  UilAngleRight,
+} from "@iconscout/react-unicons";
+import PaginatedItems from "../global/PaginatedItems";
 
 const AdministratorDashboardPanel = () => {
   const navigate = useNavigate();
@@ -31,6 +36,12 @@ const AdministratorDashboardPanel = () => {
     },
     { title: "Total Driver", total: 0, type: "On-Duty" },
     { title: "Total Requests", total: 0, type: "Rejected" },
+  ];
+
+  // Example items, to simulate fetching from another resources.
+  const items = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+    10, 11, 12, 13, 14,
   ];
 
   return (
@@ -125,20 +136,7 @@ const AdministratorDashboardPanel = () => {
               <Divider />
             </Box>
             <Box px={4} py={4}>
-              <Flex flexDirection="column" gap={2}>
-                <AdministratorRequestCard
-                  bgColor="white"
-                  borderRadius="sm"
-                  card_header="Request ID"
-                  card_header_detail="dasdajhgsdfgdsgfd"
-                />
-                <AdministratorRequestCard
-                  bgColor="white"
-                  borderRadius="sm"
-                  card_header="Request ID"
-                  card_header_detail="dasdajhgsdfgdsgfd"
-                />
-              </Flex>
+              <PaginatedItems itemsPerPage={4} items={items} />
             </Box>
           </Box>
         </Box>

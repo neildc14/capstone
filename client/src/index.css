@@ -30,3 +30,35 @@ body {
     background: #c2c9d2;
   }
 }
+
+.pagination {
+  margin-left: 10rem;
+  display: flex;
+  justify-content: center;
+
+  margin-top: 20px;
+}
+
+.page-item {
+  display: inline-block;
+  margin-right: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+
+.page-item.active {
+  background-color: #ff7a00;
+  border-color: #ff7a00;
+  color: #fff;
+}
+
+.page-link {
+  display: block;
+  text-align: center;
+}
+
+.page-link:hover {
+  text-decoration: none;
+}
