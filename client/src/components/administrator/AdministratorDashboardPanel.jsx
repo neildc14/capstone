@@ -168,7 +168,7 @@ const AdministratorDashboardPanel = () => {
                   gap={4}
                 >
                   <Text color="#FF7A00" fontWeight="semibold">
-                    Total: 30
+                    Total: {pendingRequests?.length}
                   </Text>
                   <Button
                     size="sm"
