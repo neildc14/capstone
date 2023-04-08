@@ -66,7 +66,7 @@ const RequestorDashboardPanel = () => {
   let fulfilled;
   let rejected;
 
-  const totalRequestCounts = useCallback(() => {
+  const totalRequestCounts = () => {
     if (Array.isArray(requestData)) {
       pending = requestData?.filter((req) => req.status === "pending").length;
       approved = requestData?.filter((req) => req.status === "approved").length;
@@ -75,7 +75,7 @@ const RequestorDashboardPanel = () => {
       ).length;
       rejected = requestData?.filter((req) => req.status === "rejected").length;
     }
-  }, [requestData]);
+  };
   totalRequestCounts();
 
   const panel_card_data = [
@@ -97,6 +97,8 @@ const RequestorDashboardPanel = () => {
   const handleRequestClick = () => {
     navigate("request");
   };
+
+  console.log({ data });
 
   return (
     <>
