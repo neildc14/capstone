@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardBody, Heading, Text, VStack } from "@chakra-ui/react";
 
-const PersonnelTripTicketDetails = () => {
+const PersonnelTripTicketDetails = ({ ticketDetails }) => {
   return (
     <>
       <Card background="gray.100">
@@ -16,7 +16,7 @@ const PersonnelTripTicketDetails = () => {
               Trip Ticket ID:
             </Heading>
             <Text as="span" fontWeight="normal">
-              asdjfeqflkewqjhrrwin
+              {ticketDetails._id}
             </Text>
           </VStack>
           <VStack align="left" spacing={1} pb={3}>
@@ -28,8 +28,8 @@ const PersonnelTripTicketDetails = () => {
             >
               Driver:
             </Heading>
-            <Text as="span" fontWeight="normal">
-              Juan Dela Crux
+            <Text as="span" fontWeight="normal" textTransform="capitalize">
+              {ticketDetails.ambulance_personnel["fullName"]}
             </Text>
           </VStack>
           <VStack align="left" spacing={1} pb={3}>
@@ -42,7 +42,7 @@ const PersonnelTripTicketDetails = () => {
               Ambulance Plate:
             </Heading>
             <Text as="span" fontWeight="normal">
-              ABCM 342
+              {ticketDetails.ambulance["license_plate"]}
             </Text>
           </VStack>
           <VStack align="left" spacing={1} pb={3}>
@@ -54,8 +54,8 @@ const PersonnelTripTicketDetails = () => {
             >
               Destination:
             </Heading>
-            <Text as="span" fontWeight="normal">
-              Manila
+            <Text as="span" fontWeight="normal" textTransform="capitalize">
+              {ticketDetails.destination}
             </Text>
           </VStack>
           <VStack align="left" spacing={1} pb={3}>
@@ -64,10 +64,11 @@ const PersonnelTripTicketDetails = () => {
               display="block"
               fontSize="md"
               fontWeight="semibold"
+              textTransform="capitalize"
             >
               Patient Name:
             </Heading>
-            <Text as="span" fontWeight="normal">
+            <Text as="span" fontWeight="normal" textTransform="capitalize">
               Macaraeg Macaraeg
             </Text>
           </VStack>
