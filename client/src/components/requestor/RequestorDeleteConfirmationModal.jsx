@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -17,7 +17,15 @@ import axios from "axios";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
-const DeleteConfirmationModal = ({ id, URL, isOpen, onClose, subject }) => {
+const DeleteConfirmationModal = ({
+  id,
+  URL,
+  isOpen,
+  onClose,
+  subject,
+  refetch,
+  queryKey,
+}) => {
   const queryClient = useQueryClient();
   const toast = useToast();
 
@@ -29,7 +37,7 @@ const DeleteConfirmationModal = ({ id, URL, isOpen, onClose, subject }) => {
   const deleteURL = useMutation({
     mutationFn: deleteRequest,
     onSettled: () => {
-      queryClient.invalidateQueries(["ambulance_request_with_ticket"]);
+      queryClient.invalidateQueries([queryKey]);
     },
     onSuccess: () => {
       toast({
@@ -45,6 +53,8 @@ const DeleteConfirmationModal = ({ id, URL, isOpen, onClose, subject }) => {
   const deleteRecentRequestFunction = (e) => {
     e.preventDefault();
     deleteURL.mutate(`${ENDPOINT}${URL}/${id}`);
+    refetch();
+    onClose();
   };
 
   return (

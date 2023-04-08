@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import {
   Box,
   Heading,
   Divider,
   Flex,
-  Skeleton,
   Card,
   CardBody,
   Grid,
@@ -16,8 +15,9 @@ import {
   UilThLarge,
   UilDocumentInfo,
   UilTicket,
+  UilFileSlash,
 } from "@iconscout/react-unicons";
-import RequestCard from "./RequestorRequestCard";
+import RequestorRequestCard from "./RequestorRequestCard";
 import RequestorTripTicket from "./RequestorTripTicket";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -42,8 +42,9 @@ const RequestorDashboardPanel = () => {
     return results;
   }, []);
 
-  const { data, isLoading, isFetching, error, isFetched } = useQuery(
-    ["ambulance_request_with_ticket"],
+  const queryKey = "ambulance_request_with_ticket";
+  const { data, isLoading, isFetching, error, isFetched, refetch } = useQuery(
+    [queryKey],
     fetchRecentRequestAndTicket,
     {
       refetchOnWindowFocus: false,
@@ -60,6 +61,10 @@ const RequestorDashboardPanel = () => {
   useEffect(() => {
     setDisplayMobileRequestbutton(true);
   }, []);
+
+  const memoizeRequestData = useMemo(() => {
+    return requestData;
+  }, [requestData]);
 
   let pending;
   let approved;
@@ -198,17 +203,27 @@ const RequestorDashboardPanel = () => {
                 {!isLoading &&
                   !isFetching &&
                   data[0]?.status === "fulfilled" && (
-                    <RequestCard
+                    <RequestorRequestCard
                       request_data={requestData[0]}
                       request_id={requestData[0]?._id}
                       request_status={requestData[0]?.status}
+                      refetch={refetch}
+                      queryKey={queryKey}
                     />
                   )}
                 {!isLoading &&
                   !isFetching &&
                   data[0]?.status === "rejected" && (
-                    <Card bgColor="gray.50">
-                      <CardBody>No request found</CardBody>
+                    <Card bgColor="orange.300">
+                      <CardBody
+                        display="inline-flex"
+                        alignItems="center"
+                        gap={2}
+                        color="white"
+                        fontWeight="semibold"
+                      >
+                        <UilFileSlash color="white" /> No requests found.
+                      </CardBody>
                     </Card>
                   )}
               </Box>

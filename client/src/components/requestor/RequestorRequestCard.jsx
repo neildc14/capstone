@@ -13,6 +13,8 @@ import RequestCardDetailsModal from "../RequestCardDetailsModal";
 import DeleteConfirmationModal from "./RequestorDeleteConfirmationModal";
 
 const RequestCard = ({
+  refetch,
+  queryKey,
   request_data,
   request_id,
   request_status,
@@ -104,6 +106,8 @@ const RequestCard = ({
             request_data={request_data}
           />
           <DeleteConfirmationModal
+            refetch={refetch}
+            queryKey={queryKey}
             id={request_id}
             URL="request"
             subject="request"
