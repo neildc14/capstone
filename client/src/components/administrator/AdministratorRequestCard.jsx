@@ -16,6 +16,7 @@ import {
   ModalBody,
   ModalFooter,
   Divider,
+  Image,
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
@@ -47,13 +48,20 @@ const AdministratorRequestCard = ({
     </Button>
   );
 
+  const id = request_data?._id;
+  const name = `${request_data?.first_name} ${request_data?.last_name}`;
+  const pickup_location = request_data?.pickup_location;
+  const transfer_location = request_data?.transfer_location;
+  const referral_slip = request_data?.referral_slip;
+  const patient_condition = request_data?.patient_condition;
+
   const data = useMemo(
     () => [
       {
-        id: "dasldasdngf",
-        name: "Juan Dela Cruz",
-        pickup_location: "San Jose",
-        transfer_location: "Manila",
+        id,
+        name,
+        pickup_location,
+        transfer_location,
         action: viewButton,
       },
     ],
@@ -113,7 +121,11 @@ const AdministratorRequestCard = ({
                     <Tr {...row.getRowProps()}>
                       {row.cells.map((cell) => {
                         return (
-                          <Td {...cell.getCellProps()} textAlign="left">
+                          <Td
+                            {...cell.getCellProps()}
+                            textAlign="left"
+                            width="30%"
+                          >
                             {cell.render("Cell")}
                           </Td>
                         );
@@ -129,7 +141,7 @@ const AdministratorRequestCard = ({
 
       <ModalContainer
         header="Requestor ID"
-        header_detail="pqoerjflsdakfn"
+        header_detail={id}
         isOpen={isOpen}
         onClose={handleOpenModal}
       >
@@ -142,7 +154,7 @@ const AdministratorRequestCard = ({
               fontWeight="normal"
               textTransform="capitalize"
             >
-              Juan Dela Cruz
+              {name}
             </Text>
           </Heading>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
@@ -153,7 +165,7 @@ const AdministratorRequestCard = ({
               fontWeight="normal"
               textTransform="capitalize"
             >
-              San Jose City
+              {pickup_location}
             </Text>
           </Heading>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
@@ -164,23 +176,19 @@ const AdministratorRequestCard = ({
               fontWeight="normal"
               textTransform="capitalize"
             >
-              Cabanatuan City
+              {transfer_location}
             </Text>
           </Heading>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
             Patient Condition:
-            <Text
-              as="span"
-              ps={2}
-              fontWeight="normal"
-              textTransform="capitalize"
-            >
-              Migraine
+            <Text as="span" ps={2} fontWeight="normal">
+              {patient_condition}
             </Text>
           </Heading>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
             Referral Slip:
           </Heading>
+          {referral_slip && <Image src={referral_slip} alt="referral slip" />}
         </ModalBody>
         <Divider />
         <ModalFooter>

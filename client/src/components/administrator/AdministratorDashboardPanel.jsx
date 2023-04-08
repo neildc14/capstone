@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Box,
   Heading,
@@ -11,39 +11,89 @@ import {
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
-import ReactPaginate from "react-paginate";
-import {
-  UilFileCheckAlt,
-  UilThLarge,
-  UilAngleLeft,
-  UilAngleRight,
-} from "@iconscout/react-unicons";
+import { UilFileCheckAlt, UilThLarge } from "@iconscout/react-unicons";
 import PaginatedItems from "../global/PaginatedItems";
 import AdministratorRequestCard from "./AdministratorRequestCard";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorDashboardPanel = () => {
   const navigate = useNavigate();
+  const [requestData, setRequestData] = useState([]);
+  const [tripTicketData, setTripTicketData] = useState([]);
+  const [ambulanceData, setAmbulanceData] = useState([]);
+  const [scheduleData, setScheduleData] = useState([]);
+
+  console.log({ requestData, tripTicketData, ambulanceData, scheduleData });
 
   const navigateToRequests = () => {
     navigate("requests");
   };
 
+  const fetchDetails = useCallback(async () => {
+    const results = await Promise.allSettled([
+      axios.get(`${ENDPOINT}request`),
+      axios.get(`${ENDPOINT}ticket`),
+      axios.get(`${ENDPOINT}ambulance`),
+      axios.get(`${ENDPOINT}schedule`),
+    ]);
+
+    return results;
+  }, []);
+
+  const queryKey = "admin_all_informations";
+  const { data, isLoading, isFetching, error, isFetched, refetch } = useQuery(
+    [queryKey],
+    fetchDetails,
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
+
+  useEffect(() => {
+    if (!isLoading && !isFetching) {
+      setRequestData(data[0]?.value?.data);
+      setTripTicketData(data[1]?.value?.data);
+      setAmbulanceData(data[2]?.value?.data);
+      setScheduleData(data[3]?.value?.data);
+    }
+  }, [data, isLoading, isFetching]);
+
+  let available;
+  const totalAmbulanceAvailable = () => {
+    if (Array.isArray(ambulanceData)) {
+      available = ambulanceData?.filter(
+        (ambulance) => ambulance.status === "available"
+      ).length;
+    }
+  };
+  totalAmbulanceAvailable();
+
+  let pendingRequests;
+  const filterPendingRequests = () => {
+    if (Array.isArray(requestData)) {
+      pendingRequests = requestData?.filter((req) => req.status === "pending");
+    }
+  };
+  filterPendingRequests();
+
   const panel_card_data = [
-    { title: "Total Requests", total: 0, type: "Today" },
+    { title: "Total Requests", total: requestData?.length ?? 0, type: "Today" },
     {
       title: "Total Ambulance",
-      total: 0,
+      total: available ?? 0,
       type: "Available",
     },
-    { title: "Total Driver", total: 0, type: "On-Duty" },
-    { title: "Total Requests", total: 0, type: "Rejected" },
+    {
+      title: "Total Driver",
+      total: scheduleData?.length ?? 0,
+      type: "On-Duty",
+    },
   ];
 
-  // Example items, to simulate fetching from another resources.
-  const items = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-    10, 11, 12, 13, 14,
-  ];
+  const items = pendingRequests.reverse();
 
   return (
     <Box>
@@ -137,20 +187,23 @@ const AdministratorDashboardPanel = () => {
               <Divider />
             </Box>
             <Box px={4} py={4}>
-              <PaginatedItems itemsPerPage={4} items={items}>
-                {(currentItems) => (
-                  <Flex flexDirection="column" gap={2}>
-                    {currentItems &&
-                      currentItems.map((item) => (
-                        <AdministratorRequestCard
-                          key={item}
-                          bgColor="white"
-                          borderRadius="sm"
-                        />
-                      ))}
-                  </Flex>
-                )}
-              </PaginatedItems>
+              {!error && (
+                <PaginatedItems itemsPerPage={4} items={items}>
+                  {(currentItems) => (
+                    <Flex flexDirection="column" gap={2}>
+                      {currentItems &&
+                        currentItems.map((item) => (
+                          <AdministratorRequestCard
+                            key={item._id}
+                            request_data={item}
+                            bgColor="white"
+                            borderRadius="sm"
+                          />
+                        ))}
+                    </Flex>
+                  )}
+                </PaginatedItems>
+              )}
             </Box>
           </Box>
         </Box>
