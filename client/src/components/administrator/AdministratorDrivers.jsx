@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Box,
   Button,
@@ -12,28 +12,41 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  ModalBody,
 } from "@chakra-ui/react";
 import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
-import ModalContainer from "../global/ModalContainer";
 import RequestCard from "../global/RequestCard";
 import PaginatedItems from "../global/PaginatedItems";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorDrivers = () => {
-  const [isOpen, setOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const handleOpenModal = () => {
-    setOpen(!isOpen);
-  };
+  const fetchAllDrivers = useCallback(async () => {
+    const response = await axios.get(`${ENDPOINT}auth/users/drivers`);
+    return response.data;
+  }, []);
+
+  const queryKey = "drivers";
+  const { data, error } = useQuery([queryKey], fetchAllDrivers, {
+    refetchOnWindowFocus: true,
+  });
+
+  const memoizedData = useMemo(() => {
+    return data;
+  }, [data]);
+
+  console.log(memoizedData);
 
   const tabs = [
     {
       label: "All",
+      items: data ?? [],
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
       },
-      items: [1, 2, 3, 4, 5, 6],
     },
     {
       label: "On-duty",
@@ -103,18 +116,19 @@ const AdministratorDrivers = () => {
             onChange={(index) => setSelectedTab(index)}
           >
             <TabList>
-              {tabs?.map((tab, index) => (
-                <Tab
-                  key={tab.label}
-                  fontSize={{ base: "xs", md: "md" }}
-                  _selected={{ color: "orange.500", fontWeight: "semibold" }}
-                >
-                  {tab.label}{" "}
-                  <Text as="span" opacity={selectedTab === index ? 1 : 0}>
-                    {`(${tab.counter})`}
-                  </Text>
-                </Tab>
-              ))}
+              {!error &&
+                tabs?.map((tab, index) => (
+                  <Tab
+                    key={tab.label}
+                    fontSize={{ base: "xs", md: "md" }}
+                    _selected={{ color: "orange.500", fontWeight: "semibold" }}
+                  >
+                    {tab.label}{" "}
+                    <Text as="span" opacity={selectedTab === index ? 1 : 0}>
+                      {`(${tab.counter})`}
+                    </Text>
+                  </Tab>
+                ))}
             </TabList>
 
             <TabPanels bgColor="custom.secondary" mt={4} py={2}>
@@ -127,7 +141,7 @@ const AdministratorDrivers = () => {
                           {currentItems &&
                             currentItems.map((item) => (
                               <RequestCard
-                                key={item}
+                                key={item._id}
                                 bgColor="white"
                                 borderRadius="sm"
                                 card_header="Driver"
@@ -144,22 +158,6 @@ const AdministratorDrivers = () => {
           </Tabs>
         </Box>
       </Box>
-
-      <ModalContainer
-        header="Requestor ID"
-        header_detail="pqoerjflsdakfn"
-        isOpen={isOpen}
-        onClose={handleOpenModal}
-      >
-        <ModalBody>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Requestor Name:
-            <Text as="span" fontWeight="normal" textTransform="capitalize">
-              Nero Nero
-            </Text>
-          </Heading>
-        </ModalBody>
-      </ModalContainer>
     </>
   );
 };
