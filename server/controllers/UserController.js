@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const createToken = require("../helpers/createToken");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
+const throwError = require("../helpers/createError");
 
 const signUp = async (req, res) => {
   const { firstname, lastname, email, password, user_type } = req.body;
@@ -53,7 +54,36 @@ const logIn = async (req, res) => {
   }
 };
 
+const getDrivers = async (req, res) => {
+  try {
+    const users = await User.find();
+    const all_drivers = users
+      .filter((user) => user.user_type === "ambulance_personnel")
+      .map((user) => {
+        return {
+          _id: user._id,
+          email: user.email,
+          user_type: user.user_type,
+          firstname: user.firstname,
+          lastname: user.lastname,
+        };
+      });
+    console.log(all_drivers);
+
+    let errorMessage = "No trip ambulance drivers were found";
+    if (all_drivers.length === 0) {
+      throwError(errorMessage);
+    }
+    const success = new HTTPResponse(res, 200, all_drivers);
+    return success.sendResponse();
+  } catch (error) {
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
+  }
+};
+
 module.exports = {
   signUp,
   logIn,
+  getDrivers,
 };
