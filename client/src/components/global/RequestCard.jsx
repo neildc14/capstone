@@ -11,10 +11,11 @@ import {
 } from "@chakra-ui/react";
 import ModalContainer from "./ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
+import { DateTime } from "luxon";
 
 const RequestCard = ({
-  card_header,
-  card_header_detail,
+  name,
+  date_time,
   bgColor = "#F5F5F5",
   borderRadius = "md",
 }) => {
@@ -23,6 +24,9 @@ const RequestCard = ({
   const handleOpenModal = () => {
     setOpen(!isOpen);
   };
+
+  const dt = DateTime.fromISO(date_time);
+  const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
 
   return (
     <>
@@ -40,13 +44,25 @@ const RequestCard = ({
           >
             <Heading
               as="h5"
+              flexBasis={{ md: "20%" }}
               display="block"
               fontSize="md"
               fontWeight="semibold"
             >
-              {card_header}:
+              Requestor:
               <Text as="span" ps={2} fontWeight="normal">
-                {card_header_detail}
+                {name}
+              </Text>
+            </Heading>
+            <Heading
+              as="h5"
+              display="block"
+              fontSize="md"
+              fontWeight="semibold"
+            >
+              Date & Time Requested:
+              <Text as="span" ps={2} fontWeight="normal">
+                {formattedDate}
               </Text>
             </Heading>
             <Button

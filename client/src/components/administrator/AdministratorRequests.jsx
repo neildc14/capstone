@@ -27,65 +27,40 @@ const AdministratorRequests = () => {
   const [isOpen, setOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const handleOpenModal = () => {
-    setOpen(!isOpen);
-  };
-
   const fetchAllRequests = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}request`);
     return response.data;
   }, []);
 
   const queryKey = "ambulance_request";
-  const { data, isLoading, isFetching, error, refetch } = useQuery(
-    [queryKey],
-    fetchAllRequests,
-    {
-      refetchOnWindowFocus: true,
-    }
-  );
+  const { data, error } = useQuery([queryKey], fetchAllRequests, {
+    refetchOnWindowFocus: true,
+  });
 
   const memoizedData = useMemo(() => {
     return data;
   }, [data]);
 
   let pendingRequests = [];
-  const filterPendingRequests = () => {
+  let approvedRequest = [];
+  let fulfilledRequest = [];
+  let rejectedRequests = [];
+
+  const filterRequests = () => {
     if (Array.isArray(memoizedData)) {
       pendingRequests = memoizedData?.filter((req) => req.status === "pending");
-    }
-  };
-  filterPendingRequests();
-
-  let approvedRequest = [];
-  const filterApprovedRequests = () => {
-    if (Array.isArray(memoizedData)) {
       approvedRequest = memoizedData?.filter(
         (req) => req.status === "approved"
       );
-    }
-  };
-  filterApprovedRequests();
-
-  let fulfilledRequest = [];
-  const filterFulfilledRequests = () => {
-    if (Array.isArray(memoizedData)) {
       fulfilledRequest = memoizedData?.filter(
         (req) => req.status === "fulfilled"
       );
-    }
-  };
-  filterFulfilledRequests();
-
-  let rejectedRequests = [];
-  const filterRejectedRequests = () => {
-    if (Array.isArray(memoizedData)) {
       rejectedRequests = memoizedData?.filter(
-        (req) => req.status === "rejecte"
+        (req) => req.status === "rejected"
       );
     }
   };
-  filterRejectedRequests();
+  filterRequests();
 
   const tabs = [
     {
@@ -93,11 +68,10 @@ const AdministratorRequests = () => {
       get counter() {
         return this?.items?.length;
       },
-      items: data ?? [],
+      items: memoizedData ?? [],
     },
     {
       label: "Pending",
-
       items: pendingRequests,
       get counter() {
         return this?.items?.length;
@@ -205,8 +179,8 @@ const AdministratorRequests = () => {
                                 key={item._id}
                                 bgColor="white"
                                 borderRadius="sm"
-                                card_header="Request ID"
-                                card_header_detail="dasdajhgsdfgdsgfd"
+                                name={`${item?.first_name} ${item?.last_name}`}
+                                date_time={item?.createdAt}
                               />
                             ))}
                           {tab?.counter === 0 && (
@@ -224,22 +198,6 @@ const AdministratorRequests = () => {
           </Tabs>
         </Box>
       </Box>
-
-      <ModalContainer
-        header="Requestor ID"
-        header_detail="pqoerjflsdakfn"
-        isOpen={isOpen}
-        onClose={handleOpenModal}
-      >
-        <ModalBody>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Requestor Name:
-            <Text as="span" fontWeight="normal" textTransform="capitalize">
-              Nero Nero
-            </Text>
-          </Heading>
-        </ModalBody>
-      </ModalContainer>
     </>
   );
 };
