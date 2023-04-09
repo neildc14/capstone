@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Box,
   Button,
@@ -12,51 +12,75 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  ModalBody,
 } from "@chakra-ui/react";
 import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
-import ModalContainer from "../global/ModalContainer";
-import RequestCard from "../global/RequestCard";
+import AmbulanceCard from "../global/AmbulanceCard";
 import PaginatedItems from "../global/PaginatedItems";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorAmbulance = () => {
-  const [isOpen, setOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const handleOpenModal = () => {
-    setOpen(!isOpen);
+  const fetchAllAmbulance = useCallback(async () => {
+    const response = await axios.get(`${ENDPOINT}ambulance`);
+    return response.data;
+  }, []);
+
+  const queryKey = "ambulance";
+  const { data, error } = useQuery([queryKey], fetchAllAmbulance, {
+    refetchOnWindowFocus: true,
+  });
+
+  const memoizedData = useMemo(() => {
+    return data;
+  }, [data]);
+
+  let available = [];
+  let travelling = [];
+  let maintenance = [];
+
+  const filterAmbulances = () => {
+    if (Array.isArray(memoizedData)) {
+      available = memoizedData?.filter((req) => req.status === "available");
+      maintenance = memoizedData?.filter((req) => req.status === "maintenance");
+      travelling = memoizedData?.filter((req) => req.status === "travelling");
+    }
   };
+  filterAmbulances();
 
   const tabs = [
     {
       label: "All",
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
       },
-      items: [1, 2, 3, 4, 5, 6],
+      items: memoizedData ?? [],
     },
     {
       label: "Available",
 
-      items: [1, 2, 3],
+      items: available,
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
       },
     },
     {
       label: "Travelling",
 
-      items: [1, 2, 3, 4, 5],
+      items: travelling,
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
       },
     },
     {
       label: "Maintenance",
 
-      items: [1, 2, 3, 4],
+      items: maintenance,
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
       },
     },
   ];
@@ -126,50 +150,40 @@ const AdministratorAmbulance = () => {
             </TabList>
 
             <TabPanels bgColor="custom.secondary" mt={4} py={2}>
-              {tabs?.map((tab) => (
-                <TabPanel key={tab.label}>
-                  <Flex flexDirection="column" gap={4}>
-                    <PaginatedItems itemsPerPage={4} items={tab.items}>
-                      {(currentItems) => (
-                        <Flex flexDirection="column" gap={2}>
-                          {currentItems &&
-                            currentItems.map((item) => (
-                              <RequestCard
-                                key={item}
-                                bgColor="white"
-                                borderRadius="sm"
-                                card_header="License Plate number"
-                                card_header_detail="ABCD 124"
-                              />
-                            ))}
-                        </Flex>
-                      )}
-                    </PaginatedItems>
-                  </Flex>
-                </TabPanel>
-              ))}
+              {!error &&
+                tabs?.map((tab) => (
+                  <TabPanel key={tab.label}>
+                    <Flex flexDirection="column" gap={4}>
+                      <PaginatedItems itemsPerPage={4} items={tab.items}>
+                        {(currentItems) => (
+                          <Flex flexDirection="column" gap={2}>
+                            {currentItems &&
+                              currentItems.map((item) => (
+                                <AmbulanceCard
+                                  key={item._id}
+                                  bgColor="white"
+                                  borderRadius="sm"
+                                  license_plate="ABCD 124"
+                                />
+                              ))}
+
+                            {tab?.counter === 0 && (
+                              <Text fontSize="md" color="orange.500">
+                                No ambulance found
+                              </Text>
+                            )}
+                          </Flex>
+                        )}
+                      </PaginatedItems>
+                    </Flex>
+                  </TabPanel>
+                ))}
             </TabPanels>
           </Tabs>
         </Box>
       </Box>
-
-      <ModalContainer
-        header="Requestor ID"
-        header_detail="pqoerjflsdakfn"
-        isOpen={isOpen}
-        onClose={handleOpenModal}
-      >
-        <ModalBody>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Requestor Name:
-            <Text as="span" fontWeight="normal" textTransform="capitalize">
-              Nero Nero
-            </Text>
-          </Heading>
-        </ModalBody>
-      </ModalContainer>
     </>
   );
 };
 
-export default AdministratorAmbulance;
+export default React.memo(AdministratorAmbulance);

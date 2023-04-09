@@ -15,7 +15,6 @@ import {
   ModalBody,
 } from "@chakra-ui/react";
 import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
-import ModalContainer from "../global/ModalContainer";
 import RequestCard from "../global/RequestCard";
 import PaginatedItems from "../global/PaginatedItems";
 import { useQuery } from "@tanstack/react-query";
@@ -24,7 +23,6 @@ import axios from "axios";
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorRequests = () => {
-  const [isOpen, setOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
 
   const fetchAllRequests = useCallback(async () => {
@@ -167,33 +165,34 @@ const AdministratorRequests = () => {
             </TabList>
 
             <TabPanels bgColor="custom.secondary" mt={4} py={2}>
-              {tabs?.map((tab) => (
-                <TabPanel key={tab.label + "panel"}>
-                  <Flex flexDirection="column" gap={4}>
-                    <PaginatedItems itemsPerPage={4} items={tab.items}>
-                      {(currentItems) => (
-                        <Flex flexDirection="column" gap={2}>
-                          {currentItems &&
-                            currentItems.map((item, i) => (
-                              <RequestCard
-                                key={item._id}
-                                bgColor="white"
-                                borderRadius="sm"
-                                name={`${item?.first_name} ${item?.last_name}`}
-                                date_time={item?.createdAt}
-                              />
-                            ))}
-                          {tab?.counter === 0 && (
-                            <Text fontSize="md" color="orange.500">
-                              No requests found
-                            </Text>
-                          )}
-                        </Flex>
-                      )}
-                    </PaginatedItems>
-                  </Flex>
-                </TabPanel>
-              ))}
+              {!error &&
+                tabs?.map((tab) => (
+                  <TabPanel key={tab.label + "panel"}>
+                    <Flex flexDirection="column" gap={4}>
+                      <PaginatedItems itemsPerPage={4} items={tab.items}>
+                        {(currentItems) => (
+                          <Flex flexDirection="column" gap={2}>
+                            {currentItems &&
+                              currentItems.map((item, i) => (
+                                <RequestCard
+                                  key={item._id}
+                                  bgColor="white"
+                                  borderRadius="sm"
+                                  name={`${item?.first_name} ${item?.last_name}`}
+                                  date_time={item?.createdAt}
+                                />
+                              ))}
+                            {tab?.counter === 0 && (
+                              <Text fontSize="md" color="orange.500">
+                                No requests found
+                              </Text>
+                            )}
+                          </Flex>
+                        )}
+                      </PaginatedItems>
+                    </Flex>
+                  </TabPanel>
+                ))}
             </TabPanels>
           </Tabs>
         </Box>
@@ -202,4 +201,4 @@ const AdministratorRequests = () => {
   );
 };
 
-export default AdministratorRequests;
+export default React.memo(AdministratorRequests);

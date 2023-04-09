@@ -11,11 +11,9 @@ import {
 } from "@chakra-ui/react";
 import ModalContainer from "./ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
-import { DateTime } from "luxon";
 
-const RequestCard = ({
-  name,
-  date_time,
+const AmbulanceCard = ({
+  license_plate,
   bgColor = "#F5F5F5",
   borderRadius = "md",
 }) => {
@@ -24,9 +22,6 @@ const RequestCard = ({
   const handleOpenModal = () => {
     setOpen(!isOpen);
   };
-
-  const dt = DateTime.fromISO(date_time);
-  const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
 
   return (
     <>
@@ -44,27 +39,16 @@ const RequestCard = ({
           >
             <Heading
               as="h5"
-              flexBasis={{ md: "30%" }}
               display="block"
               fontSize="md"
               fontWeight="semibold"
             >
-              Requestor:
+              License Plate:
               <Text as="span" ps={2} fontWeight="normal">
-                {name}
+                {license_plate}
               </Text>
             </Heading>
-            <Heading
-              as="h5"
-              display="block"
-              fontSize="md"
-              fontWeight="semibold"
-            >
-              Date & Time Requested:
-              <Text as="span" ps={2} fontWeight="normal">
-                {formattedDate}
-              </Text>
-            </Heading>
+
             <Button
               size="sm"
               display="inline-flex"
@@ -90,9 +74,9 @@ const RequestCard = ({
       >
         <ModalBody>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Requestor Name:
+            License Plate:
             <Text as="span" fontWeight="normal" textTransform="capitalize">
-              Nero Nero
+              ABCD 123
             </Text>
           </Heading>
         </ModalBody>
@@ -101,4 +85,4 @@ const RequestCard = ({
   );
 };
 
-export default RequestCard;
+export default AmbulanceCard;
