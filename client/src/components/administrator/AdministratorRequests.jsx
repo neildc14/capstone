@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Box,
   Button,
@@ -18,6 +18,10 @@ import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
 import ModalContainer from "../global/ModalContainer";
 import RequestCard from "../global/RequestCard";
 import PaginatedItems from "../global/PaginatedItems";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorRequests = () => {
   const [isOpen, setOpen] = useState(false);
@@ -27,44 +31,100 @@ const AdministratorRequests = () => {
     setOpen(!isOpen);
   };
 
+  const fetchAllRequests = useCallback(async () => {
+    const response = await axios.get(`${ENDPOINT}request`);
+    return response.data;
+  }, []);
+
+  const queryKey = "ambulance_request";
+  const { data, isLoading, isFetching, error, refetch } = useQuery(
+    [queryKey],
+    fetchAllRequests,
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
+
+  const memoizedData = useMemo(() => {
+    return data;
+  }, [data]);
+
+  let pendingRequests = [];
+  const filterPendingRequests = () => {
+    if (Array.isArray(memoizedData)) {
+      pendingRequests = memoizedData?.filter((req) => req.status === "pending");
+    }
+  };
+  filterPendingRequests();
+
+  let approvedRequest = [];
+  const filterApprovedRequests = () => {
+    if (Array.isArray(memoizedData)) {
+      approvedRequest = memoizedData?.filter(
+        (req) => req.status === "approved"
+      );
+    }
+  };
+  filterApprovedRequests();
+
+  let fulfilledRequest = [];
+  const filterFulfilledRequests = () => {
+    if (Array.isArray(memoizedData)) {
+      fulfilledRequest = memoizedData?.filter(
+        (req) => req.status === "fulfilled"
+      );
+    }
+  };
+  filterFulfilledRequests();
+
+  let rejectedRequests = [];
+  const filterRejectedRequests = () => {
+    if (Array.isArray(memoizedData)) {
+      rejectedRequests = memoizedData?.filter(
+        (req) => req.status === "rejecte"
+      );
+    }
+  };
+  filterRejectedRequests();
+
   const tabs = [
     {
       label: "All",
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
       },
-      items: [1, 2, 3, 4, 5, 6],
+      items: data ?? [],
     },
     {
       label: "Pending",
 
-      items: [1, 2, 3],
+      items: pendingRequests,
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
       },
     },
     {
-      label: "Approve",
+      label: "Approved",
 
-      items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      items: approvedRequest,
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
       },
     },
     {
       label: "Fulfilled",
 
-      items: [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-      ],
+      items: fulfilledRequest,
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
       },
     },
     {
       label: "Rejected",
-      counter: 10,
-      items: [1, 2],
+      items: rejectedRequests,
+      get counter() {
+        return this?.items?.length;
+      },
     },
   ];
 
@@ -134,21 +194,26 @@ const AdministratorRequests = () => {
 
             <TabPanels bgColor="custom.secondary" mt={4} py={2}>
               {tabs?.map((tab) => (
-                <TabPanel key={tab.label}>
+                <TabPanel key={tab.label + "panel"}>
                   <Flex flexDirection="column" gap={4}>
                     <PaginatedItems itemsPerPage={4} items={tab.items}>
                       {(currentItems) => (
                         <Flex flexDirection="column" gap={2}>
                           {currentItems &&
-                            currentItems.map((item) => (
+                            currentItems.map((item, i) => (
                               <RequestCard
-                                key={item}
+                                key={item._id}
                                 bgColor="white"
                                 borderRadius="sm"
                                 card_header="Request ID"
                                 card_header_detail="dasdajhgsdfgdsgfd"
                               />
                             ))}
+                          {tab?.counter === 0 && (
+                            <Text fontSize="md" color="orange.500">
+                              No requests found
+                            </Text>
+                          )}
                         </Flex>
                       )}
                     </PaginatedItems>
