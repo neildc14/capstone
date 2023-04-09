@@ -10,8 +10,8 @@ const ScheduleSchema = new Schema(
     },
     status: {
       type: String,
-      default: "stand by",
-      enum: ["stand by", "driving"],
+      default: "stand-by",
+      enum: ["stand-by", "driving", "off-duty"],
       required: true,
     },
   },

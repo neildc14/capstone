@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Button,
@@ -14,7 +14,7 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
-import RequestCard from "../global/RequestCard";
+import DriverCard from "../global/DriverCard";
 import PaginatedItems from "../global/PaginatedItems";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -23,45 +23,83 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorDrivers = () => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [allDrivers, setAllDrivers] = useState([]);
+  const [driverSchedules, setDriverSchedules] = useState([]);
 
-  const fetchAllDrivers = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}auth/users/drivers`);
-    return response.data;
+  const fetchDetails = useCallback(async () => {
+    const results = await Promise.allSettled([
+      axios.get(`${ENDPOINT}auth/users/drivers`),
+      axios.get(`${ENDPOINT}schedule`),
+    ]);
+
+    return results;
   }, []);
 
   const queryKey = "drivers";
-  const { data, error } = useQuery([queryKey], fetchAllDrivers, {
-    refetchOnWindowFocus: true,
-  });
+  const { data, error, isLoading, isFetching } = useQuery(
+    [queryKey],
+    fetchDetails,
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
 
-  const memoizedData = useMemo(() => {
-    return data;
+  useEffect(() => {
+    if (!isLoading && !isFetching) {
+      setAllDrivers(data[0]?.value?.data);
+      setDriverSchedules(data[1]?.value?.data);
+    }
   }, [data]);
 
-  console.log(memoizedData);
+  let stand_by = [];
+  let driving = [];
+  let off_duty = [];
+
+  const filterDrivers = () => {
+    if (Array.isArray(driverSchedules)) {
+      stand_by = driverSchedules?.filter(
+        (driver) => driver.status === "stand-by"
+      );
+      driving = driverSchedules?.filter(
+        (driver) => driver.status === "driving"
+      );
+      off_duty = driverSchedules?.filter(
+        (driver) => driver.status === "off-duty"
+      );
+    }
+  };
+  filterDrivers();
 
   const tabs = [
     {
       label: "All",
-      items: data ?? [],
+      items: allDrivers ?? [],
       get counter() {
         return this?.items?.length;
       },
     },
     {
-      label: "On-duty",
+      label: "Stand-by",
 
-      items: [1, 2, 3],
+      items: stand_by,
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
+      },
+    },
+    {
+      label: "Driving",
+
+      items: driving,
+      get counter() {
+        return this?.items?.length;
       },
     },
     {
       label: "Off-duty",
 
-      items: [1, 2, 3, 4, 5],
+      items: off_duty,
       get counter() {
-        return this.items.length;
+        return this?.items?.length;
       },
     },
   ];
@@ -132,28 +170,31 @@ const AdministratorDrivers = () => {
             </TabList>
 
             <TabPanels bgColor="custom.secondary" mt={4} py={2}>
-              {tabs?.map((tab) => (
-                <TabPanel key={tab.label}>
-                  <Flex flexDirection="column" gap={4}>
-                    <PaginatedItems itemsPerPage={4} items={tab.items}>
-                      {(currentItems) => (
-                        <Flex flexDirection="column" gap={2}>
-                          {currentItems &&
-                            currentItems.map((item) => (
-                              <RequestCard
-                                key={item._id}
-                                bgColor="white"
-                                borderRadius="sm"
-                                card_header="Driver"
-                                card_header_detail="Juan Dela Cruz"
-                              />
-                            ))}
-                        </Flex>
-                      )}
-                    </PaginatedItems>
-                  </Flex>
-                </TabPanel>
-              ))}
+              {!error &&
+                tabs?.map((tab) => (
+                  <TabPanel key={tab.label}>
+                    <Flex flexDirection="column" gap={4}>
+                      <PaginatedItems itemsPerPage={4} items={tab.items}>
+                        {(currentItems) => (
+                          <Flex flexDirection="column" gap={2}>
+                            {currentItems &&
+                              currentItems.map((item) => (
+                                <DriverCard
+                                  key={item._id}
+                                  bgColor="white"
+                                  borderRadius="sm"
+                                  name={
+                                    item?.scheduled_personnel?.fullName ||
+                                    `${item?.firstname} ${item?.lastname}`
+                                  }
+                                />
+                              ))}
+                          </Flex>
+                        )}
+                      </PaginatedItems>
+                    </Flex>
+                  </TabPanel>
+                ))}
             </TabPanels>
           </Tabs>
         </Box>
@@ -162,4 +203,4 @@ const AdministratorDrivers = () => {
   );
 };
 
-export default AdministratorDrivers;
+export default React.memo(AdministratorDrivers);
