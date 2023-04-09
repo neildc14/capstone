@@ -26,8 +26,6 @@ const AdministratorDashboardPanel = () => {
   const [ambulanceData, setAmbulanceData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
 
-  console.log(scheduleData);
-
   const navigateToRequests = () => {
     navigate("requests");
   };
