@@ -163,7 +163,7 @@ const AdministratorAmbulance = () => {
                                   key={item._id}
                                   bgColor="white"
                                   borderRadius="sm"
-                                  license_plate="ABCD 124"
+                                  license_plate={item?.license_plate}
                                 />
                               ))}
 

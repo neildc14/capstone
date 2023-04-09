@@ -26,7 +26,7 @@ const AdministratorDashboardPanel = () => {
   const [ambulanceData, setAmbulanceData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
 
-  console.log({ requestData, tripTicketData, ambulanceData, scheduleData });
+  console.log(scheduleData);
 
   const navigateToRequests = () => {
     navigate("requests");
@@ -79,6 +79,20 @@ const AdministratorDashboardPanel = () => {
   };
   filterPendingRequests();
 
+  let driverOnDuty;
+  let driverDriving;
+  const filterDriver = () => {
+    if (Array.isArray(scheduleData)) {
+      driverOnDuty = scheduleData?.filter(
+        (driver) => driver.status === "stand-by"
+      );
+      driverDriving = scheduleData?.filter(
+        (driver) => driver.status === "driving"
+      );
+    }
+  };
+  filterDriver();
+
   const panel_card_data = [
     { title: "Total Requests", total: requestData?.length ?? 0, type: "Today" },
     {
@@ -88,8 +102,13 @@ const AdministratorDashboardPanel = () => {
     },
     {
       title: "Total Driver",
-      total: scheduleData?.length ?? 0,
-      type: "On-Duty",
+      total: driverOnDuty?.length ?? 0,
+      type: "Stand-by",
+    },
+    {
+      title: "Total Driver",
+      total: driverDriving?.length ?? 0,
+      type: "Driving",
     },
   ];
 
@@ -122,7 +141,7 @@ const AdministratorDashboardPanel = () => {
           </Box>
           <Box my={8}>
             <Grid
-              templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
+              templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(4, 1fr)" }}
               gap={6}
             >
               {panel_card_data?.map((panel_card) => (
