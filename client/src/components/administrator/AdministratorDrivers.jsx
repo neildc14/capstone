@@ -130,7 +130,7 @@ const AdministratorDrivers = () => {
                   bgColor="white"
                   color="gray.700"
                 >
-                  <UilLayerGroup color="#FF7A00" /> All Requests
+                  <UilLayerGroup color="#FF7A00" /> All Drivers
                 </Heading>
                 <Box display="inline-flex" flex="1" gap={2}>
                   <Input
@@ -153,11 +153,12 @@ const AdministratorDrivers = () => {
             selectedindex={selectedTab}
             onChange={(index) => setSelectedTab(index)}
           >
-            <TabList>
+            <TabList overflowX="scroll" overflowY="hidden">
               {!error &&
                 tabs?.map((tab, index) => (
                   <Tab
                     key={tab.label}
+                    display="inline-block"
                     fontSize={{ base: "xs", md: "md" }}
                     _selected={{ color: "orange.500", fontWeight: "semibold" }}
                   >
@@ -182,6 +183,7 @@ const AdministratorDrivers = () => {
                                 <DriverCard
                                   key={item._id}
                                   borderRadius="sm"
+                                  driver_data={item}
                                   name={
                                     item?.scheduled_personnel?.fullName ||
                                     `${item?.firstname} ${item?.lastname}`

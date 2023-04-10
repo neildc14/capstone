@@ -7,15 +7,76 @@ import {
   CardBody,
   Text,
   ModalBody,
+  IconButton,
+  GridItem,
+  Grid,
+  useToast,
 } from "@chakra-ui/react";
 import ModalContainer from "./ModalContainer";
-import { UilEye } from "@iconscout/react-unicons";
+import { UilEye, UilEdit, UilTrashAlt } from "@iconscout/react-unicons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
-const DriverCard = ({ name, borderRadius = "md" }) => {
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
+
+const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
   const [isOpen, setOpen] = useState(false);
+  const [isOpenUpdate, setOpenUpdate] = useState(false);
+  const [isOpenDelete, setOpenDelete] = useState(false);
+  const [toastStatus, setToastStatus] = useState(null);
+  const [mutationFunctionType, setMutationFunctionType] = useState("");
 
-  const handleOpenModal = () => {
+  const toast = useToast();
+  const queryClient = useQueryClient();
+
+  console.log(driver_data);
+
+  const handleMutationFunctionType = (data) => {
+    let axiosMethod;
+
+    switch (mutationFunctionType) {
+      case "UPDATE":
+        axiosMethod = axios.put;
+        break;
+      case "DELETE":
+        axiosMethod = axios.delete;
+    }
+
+    return axiosMethod(
+      `${ENDPOINT}auth/users/drivers/${driver_data?._id}`,
+      data
+    );
+  };
+
+  const mutation = useMutation({
+    mutationFn: handleMutationFunctionType,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Ambulance update.",
+        description: `Ambulance status is marked as ${toastStatus}`,
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      queryClient.invalidateQueries(["drivers"]);
+    },
+  });
+
+  const handleViewModal = () => {
     setOpen(!isOpen);
+  };
+
+  const handleEditModal = () => {
+    setOpenUpdate(!isOpenUpdate);
+    setMutationFunctionType("UPDATE");
+  };
+
+  const handleDeleteModal = () => {
+    setOpenDelete(!isOpenDelete);
+    setMutationFunctionType("DELETE");
   };
 
   return (
@@ -26,38 +87,54 @@ const DriverCard = ({ name, borderRadius = "md" }) => {
         borderRadius={borderRadius}
       >
         <CardBody>
-          <Flex
-            flexDirection={{ base: "column", md: "row" }}
-            justifyContent="space-between"
+          <Grid
+            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
             alignItems="center"
-            gap={{ base: 4, md: 0 }}
+            gap={4}
           >
-            <Heading
-              as="h5"
-              display="block"
-              fontSize="md"
-              fontWeight="semibold"
-            >
-              Driver:
-              <Text as="span" ps={2} fontWeight="normal">
-                {name}
-              </Text>
-            </Heading>
-
-            <Button
-              size="sm"
-              display="inline-flex"
-              gap={1}
-              width={{ base: "100%", md: "inherit" }}
-              px={6}
-              bgColor="custom.primary"
-              color="white"
-              _hover={{ bgColor: "orange.500" }}
-              onClick={handleOpenModal}
-            >
-              <UilEye color="white" /> View
-            </Button>
-          </Flex>
+            <GridItem>
+              <Heading
+                as="h5"
+                display="block"
+                fontSize="md"
+                fontWeight="semibold"
+              >
+                Driver:
+                <Text as="span" ps={2} fontWeight="normal">
+                  {name}
+                </Text>
+              </Heading>
+            </GridItem>
+            <GridItem>
+              <Flex gap={2} justifyContent="flex-end">
+                <Button
+                  size="sm"
+                  display="inline-flex"
+                  gap={1}
+                  width={{ base: "100%", md: "inherit" }}
+                  px={6}
+                  bgColor="custom.primary"
+                  color="white"
+                  _hover={{ bgColor: "orange.500" }}
+                  onClick={handleViewModal}
+                >
+                  <UilEye color="white" /> View
+                </Button>
+                <IconButton
+                  size="sm"
+                  aria-label="Edit driver details"
+                  onClick={handleEditModal}
+                  icon={<UilEdit />}
+                />
+                <IconButton
+                  size="sm"
+                  aria-label="Delete driver details"
+                  onClick={handleDeleteModal}
+                  icon={<UilTrashAlt />}
+                />
+              </Flex>
+            </GridItem>
+          </Grid>
         </CardBody>
       </Card>
 
@@ -65,7 +142,39 @@ const DriverCard = ({ name, borderRadius = "md" }) => {
         header="Requestor ID"
         header_detail="pqoerjflsdakfn"
         isOpen={isOpen}
-        onClose={handleOpenModal}
+        onClose={handleViewModal}
+      >
+        <ModalBody>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Driver:
+            <Text as="span" fontWeight="normal" textTransform="capitalize">
+              Nero
+            </Text>
+          </Heading>
+        </ModalBody>
+      </ModalContainer>
+
+      <ModalContainer
+        header="Requestor ID"
+        header_detail="pqoerjflsdakfn"
+        isOpen={isOpenUpdate}
+        onClose={handleEditModal}
+      >
+        <ModalBody>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Driver:
+            <Text as="span" fontWeight="normal" textTransform="capitalize">
+              Nero
+            </Text>
+          </Heading>
+        </ModalBody>
+      </ModalContainer>
+
+      <ModalContainer
+        header="Requestor ID"
+        header_detail="pqoerjflsdakfn"
+        isOpen={isOpenDelete}
+        onClose={handleDeleteModal}
       >
         <ModalBody>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">

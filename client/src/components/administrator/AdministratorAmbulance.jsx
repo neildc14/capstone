@@ -111,7 +111,7 @@ const AdministratorAmbulance = () => {
                   bgColor="white"
                   color="gray.700"
                 >
-                  <UilLayerGroup color="#FF7A00" /> All Requests
+                  <UilLayerGroup color="#FF7A00" /> All Ambulance
                 </Heading>
                 <Box display="inline-flex" flex="1" gap={2}>
                   <Input
