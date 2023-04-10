@@ -50,7 +50,7 @@ const AdministratorAmbulance = () => {
     }
   };
   filterAmbulances();
-
+  console.log(memoizedData);
   const tabs = [
     {
       label: "All",
@@ -161,7 +161,6 @@ const AdministratorAmbulance = () => {
                               currentItems.map((item) => (
                                 <AmbulanceCard
                                   key={item._id}
-                                  bgColor="white"
                                   borderRadius="sm"
                                   license_plate={item?.license_plate}
                                 />

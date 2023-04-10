@@ -148,7 +148,7 @@ const AdministratorRequests = () => {
             selectedindex={selectedTab}
             onChange={(index) => setSelectedTab(index)}
           >
-            <TabList overflowX="scroll">
+            <TabList overflowX="scroll" overflowY="hidden">
               {tabs?.map((tab, index) => (
                 <Tab
                   key={tab.label}
@@ -176,7 +176,6 @@ const AdministratorRequests = () => {
                                 <AdministratorGenericRequestCard
                                   request_data={item}
                                   key={item._id}
-                                  bgColor="white"
                                   borderRadius="sm"
                                   name={`${item?.first_name} ${item?.last_name}`}
                                   date_time={item?.createdAt}

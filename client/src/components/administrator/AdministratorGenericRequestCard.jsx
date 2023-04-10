@@ -22,7 +22,6 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const AdministratorGenericRequestCard = ({
   date_time,
   request_data,
-  bgColor = "#F5F5F5",
   borderRadius = "md",
 }) => {
   const [isOpen, setOpen] = useState(false);
@@ -95,7 +94,7 @@ const AdministratorGenericRequestCard = ({
     <>
       <Card
         boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
-        bgColor={bgColor}
+        bgColor={isOpen ? "orange.300" : "white"}
         borderRadius={borderRadius}
       >
         <CardBody>

@@ -11,7 +11,7 @@ import {
 import ModalContainer from "./ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
 
-const DriverCard = ({ name, bgColor = "#F5F5F5", borderRadius = "md" }) => {
+const DriverCard = ({ name, borderRadius = "md" }) => {
   const [isOpen, setOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -22,7 +22,7 @@ const DriverCard = ({ name, bgColor = "#F5F5F5", borderRadius = "md" }) => {
     <>
       <Card
         boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
-        bgColor={bgColor}
+        bgColor={isOpen ? "orange.300" : "white"}
         borderRadius={borderRadius}
       >
         <CardBody>

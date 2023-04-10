@@ -181,7 +181,6 @@ const AdministratorDrivers = () => {
                               currentItems.map((item) => (
                                 <DriverCard
                                   key={item._id}
-                                  bgColor="white"
                                   borderRadius="sm"
                                   name={
                                     item?.scheduled_personnel?.fullName ||
