@@ -14,10 +14,10 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
-import RequestCard from "../global/RequestCard";
 import PaginatedItems from "../global/PaginatedItems";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import AdministratorGenericRequestCard from "./AdministratorGenericRequestCard";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -148,7 +148,7 @@ const AdministratorRequests = () => {
             selectedindex={selectedTab}
             onChange={(index) => setSelectedTab(index)}
           >
-            <TabList>
+            <TabList overflowX="scroll">
               {tabs?.map((tab, index) => (
                 <Tab
                   key={tab.label}
@@ -173,7 +173,8 @@ const AdministratorRequests = () => {
                           <Flex flexDirection="column" gap={2}>
                             {currentItems &&
                               currentItems.map((item, i) => (
-                                <RequestCard
+                                <AdministratorGenericRequestCard
+                                  request_data={item}
                                   key={item._id}
                                   bgColor="white"
                                   borderRadius="sm"
