@@ -26,7 +26,7 @@ const AdministratorGenericRequestCard = ({
   borderRadius = "md",
 }) => {
   const [isOpen, setOpen] = useState(false);
-  const [status, setStatus] = useState(null);
+  const [toastStatus, setToastStatus] = useState(null);
 
   const toast = useToast();
   const queryClient = useQueryClient();
@@ -43,7 +43,7 @@ const AdministratorGenericRequestCard = ({
     onSuccess: () => {
       toast({
         title: "Request update.",
-        description: `Request is marked a ${status}`,
+        description: `Request is marked a ${toastStatus}`,
         status: "success",
         duration: 2000,
         isClosable: true,
@@ -54,7 +54,7 @@ const AdministratorGenericRequestCard = ({
 
   const rejectRequest = (e) => {
     e.preventDefault();
-    setStatus("Rejected");
+    setToastStatus("Rejected");
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "rejected",
@@ -65,7 +65,7 @@ const AdministratorGenericRequestCard = ({
 
   const approveRequest = (e) => {
     e.preventDefault();
-    setStatus("Approved");
+    setToastStatus("Approved");
 
     const body = {
       pickup_location: request_data?.pickup_location,
@@ -89,6 +89,7 @@ const AdministratorGenericRequestCard = ({
   const transfer_location = request_data?.transfer_location;
   const referral_slip = request_data?.referral_slip;
   const patient_condition = request_data?.patient_condition;
+  const status = request_data?.status;
 
   return (
     <>
@@ -101,7 +102,7 @@ const AdministratorGenericRequestCard = ({
           <Flex
             flexDirection={{ base: "column", md: "row" }}
             justifyContent="space-between"
-            alignItems="center"
+            alignItems={{ base: "left", md: "center" }}
             gap={{ base: 4, md: 0 }}
           >
             <Heading
@@ -114,6 +115,23 @@ const AdministratorGenericRequestCard = ({
               Requestor:
               <Text as="span" ps={2} fontWeight="normal">
                 {name}
+              </Text>
+            </Heading>
+            <Heading
+              as="h5"
+              flexBasis={{ md: "5%" }}
+              display="block"
+              fontSize="md"
+              fontWeight="semibold"
+            >
+              Status:
+              <Text
+                as="span"
+                ps={2}
+                fontWeight="normal"
+                textTransform="capitalize"
+              >
+                {status}
               </Text>
             </Heading>
             <Heading
