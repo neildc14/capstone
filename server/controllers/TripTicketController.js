@@ -136,10 +136,9 @@ const putTripTicket = async (req, res) => {
     const trip_ticket = await TripTicket.findOne({ _id: id }).exec();
     validateInstanceMethod(trip_ticket, errorMessage);
 
-    const updated_trip_ticket = await TripTicket.findOneAndUpdate({
-      id,
-      ...req.body,
-    });
+    const filter = { _id: id };
+    const body = req.body;
+    const updated_trip_ticket = await TripTicket.findOneAndUpdate(filter,body);
 
     errorMessage = "Failed to update trip ticket.";
     validateInstanceMethod(updated_trip_ticket, errorMessage);

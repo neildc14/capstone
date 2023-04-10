@@ -111,10 +111,9 @@ const putSchedule = async (req, res) => {
     const personnel = await User.findOne({ _id: scheduled_personnel }).exec();
     validateInstanceMethod(personnel, errorMessage);
 
-    const updated_schedule = await Schedule.findOneAndUpdate({
-      id,
-      ...req.body,
-    });
+    const filter = { _id: id };
+    const body = req.body;
+    const updated_schedule = await Schedule.findOneAndUpdate(filter, body);
 
     errorMessage = "Failed to update scheduled personnel";
     validateInstanceMethod(updated_schedule, errorMessage);

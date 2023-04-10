@@ -17,10 +17,15 @@ import {
   ModalFooter,
   Divider,
   Image,
+  useToast,
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
 import { useTable } from "react-table";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorRequestCard = ({
   request_data,
@@ -28,9 +33,50 @@ const AdministratorRequestCard = ({
   borderRadius = "md",
 }) => {
   const [isOpen, setOpen] = useState(false);
+  const [status, setStatus] = useState(null);
+
+  const toast = useToast();
+
+  const updateRequest = (data) => {
+    return axios.put(
+      `${ENDPOINT}request/${request_data?._id}`,
+      data
+    );
+  };
+
+  const mutation = useMutation({
+    mutationFn: updateRequest,
+    onError: (error, variables, context) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Request update.",
+        description: `Request is marked a ${status}`,
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
+
+  const rejectRequest = (e) => {
+    e.preventDefault();
+
+    const body = {
+      pickup_location: request_data?.pickup_location,
+      status: "rejected",
+    };
+    console.log(body);
+    mutation.mutate({
+      pickup_location: request_data?.pickup_location,
+      status: "rejected",
+    });
+  };
 
   const handleOpenModal = () => {
     setOpen(!isOpen);
+  
   };
 
   const viewButton = (
@@ -198,6 +244,7 @@ const AdministratorRequestCard = ({
               bgColor="yellow.500"
               color="white"
               _hover={{ bgColor: "yellow.600" }}
+              onClick={rejectRequest}
             >
               Decline
             </Button>

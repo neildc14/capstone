@@ -84,10 +84,9 @@ const putAmbulance = async (req, res) => {
     const license_plate = req.body.license_plate;
     isEmpty(license_plate, errorMessage);
 
-    const updated_ambulance = await Ambulance.findOneAndUpdate({
-      id,
-      ...req.body,
-    });
+    const filter = { _id: id };
+    const body = req.body;
+    const updated_ambulance = await Ambulance.findOneAndUpdate(filter, body);
 
     errorMessage = "Failed to update ambulance status.";
     validateInstanceMethod(updated_ambulance, errorMessage);

@@ -82,7 +82,6 @@ const postRequest = async (req, res) => {
         ),
         contentType: "image/png",
       },*/
-      
     });
 
     errorMessage = "Failed to post request.";
@@ -98,7 +97,7 @@ const postRequest = async (req, res) => {
 //UPDATE existing request
 const putRequest = async (req, res) => {
   const { id } = req.params;
-  const { pickup_location, requestor_id } = req.body;
+  const { pickup_location } = req.body;
 
   try {
     let errorMessage = "Invalid ID";
@@ -114,10 +113,9 @@ const putRequest = async (req, res) => {
     errorMessage = "Location is not defined";
     isEmpty(pickup_location, errorMessage);
 
-    const updated_request = await Request.findOneAndUpdate({
-      id,
-      ...req.body,
-    });
+    const filter = { _id: id };
+    const body = req.body;
+    const updated_request = await Request.findOneAndUpdate(filter, body);
 
     errorMessage = "Failed to update request.";
     validateInstanceMethod(updated_request, errorMessage);
