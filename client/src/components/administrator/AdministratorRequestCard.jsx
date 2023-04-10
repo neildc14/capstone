@@ -38,10 +38,7 @@ const AdministratorRequestCard = ({
   const toast = useToast();
 
   const updateRequest = (data) => {
-    return axios.put(
-      `${ENDPOINT}request/${request_data?._id}`,
-      data
-    );
+    return axios.put(`${ENDPOINT}request/${request_data?._id}`, data);
   };
 
   const mutation = useMutation({
@@ -62,21 +59,30 @@ const AdministratorRequestCard = ({
 
   const rejectRequest = (e) => {
     e.preventDefault();
-
+    setStatus("Rejected");
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "rejected",
     };
-    console.log(body);
-    mutation.mutate({
+    mutation.mutate(body);
+    setOpen(false);
+  };
+
+  const approveRequest = (e) => {
+    e.preventDefault();
+    setStatus("Approved");
+
+    const body = {
       pickup_location: request_data?.pickup_location,
-      status: "rejected",
-    });
+      status: "approved",
+    };
+
+    mutation.mutate(body);
+    setOpen(false);
   };
 
   const handleOpenModal = () => {
     setOpen(!isOpen);
-  
   };
 
   const viewButton = (
@@ -253,6 +259,7 @@ const AdministratorRequestCard = ({
               bgColor="green.500"
               color="white"
               _hover={{ bgColor: "green.600" }}
+              onClick={approveRequest}
             >
               Approve
             </Button>
@@ -263,4 +270,4 @@ const AdministratorRequestCard = ({
   );
 };
 
-export default AdministratorRequestCard;
+export default React.memo(AdministratorRequestCard);

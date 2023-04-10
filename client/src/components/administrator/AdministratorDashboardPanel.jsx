@@ -110,7 +110,7 @@ const AdministratorDashboardPanel = () => {
     },
   ];
 
-  const items = pendingRequests.reverse();
+  const items = pendingRequests?.reverse();
 
   return (
     <Box>
