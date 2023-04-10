@@ -134,7 +134,7 @@ const AdministratorAmbulance = () => {
             selectedindex={selectedTab}
             onChange={(index) => setSelectedTab(index)}
           >
-            <TabList>
+            <TabList overflowX="scroll" overflowY="hidden">
               {tabs?.map((tab, index) => (
                 <Tab
                   key={tab.label}
@@ -162,6 +162,7 @@ const AdministratorAmbulance = () => {
                                 <AmbulanceCard
                                   key={item._id}
                                   borderRadius="sm"
+                                  ambulance_data={item}
                                   license_plate={item?.license_plate}
                                 />
                               ))}

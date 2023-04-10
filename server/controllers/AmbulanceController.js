@@ -69,6 +69,7 @@ const postAmbulance = async (req, res) => {
 //UPDATE specific ambulance
 const putAmbulance = async (req, res) => {
   const { id } = req.params;
+  console.log(id);
   try {
     let errorMessage = "Invalid ID.";
     if (isNotObjectId(id)) {
@@ -86,6 +87,7 @@ const putAmbulance = async (req, res) => {
 
     const filter = { _id: id };
     const body = req.body;
+    console.log(body);
     const updated_ambulance = await Ambulance.findOneAndUpdate(filter, body);
 
     errorMessage = "Failed to update ambulance status.";

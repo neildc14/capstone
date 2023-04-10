@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-const useSelect = () => {
-  const [value, setValue] = useState("");
+const useSelect = (defaultVal = "") => {
+  const [value, setValue] = useState(defaultVal);
 
   const handleChange = (event) => {
     setValue(event.target.value);
