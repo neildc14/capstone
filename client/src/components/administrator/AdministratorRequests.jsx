@@ -12,7 +12,6 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  ModalBody,
 } from "@chakra-ui/react";
 import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
 import RequestCard from "../global/RequestCard";

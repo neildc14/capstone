@@ -13,7 +13,7 @@ import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
 import { UilFileCheckAlt, UilThLarge } from "@iconscout/react-unicons";
 import PaginatedItems from "../global/PaginatedItems";
-import AdministratorRequestCard from "./AdministratorRequestCard";
+import AdministratorPendingRequestCard from "./AdministratorPendingRequestCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -210,7 +210,7 @@ const AdministratorDashboardPanel = () => {
                     <Flex flexDirection="column" gap={2}>
                       {currentItems &&
                         currentItems.map((item) => (
-                          <AdministratorRequestCard
+                          <AdministratorPendingRequestCard
                             key={item._id}
                             request_data={item}
                             bgColor="white"

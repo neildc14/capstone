@@ -27,7 +27,7 @@ import axios from "axios";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
-const AdministratorRequestCard = ({
+const AdministratorPendingRequestCard = ({
   request_data,
   bgColor = "#F5F5F5",
   borderRadius = "md",
@@ -270,4 +270,4 @@ const AdministratorRequestCard = ({
   );
 };
 
-export default React.memo(AdministratorRequestCard);
+export default React.memo(AdministratorPendingRequestCard);

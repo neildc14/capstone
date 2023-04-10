@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
-import AdministratorRequestCard from "../administrator/AdministratorRequestCard";
+import AdministratorRequestCard from "../administrator/AdministratorPendingRequestCard";
 import { Box, Flex } from "@chakra-ui/react";
 
 const PaginatedItems = ({ itemsPerPage, items, children }) => {
