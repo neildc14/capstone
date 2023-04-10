@@ -221,6 +221,11 @@ const AdministratorDashboardPanel = () => {
                   )}
                 </PaginatedItems>
               )}
+              {pendingRequests?.length === 0 && (
+                <Text textAlign="center" color="orange.500">
+                  No pending request for now.
+                </Text>
+              )}
             </Box>
           </Box>
         </Box>
