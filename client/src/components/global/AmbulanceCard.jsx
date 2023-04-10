@@ -30,33 +30,28 @@ const AmbulanceCard = ({
   const [isOpenDelete, setOpenDelete] = useState(false);
   const [selectValue, handleChangeSelect] = useSelect(ambulance_data?.status);
   const [toastStatus, setToastStatus] = useState(null);
-  const [mutationFunctionType, setMutationFunctionType] = useState("UPDATE");
+  const [mutationFunctionType, setMutationFunctionType] = useState("");
   const status = ambulance_data?.status;
 
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const handleMutationFunctionType = () => {
-    function updateAmbulanceStatus(data) {
-      return axios.put(`${ENDPOINT}ambulance/${ambulance_data?._id}`, data);
-    }
-
-    function deleteAmbulanceStatus(data) {
-      return axios.delete(`${ENDPOINT}ambulance/${ambulance_data?._id}`, data);
-    }
+  const handleMutationFunctionType = (data) => {
+    let axiosMethod;
 
     switch (mutationFunctionType) {
       case "UPDATE":
-        return updateAmbulanceStatus;
+        axiosMethod = axios.put;
+        break;
       case "DELETE":
-        return deleteAmbulanceStatus;
+        axiosMethod = axios.delete;
     }
+
+    return axiosMethod(`${ENDPOINT}ambulance/${ambulance_data?._id}`, data);
   };
 
-  const returnedMutationFunction = handleMutationFunctionType();
-
   const mutation = useMutation({
-    mutationFn: returnedMutationFunction,
+    mutationFn: handleMutationFunctionType,
     onError: (error) => {
       console.log(error);
     },
@@ -192,6 +187,7 @@ const AmbulanceCard = ({
           </Button>
         </ModalBody>
       </ModalContainer>
+
       <ModalContainer
         header="License Plate"
         header_detail={license_plate}
