@@ -7,8 +7,14 @@ import {
   GridItem,
   Heading,
   useMediaQuery,
+  Button,
+  Input,
 } from "@chakra-ui/react";
-import { UilHistory, UilFileInfoAlt } from "@iconscout/react-unicons";
+import {
+  UilHistory,
+  UilFileInfoAlt,
+  UilSearch,
+} from "@iconscout/react-unicons";
 import TripTicketCard from "../global/TripTicketCard";
 import TripTicketDetails from "../global/TripTicketDetails";
 import { useQuery } from "@tanstack/react-query";
@@ -53,9 +59,17 @@ const AdministratorTripTickets = () => {
           <GridItem colSpan={4}>
             <Box as="section">
               <Box>
-                <Flex justifyContent="space-between" alignItems="center">
+                <Flex
+                  px={4}
+                  py={2}
+                  flexDirection={{ base: "column", md: "row" }}
+                  justifyContent="space-between"
+                  alignItems="center"
+                  gap={2}
+                >
                   <Heading
                     as="h2"
+                    flex="1"
                     display="inline-flex"
                     gap={2}
                     py={2}
@@ -66,6 +80,22 @@ const AdministratorTripTickets = () => {
                   >
                     <UilHistory color="#FF7A00" /> Trip History
                   </Heading>
+                  <Box display="inline-flex" flex="1" gap={2}>
+                    <Input
+                      type="search"
+                      size="sm"
+                      flex="1"
+                      placeholder="Search ticket"
+                    />
+                    <Button
+                      type="submit"
+                      display="inline-flex"
+                      gap={2}
+                      size="sm"
+                    > 
+                      <UilSearch size="16px" /> Search
+                    </Button>
+                  </Box>
                 </Flex>
                 <Divider />
               </Box>

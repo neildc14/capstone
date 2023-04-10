@@ -36,6 +36,7 @@ const PersonnelTripTicketCard = ({
     <>
       <Card
         boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
+        borderRadius="sm"
         bgColor={
           ticketDetails._id === trip_ticket._id ? "orange.300" : "#F5F5F5"
         }
