@@ -11,11 +11,13 @@ import {
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
-import { UilFileCheckAlt, UilThLarge } from "@iconscout/react-unicons";
+import { UilFileCheckAlt, UilThLarge, UilPlus } from "@iconscout/react-unicons";
 import PaginatedItems from "../global/PaginatedItems";
 import AdministratorPendingRequestCard from "./AdministratorPendingRequestCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import AdministratorAddDriverModal from "./AdministratorAddDriverModal";
+import AdministratorAddAmbulanceModal from "./AdministratorAddAmbulanceModal";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -25,6 +27,8 @@ const AdministratorDashboardPanel = () => {
   const [tripTicketData, setTripTicketData] = useState([]);
   const [ambulanceData, setAmbulanceData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
+  const [isOpenAddDriverModal, setOpenAddDriverModal] = useState(false);
+  const [isOpenAddAmbulanceModal, setOpenAddAmbulanceModal] = useState(false);
 
   const navigateToRequests = () => {
     navigate("requests");
@@ -112,59 +116,25 @@ const AdministratorDashboardPanel = () => {
 
   const items = pendingRequests?.reverse();
 
+  const handleOpenAddDriverModal = () => {
+    setOpenAddDriverModal(!isOpenAddDriverModal);
+  };
+
+  const handleOpenAddAmbulanceModal = () => {
+    setOpenAddAmbulanceModal(!isOpenAddAmbulanceModal);
+  };
+
   return (
-    <Box>
-      <Flex
-        display="flex"
-        flexDirection={{ base: "column-reverse", md: "column" }}
-        gap={{ base: 4, md: 0 }}
-      >
-        <Box as="section">
-          <Box>
-            <Flex justifyContent="space-between" alignItems="center">
-              <Heading
-                as="h2"
-                display="inline-flex"
-                gap={2}
-                py={2}
-                fontSize="xl"
-                fontWeight="semibold"
-                bgColor="white"
-                color="gray.700"
-              >
-                <UilThLarge color="#FF7A00" /> Dashboard Panel
-              </Heading>
-            </Flex>
-            <Divider />
-          </Box>
-          <Box my={8}>
-            <Grid
-              templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(4, 1fr)" }}
-              gap={6}
-            >
-              {panel_card_data?.map((panel_card) => (
-                <GridItem key={panel_card.type}>
-                  <PersonnelPanelCard
-                    total={panel_card.total}
-                    title={panel_card.title}
-                    type={panel_card.type}
-                    bgColor="#E2E8F0"
-                  />
-                </GridItem>
-              ))}
-            </Grid>
-          </Box>
-        </Box>
-        <Box as="section">
-          <Box mb={8} bgColor="custom.secondary">
+    <>
+      <Box>
+        <Flex
+          display="flex"
+          flexDirection={{ base: "column-reverse", md: "column" }}
+          gap={{ base: 4, md: 0 }}
+        >
+          <Box as="section">
             <Box>
-              <Flex
-                px={4}
-                py={2}
-                flexDirection={{ base: "column", md: "row" }}
-                justifyContent="space-between"
-                alignItems="center"
-              >
+              <Flex justifyContent="space-between" alignItems="center" mb={2}>
                 <Heading
                   as="h2"
                   display="inline-flex"
@@ -172,65 +142,141 @@ const AdministratorDashboardPanel = () => {
                   py={2}
                   fontSize="xl"
                   fontWeight="semibold"
-                  color="blackAlpha"
+                  bgColor="white"
+                  color="gray.700"
                 >
-                  <UilFileCheckAlt color="#FF7A00" /> Recent Pending Request
+                  <UilThLarge color="#FF7A00" /> Dashboard Panel
                 </Heading>
-
-                <Flex
-                  width={{ base: "100%", md: "inherit" }}
-                  flexDirection={{ base: "row", md: "row" }}
-                  justifyContent={{ base: "space-between" }}
-                  alignItems={{ base: "center", md: "center" }}
-                  gap={4}
-                >
-                  <Text color="#FF7A00" fontWeight="semibold">
-                    Total: {pendingRequests?.length}
-                  </Text>
+                <Flex gap={2}>
                   <Button
-                    size="sm"
-                    px={{ base: 2, md: 6 }}
-                    border="1px solid #ff7a00"
-                    borderRadius="md"
-                    color="custom.primary"
-                    bgColor="white"
-                    _hover={{ color: "white", bgColor: "orange.500" }}
-                    onClick={navigateToRequests}
+                    leftIcon={<UilPlus />}
+                    bgColor="green.500"
+                    color="white"
+                    _hover={{ bgColor: "green.600" }}
+                    onClick={handleOpenAddDriverModal}
                   >
-                    View All
+                    Driver
+                  </Button>
+                  <Button
+                    leftIcon={<UilPlus />}
+                    bgColor="green.500"
+                    color="white"
+                    _hover={{ bgColor: "green.600" }}
+                    onClick={handleOpenAddAmbulanceModal}
+                  >
+                    Ambulance
                   </Button>
                 </Flex>
               </Flex>
               <Divider />
             </Box>
-            <Box px={4} py={4}>
-              {!error && (
-                <PaginatedItems itemsPerPage={4} items={items}>
-                  {(currentItems) => (
-                    <Flex flexDirection="column" gap={2}>
-                      {currentItems &&
-                        currentItems.map((item) => (
-                          <AdministratorPendingRequestCard
-                            key={item._id}
-                            request_data={item}
-                            bgColor="white"
-                            borderRadius="sm"
-                          />
-                        ))}
-                    </Flex>
-                  )}
-                </PaginatedItems>
-              )}
-              {pendingRequests?.length === 0 && (
-                <Text textAlign="center" color="orange.500">
-                  No pending request for now.
-                </Text>
-              )}
+            <Box my={8}>
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(4, 1fr)",
+                }}
+                gap={6}
+              >
+                {panel_card_data?.map((panel_card) => (
+                  <GridItem key={panel_card.type}>
+                    <PersonnelPanelCard
+                      total={panel_card.total}
+                      title={panel_card.title}
+                      type={panel_card.type}
+                      bgColor="#E2E8F0"
+                    />
+                  </GridItem>
+                ))}
+              </Grid>
             </Box>
           </Box>
-        </Box>
-      </Flex>
-    </Box>
+          <Box as="section">
+            <Box mb={8} bgColor="custom.secondary">
+              <Box>
+                <Flex
+                  px={4}
+                  py={2}
+                  flexDirection={{ base: "column", md: "row" }}
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Heading
+                    as="h2"
+                    display="inline-flex"
+                    gap={2}
+                    py={2}
+                    fontSize="xl"
+                    fontWeight="semibold"
+                    color="blackAlpha"
+                  >
+                    <UilFileCheckAlt color="#FF7A00" /> Recent Pending Request
+                  </Heading>
+
+                  <Flex
+                    width={{ base: "100%", md: "inherit" }}
+                    flexDirection={{ base: "row", md: "row" }}
+                    justifyContent={{ base: "space-between" }}
+                    alignItems={{ base: "center", md: "center" }}
+                    gap={4}
+                  >
+                    <Text color="#FF7A00" fontWeight="semibold">
+                      Total: {pendingRequests?.length}
+                    </Text>
+                    <Button
+                      size="sm"
+                      px={{ base: 2, md: 6 }}
+                      border="1px solid #ff7a00"
+                      borderRadius="md"
+                      color="custom.primary"
+                      bgColor="white"
+                      _hover={{ color: "white", bgColor: "orange.500" }}
+                      onClick={navigateToRequests}
+                    >
+                      View All
+                    </Button>
+                  </Flex>
+                </Flex>
+                <Divider />
+              </Box>
+              <Box px={4} py={4}>
+                {!error && (
+                  <PaginatedItems itemsPerPage={4} items={items}>
+                    {(currentItems) => (
+                      <Flex flexDirection="column" gap={2}>
+                        {currentItems &&
+                          currentItems.map((item) => (
+                            <AdministratorPendingRequestCard
+                              key={item._id}
+                              request_data={item}
+                              bgColor="white"
+                              borderRadius="sm"
+                            />
+                          ))}
+                      </Flex>
+                    )}
+                  </PaginatedItems>
+                )}
+                {pendingRequests?.length === 0 && (
+                  <Text textAlign="center" color="orange.500">
+                    No pending request for now.
+                  </Text>
+                )}
+              </Box>
+            </Box>
+          </Box>
+        </Flex>
+      </Box>
+
+      <AdministratorAddDriverModal
+        handleOpenModal={handleOpenAddDriverModal}
+        isOpen={isOpenAddDriverModal}
+      />
+      <AdministratorAddAmbulanceModal
+        handleOpenModal={handleOpenAddAmbulanceModal}
+        isOpen={isOpenAddAmbulanceModal}
+      />
+    </>
   );
 };
 
