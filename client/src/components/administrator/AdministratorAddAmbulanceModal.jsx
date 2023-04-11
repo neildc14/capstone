@@ -7,17 +7,45 @@ import {
   ModalBody,
   Box,
   Button,
+  useToast,
 } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorAddAmbulanceModal = ({ handleOpenModal, isOpen }) => {
+  const toast = useToast();
+  const queryClient = useQueryClient();
+
+  const makeAmbulance = (new_ambulance) => {
+    return axios.post(`${ENDPOINT}ambulance`, new_ambulance);
+  };
+
+  const mutation = useMutation({
+    mutationFn: makeAmbulance,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Ambulance created.",
+        description: "Ambulance is successfully created.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      queryClient.invalidateQueries(["admin_all_informations"]);
+    },
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-
     const data = Object.fromEntries(formData);
-
-    console.log(data);
+    mutation.mutate(data);
+    handleOpenModal();
   };
 
   return (
