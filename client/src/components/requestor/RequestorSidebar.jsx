@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Heading, Divider, Text, Flex, Link } from "@chakra-ui/react";
 import Sidebar from "../global/Sidebar";
 import { Link as RouterLink, useLocation } from "react-router-dom";
@@ -19,6 +19,12 @@ const RequestorSidebar = () => {
   const [hoverRequestForm, bindHoverRequestForm] = useHover();
   const [hoverRequestMap, bindHoverRequestMap] = useHover();
   const [hoverTripTickets, bindHoverTripTickets] = useHover();
+
+  useEffect(() => {
+    if (location.pathname === "/requestor") {
+      document.title = "ARMS-Requestor";
+    }
+  }, [location.pathname]);
 
   return (
     <Sidebar bgColor="teal.900">

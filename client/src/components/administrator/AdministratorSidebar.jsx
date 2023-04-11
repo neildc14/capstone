@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Divider, Link, Text } from "@chakra-ui/react";
 import Sidebar from "../global/Sidebar";
 import { Link as RouterLink, useLocation } from "react-router-dom";
@@ -22,6 +22,12 @@ const AdministratorSidebar = () => {
   const [hoveDrivers, bindHoverDrivers] = useHover();
   const [hoverRequestMap, bindHoverRequestMap] = useHover();
   const [hoverReports, bindHoverReports] = useHover();
+
+  useEffect(() => {
+    if (location.pathname === "/administrator") {
+      document.title = "ARMS-Admin";
+    }
+  }, [location.pathname]);
 
   return (
     <Sidebar bgColor="teal.900">

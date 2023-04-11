@@ -21,6 +21,7 @@ import AdministratorRequests from "./components/administrator/AdministratorReque
 import AdministratorAmbulance from "./components/administrator/AdministratorAmbulance";
 import AdministratorDrivers from "./components/administrator/AdministratorDrivers";
 import AdministratorDashboardPanel from "./components/administrator/AdministratorDashboardPanel";
+import AdministratorReports from "./components/administrator/AdministratorReports";
 
 function App() {
   const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ function App() {
             <Route path="drivers" element={<AdministratorDrivers />} />
             <Route path="trip_tickets" element={<AdministratorTripTickets />} />
             <Route path="map" element={<ViewMap />} />
+            <Route path="reports" element={<AdministratorReports />} />
           </Route>
           <Route
             path="ambulance_personnel"

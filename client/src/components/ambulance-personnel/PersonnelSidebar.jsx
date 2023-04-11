@@ -1,4 +1,4 @@
-import React from "react";
+import Reac, { useEffect } from "react";
 import { Box, Divider, Link, Text } from "@chakra-ui/react";
 import Sidebar from "../global/Sidebar";
 import { Link as RouterLink, useLocation } from "react-router-dom";
@@ -21,6 +21,11 @@ const PersonnelSidebar = () => {
   const [hoverTripTickets, bindHoverTripTickets] = useHover();
   const [hoverRequestMap, bindHoverRequestMap] = useHover();
 
+  useEffect(() => {
+    if (location.pathname === "/ambulance_personnel") {
+      document.title = "ARMS-Personnel";
+    }
+  }, [location.pathname]);
   return (
     <Sidebar bgColor="teal.900">
       <Box>
