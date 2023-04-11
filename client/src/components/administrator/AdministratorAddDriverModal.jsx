@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ModalContainer from "../global/ModalContainer";
+import PropTypes from "prop-types";
 import {
   FormControl,
   FormLabel,
@@ -9,21 +10,49 @@ import {
   Button,
   InputGroup,
   InputRightElement,
+  useToast
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
   const [show, setShow] = useState(false);
   const showHidePassword = () => setShow(!show);
 
+  const toast = useToast();
+  const queryClient = useQueryClient();
+
+  const makeDriver = (new_driver) => {
+    return axios.post(`${ENDPOINT}auth/signup`, new_driver);
+  };
+
+  const mutation = useMutation({
+    mutationFn: makeDriver,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Driver registered.",
+        description: "Driver is successfully registered.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      queryClient.invalidateQueries(["admin_all_informations"]);
+    },
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-
     const data = Object.fromEntries(formData);
-
-    console.log(data);
+    mutation.mutate(data);
+    handleOpenModal();
   };
 
   return (
@@ -86,6 +115,11 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
       </ModalBody>
     </ModalContainer>
   );
+};
+
+AdministratorAddDriverModal.propTypes = {
+  handleOpenModal: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
 };
 
 export default React.memo(AdministratorAddDriverModal);

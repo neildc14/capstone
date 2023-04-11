@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import ModalContainer from "../global/ModalContainer";
+import PropTypes from "prop-types";
 import {
   FormControl,
   FormLabel,
@@ -29,8 +30,8 @@ const AdministratorAddAmbulanceModal = ({ handleOpenModal, isOpen }) => {
     },
     onSuccess: () => {
       toast({
-        title: "Ambulance created.",
-        description: "Ambulance is successfully created.",
+        title: "Ambulance registered.",
+        description: "Ambulance is successfully registered.",
         status: "success",
         duration: 2000,
         isClosable: true,
@@ -75,6 +76,11 @@ const AdministratorAddAmbulanceModal = ({ handleOpenModal, isOpen }) => {
       </ModalBody>
     </ModalContainer>
   );
+};
+
+AdministratorAddAmbulanceModal.propTypes = {
+  handleOpenModal: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
 };
 
 export default React.memo(AdministratorAddAmbulanceModal);
