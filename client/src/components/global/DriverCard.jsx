@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Heading,
   Flex,
@@ -29,7 +29,17 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  console.log(driver_data);
+  const memoizedData = useMemo(() => {
+    return driver_data;
+  }, [driver_data]);
+
+  const id = memoizedData?._id;
+
+  const email = memoizedData?.email;
+  const firstname = memoizedData?.firstname;
+  const lastname = memoizedData?.lastname;
+  const fullname = firstname + " " + lastname;
+  const user_type = memoizedData?.user_type;
 
   const handleMutationFunctionType = (data) => {
     let axiosMethod;
@@ -139,16 +149,33 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
       </Card>
 
       <ModalContainer
-        header="Requestor ID"
-        header_detail="pqoerjflsdakfn"
+        header="Driver ID"
+        header_detail={id}
         isOpen={isOpen}
         onClose={handleViewModal}
       >
         <ModalBody>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
             Driver:
-            <Text as="span" fontWeight="normal" textTransform="capitalize">
-              Nero
+            <Text
+              as="span"
+              ps={2}
+              fontWeight="normal"
+              textTransform="capitalize"
+            >
+              {fullname}
+            </Text>
+          </Heading>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Email:
+            <Text as="span" ps={2} fontWeight="normal">
+              {email}
+            </Text>
+          </Heading>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Type:
+            <Text as="span" ps={2} fontWeight="normal">
+              {user_type}
             </Text>
           </Heading>
         </ModalBody>
@@ -189,4 +216,4 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
   );
 };
 
-export default DriverCard;
+export default React.memo(DriverCard);
