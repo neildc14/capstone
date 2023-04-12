@@ -8,6 +8,7 @@ import {
   Button,
   Grid,
   GridItem,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
@@ -23,12 +24,14 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorDashboardPanel = () => {
   const navigate = useNavigate();
+  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+
   const [requestData, setRequestData] = useState([]);
-  const [tripTicketData, setTripTicketData] = useState([]);
   const [ambulanceData, setAmbulanceData] = useState([]);
   const [scheduleData, setScheduleData] = useState([]);
   const [isOpenAddDriverModal, setOpenAddDriverModal] = useState(false);
   const [isOpenAddAmbulanceModal, setOpenAddAmbulanceModal] = useState(false);
+  const [displayMobileAddbuttons, setDisplayMobileAddbuttons] = useState(false);
 
   const navigateToRequests = () => {
     navigate("requests");
@@ -46,7 +49,7 @@ const AdministratorDashboardPanel = () => {
   }, []);
 
   const queryKey = "admin_all_informations";
-  const { data, isLoading, isFetching, error, isFetched, refetch } = useQuery(
+  const { data, isLoading, isFetching, error } = useQuery(
     [queryKey],
     fetchDetails,
     {
@@ -57,11 +60,14 @@ const AdministratorDashboardPanel = () => {
   useEffect(() => {
     if (!isLoading && !isFetching) {
       setRequestData(data[0]?.value?.data);
-      setTripTicketData(data[1]?.value?.data);
       setAmbulanceData(data[2]?.value?.data);
       setScheduleData(data[3]?.value?.data);
     }
   }, [data, isLoading, isFetching]);
+
+  useEffect(() => {
+    setDisplayMobileAddbuttons(true);
+  }, []);
 
   let available;
   const totalAmbulanceAvailable = () => {
@@ -147,7 +153,7 @@ const AdministratorDashboardPanel = () => {
                 >
                   <UilThLarge color="#FF7A00" /> Dashboard Panel
                 </Heading>
-                <Flex gap={2}>
+                <Flex gap={2} display={isLargerThan768 ? "flex" : "none"}>
                   <Button
                     leftIcon={<UilPlus />}
                     bgColor="green.500"
@@ -192,6 +198,40 @@ const AdministratorDashboardPanel = () => {
             </Box>
           </Box>
           <Box as="section">
+            {displayMobileAddbuttons && (
+              <Flex
+                gap={2}
+                display={!isLargerThan768 ? "flex" : "none"}
+                justifyContent="space-between"
+                my={4}
+              >
+                <Button
+                  leftIcon={<UilPlus />}
+                  flex={1}
+                  display="inline-flex"
+                  justifyContent="space-between"
+                  bgColor="green.500"
+                  color="white"
+                  textAlign="center"
+                  _hover={{ bgColor: "green.600" }}
+                  onClick={handleOpenAddDriverModal}
+                >
+                  Driver
+                </Button>
+                <Button
+                  leftIcon={<UilPlus />}
+                  flex={1}
+                  display="inline-flex"
+                  justifyContent="space-between"
+                  bgColor="green.500"
+                  color="white"
+                  _hover={{ bgColor: "green.600" }}
+                  onClick={handleOpenAddAmbulanceModal}
+                >
+                  Ambulance
+                </Button>
+              </Flex>
+            )}
             <Box mb={8} bgColor="custom.secondary">
               <Box>
                 <Flex
