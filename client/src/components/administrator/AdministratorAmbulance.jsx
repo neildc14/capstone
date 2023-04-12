@@ -50,7 +50,7 @@ const AdministratorAmbulance = () => {
     }
   };
   filterAmbulances();
-  console.log(memoizedData);
+
   const tabs = [
     {
       label: "All",

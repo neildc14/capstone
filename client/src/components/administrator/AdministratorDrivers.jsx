@@ -25,6 +25,11 @@ const AdministratorDrivers = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [allDrivers, setAllDrivers] = useState([]);
   const [driverSchedules, setDriverSchedules] = useState([]);
+  const [nonAssignedDrivers, setNonAssignedDrivers] = useState([]);
+
+  const stand_by = [];
+  const driving = [];
+  const off_duty = [];
 
   const fetchDetails = useCallback(async () => {
     const results = await Promise.allSettled([
@@ -51,24 +56,36 @@ const AdministratorDrivers = () => {
     }
   }, [data]);
 
-  let stand_by = [];
-  let driving = [];
-  let off_duty = [];
+  useEffect(() => {
+    const nonAssignedDrivers = allDrivers.filter((driver) => {
+      return !driverSchedules.some(
+        (schedule) =>
+          schedule.scheduled_personnel?._id === driver._id ||
+          schedule.scheduled_personnel?._id === ""
+      );
+    });
+
+    setNonAssignedDrivers(nonAssignedDrivers);
+  }, [allDrivers, driverSchedules]);
 
   const filterDrivers = () => {
     if (Array.isArray(driverSchedules)) {
-      stand_by = driverSchedules?.filter(
-        (driver) => driver.status === "stand-by"
+      stand_by.push(
+        ...driverSchedules?.filter((driver) => driver.status === "stand-by")
       );
-      driving = driverSchedules?.filter(
-        (driver) => driver.status === "driving"
+
+      driving.push(
+        ...driverSchedules?.filter((driver) => driver.status === "driving")
       );
-      off_duty = driverSchedules?.filter(
-        (driver) => driver.status === "off-duty"
+
+      off_duty.push(
+        ...driverSchedules?.filter((driver) => driver.status === "off-duty")
       );
     }
   };
   filterDrivers();
+
+  const driversWithNoDuty = [nonAssignedDrivers, off_duty].flat();
 
   const tabs = [
     {
@@ -97,7 +114,7 @@ const AdministratorDrivers = () => {
     {
       label: "Off-duty",
 
-      items: off_duty,
+      items: driversWithNoDuty,
       get counter() {
         return this?.items?.length;
       },
