@@ -45,7 +45,7 @@ const AdministratorDrivers = () => {
     [queryKey],
     fetchDetails,
     {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
     }
   );
 
@@ -57,19 +57,22 @@ const AdministratorDrivers = () => {
   }, [data]);
 
   useEffect(() => {
-    const nonAssignedDrivers = allDrivers.filter((driver) => {
-      return !driverSchedules.some(
-        (schedule) =>
-          schedule.scheduled_personnel?._id === driver._id ||
-          schedule.scheduled_personnel?._id === ""
-      );
+    const nonAssignedDrivers = allDrivers?.filter((driver) => {
+      if (driverSchedules?.length !== 0) {
+        return !driverSchedules?.some(
+          (schedule) =>
+            schedule.scheduled_personnel?._id === driver._id ||
+            schedule.scheduled_personnel?._id === ""
+        );
+      }
+      return [];
     });
 
     setNonAssignedDrivers(nonAssignedDrivers);
   }, [allDrivers, driverSchedules]);
 
   const filterDrivers = () => {
-    if (Array.isArray(driverSchedules)) {
+    if (Array.isArray(driverSchedules) && driverSchedules !== undefined) {
       stand_by.push(
         ...driverSchedules?.filter((driver) => driver.status === "stand-by")
       );
@@ -85,7 +88,18 @@ const AdministratorDrivers = () => {
   };
   filterDrivers();
 
-  const driversWithNoDuty = [nonAssignedDrivers, off_duty].flat();
+  const checkIfEmptyDrivers = () => {
+    const driversWithNoDuty = [];
+    if (nonAssignedDrivers !== undefined) {
+      driversWithNoDuty.push(...nonAssignedDrivers);
+    }
+    if (off_duty.length !== 0) {
+      driversWithNoDuty.push(off_duty);
+    }
+    return driversWithNoDuty;
+  };
+
+  const driversWithNoDuty = checkIfEmptyDrivers();
 
   const tabs = [
     {
@@ -116,6 +130,8 @@ const AdministratorDrivers = () => {
 
       items: driversWithNoDuty,
       get counter() {
+        console.log(this?.items);
+        console.log(this?.items?.length);
         return this?.items?.length;
       },
     },
@@ -188,31 +204,35 @@ const AdministratorDrivers = () => {
             </TabList>
 
             <TabPanels bgColor="custom.secondary" mt={4} py={2}>
-              {!error &&
-                tabs?.map((tab) => (
-                  <TabPanel key={tab.label}>
-                    <Flex flexDirection="column" gap={4}>
-                      <PaginatedItems itemsPerPage={4} items={tab.items}>
-                        {(currentItems) => (
-                          <Flex flexDirection="column" gap={2}>
-                            {currentItems &&
-                              currentItems.map((item) => (
-                                <DriverCard
-                                  key={item._id}
-                                  borderRadius="sm"
-                                  driver_data={item}
-                                  name={
-                                    item?.scheduled_personnel?.fullName ||
-                                    `${item?.firstname} ${item?.lastname}`
-                                  }
-                                />
-                              ))}
-                          </Flex>
-                        )}
-                      </PaginatedItems>
-                    </Flex>
-                  </TabPanel>
-                ))}
+              {tabs?.map((tab) => (
+                <TabPanel key={tab.label}>
+                  <Flex flexDirection="column" gap={4}>
+                    <PaginatedItems itemsPerPage={4} items={tab?.items}>
+                      {(currentItems) => (
+                        <Flex flexDirection="column" gap={2}>
+                          {currentItems !== undefined &&
+                            currentItems.map((item) => (
+                              <DriverCard
+                                key={item?._id}
+                                borderRadius="sm"
+                                driver_data={item}
+                                name={
+                                  item?.scheduled_personnel?.fullName ||
+                                  `${item?.firstname} ${item?.lastname}`
+                                }
+                              />
+                            ))}
+                          {tab?.counter === 0 && (
+                            <Text fontSize="md" color="orange.500">
+                              No drivers found
+                            </Text>
+                          )}
+                        </Flex>
+                      )}
+                    </PaginatedItems>
+                  </Flex>
+                </TabPanel>
+              ))}
             </TabPanels>
           </Tabs>
         </Box>

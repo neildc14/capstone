@@ -1,4 +1,5 @@
 const User = require("../models/UserModel");
+const Schedule = require("../models/ScheduleModel");
 const createToken = require("../helpers/createToken");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const throwError = require("../helpers/createError");
@@ -97,6 +98,16 @@ const deleteDriver = async (req, res) => {
 
     errorMessage = "Failed to delete driver";
     validateInstanceMethod(deleted_driver, errorMessage);
+
+    if (Schedule.findOne({ scheduled_personnel: id })) {
+      const deleted_schedule = Schedule.findOneAndDelete({
+        scheduled_personnel: id,
+      });
+      console.log({ deleted_schedule }, "DELETED");
+    }
+
+    errorMessage = "Failed to delete schedule";
+    validateInstanceMethod(deleted_schedule, errorMessage);
     const success = new HTTPResponse(res, 200, {
       message: "Driver deleted successfully!",
     });

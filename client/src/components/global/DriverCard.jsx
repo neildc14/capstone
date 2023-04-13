@@ -89,57 +89,59 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
 
   return (
     <>
-      <Card
-        boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
-        bgColor={isOpen ? "orange.300" : "white"}
-        borderRadius={borderRadius}
-      >
-        <CardBody>
-          <Grid
-            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
-            alignItems="center"
-            gap={4}
-          >
-            <GridItem>
-              <Heading
-                as="h5"
-                display="block"
-                fontSize="md"
-                fontWeight="semibold"
-              >
-                Driver:
-                <Text as="span" ps={2} fontWeight="normal">
-                  {name}
-                </Text>
-              </Heading>
-            </GridItem>
-            <GridItem>
-              <Flex gap={2} justifyContent="flex-end">
-                <Button
-                  size="sm"
-                  display="inline-flex"
-                  gap={1}
-                  width={{ base: "100%", md: "inherit" }}
-                  px={6}
-                  bgColor="custom.primary"
-                  color="white"
-                  _hover={{ bgColor: "orange.500" }}
-                  onClick={handleViewModal}
+      {driver_data !== undefined && (
+        <Card
+          boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
+          bgColor={isOpen ? "orange.300" : "white"}
+          borderRadius={borderRadius}
+        >
+          <CardBody>
+            <Grid
+              templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+              alignItems="center"
+              gap={4}
+            >
+              <GridItem>
+                <Heading
+                  as="h5"
+                  display="block"
+                  fontSize="md"
+                  fontWeight="semibold"
                 >
-                  <UilEye color="white" /> View
-                </Button>
+                  Driver:
+                  <Text as="span" ps={2} fontWeight="normal">
+                    {name}
+                  </Text>
+                </Heading>
+              </GridItem>
+              <GridItem>
+                <Flex gap={2} justifyContent="flex-end">
+                  <Button
+                    size="sm"
+                    display="inline-flex"
+                    gap={1}
+                    width={{ base: "100%", md: "inherit" }}
+                    px={6}
+                    bgColor="custom.primary"
+                    color="white"
+                    _hover={{ bgColor: "orange.500" }}
+                    onClick={handleViewModal}
+                  >
+                    <UilEye color="white" /> View
+                  </Button>
 
-                <IconButton
-                  size="sm"
-                  aria-label="Delete driver details"
-                  onClick={handleDeleteModal}
-                  icon={<UilTrashAlt />}
-                />
-              </Flex>
-            </GridItem>
-          </Grid>
-        </CardBody>
-      </Card>
+                  <IconButton
+                    size="sm"
+                    aria-label="Delete driver details"
+                    onClick={handleDeleteModal}
+                    icon={<UilTrashAlt />}
+                  />
+                </Flex>
+              </GridItem>
+            </Grid>
+          </CardBody>
+        </Card>
+      )}
 
       <ModalContainer
         header="Driver ID"
