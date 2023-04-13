@@ -182,12 +182,10 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
         isOpen={isOpenDelete}
         onClose={handleDeleteModal}
       >
-        <ModalBody>
+        <ModalBody my={4}>
           <Text my={4}>
             Are you sure that you want to delete this ambulance?
           </Text>
-        </ModalBody>
-        <ModalFooter>
           <Button
             size={{ base: "sm", md: "md" }}
             width="100%"
@@ -199,7 +197,7 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
           >
             Delete
           </Button>
-        </ModalFooter>
+        </ModalBody>
       </ModalContainer>
     </>
   );

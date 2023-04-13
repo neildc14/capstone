@@ -218,6 +218,7 @@ const AdministratorGenericRequestCard = ({
             <Flex width="100%" justifyContent="space-between">
               <Button
                 size="sm"
+                px={{ md: 10 }}
                 bgColor="yellow.500"
                 color="white"
                 _hover={{ bgColor: "yellow.600" }}
@@ -227,6 +228,7 @@ const AdministratorGenericRequestCard = ({
               </Button>
               <Button
                 size="sm"
+                px={{ md: 10 }}
                 bgColor="green.500"
                 color="white"
                 _hover={{ bgColor: "green.600" }}
