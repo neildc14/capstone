@@ -251,10 +251,10 @@ const RequestorDashboardPanel = () => {
                       trip_ticket_data={tripTicketData[0]}
                       ticket_id={tripTicketData[0]?._id}
                       ambulance_personnel={
-                        tripTicketData[0]?.ambulance_personnel["fullName"]
+                        tripTicketData[0]?.ambulance_personnel?.fullName
                       }
                       ambulance_plate={
-                        tripTicketData[0]?.ambulance["license_plate"]
+                        tripTicketData[0]?.ambulance?.license_plate
                       }
                       destination={tripTicketData[0]?.destination}
                     />

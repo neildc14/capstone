@@ -22,7 +22,7 @@ const PersonnelSidebar = () => {
   const [hoverRequestMap, bindHoverRequestMap] = useHover();
 
   useEffect(() => {
-    if (location.pathname === "/ambulance_personnel") {
+    if (location.pathname.include("/ambulance_personnel")) {
       document.title = "ARMS-Personnel";
     }
   }, [location.pathname]);

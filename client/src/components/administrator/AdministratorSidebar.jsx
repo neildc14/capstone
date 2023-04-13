@@ -24,7 +24,7 @@ const AdministratorSidebar = () => {
   const [hoverReports, bindHoverReports] = useHover();
 
   useEffect(() => {
-    if (location.pathname === "/administrator") {
+    if (location.pathname.includes("/administrator")) {
       document.title = "ARMS-Admin";
     }
   }, [location.pathname]);

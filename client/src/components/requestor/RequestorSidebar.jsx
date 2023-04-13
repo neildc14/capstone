@@ -21,7 +21,7 @@ const RequestorSidebar = () => {
   const [hoverTripTickets, bindHoverTripTickets] = useHover();
 
   useEffect(() => {
-    if (location.pathname === "/requestor") {
+    if (location.pathname.includes("/requestor")) {
       document.title = "ARMS-Requestor";
     }
   }, [location.pathname]);
