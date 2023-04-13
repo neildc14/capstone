@@ -11,6 +11,6 @@ const validateUserInput = require("../middlewares/validateUserInput");
 router.post("/signup", validateUserInput, signUp);
 router.post("/login", logIn);
 router.get("/users/drivers", getDrivers);
-router.delete("/users/drivers", deleteDriver);
+router.delete("/users/drivers/:id", deleteDriver);
 
 module.exports = router;

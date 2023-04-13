@@ -2,6 +2,8 @@ const User = require("../models/UserModel");
 const createToken = require("../helpers/createToken");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const throwError = require("../helpers/createError");
+const isNotValidObjectId = require("../helpers/validateObjectId");
+const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 
 const signUp = async (req, res) => {
   const { firstname, lastname, email, password, user_type } = req.body;
@@ -84,10 +86,10 @@ const getDrivers = async (req, res) => {
 
 const deleteDriver = async (req, res) => {
   const { id } = req.params;
-
+  console.log(id);
   try {
     let errorMessage = "Invalid ID.";
-    if (isNotObjectId(id)) {
+    if (isNotValidObjectId(id)) {
       throwError(errorMessage);
     }
 
@@ -98,7 +100,10 @@ const deleteDriver = async (req, res) => {
     const success = new HTTPResponse(res, 200, {
       message: "Driver deleted successfully!",
     });
+    console.log(success);
+    return success.sendResponse();
   } catch (error) {
+    console.log(error);
     const failure = new HTTPResponse(res, 400, error.message);
     return failure.sendResponse();
   }

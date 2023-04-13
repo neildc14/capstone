@@ -7,13 +7,14 @@ import {
   CardBody,
   Text,
   ModalBody,
+  ModalFooter,
   IconButton,
   GridItem,
   Grid,
   useToast,
 } from "@chakra-ui/react";
 import ModalContainer from "./ModalContainer";
-import { UilEye, UilEdit, UilTrashAlt } from "@iconscout/react-unicons";
+import { UilEye, UilTrashAlt } from "@iconscout/react-unicons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -21,23 +22,24 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
   const [isOpen, setOpen] = useState(false);
-  const [isOpenUpdate, setOpenUpdate] = useState(false);
   const [isOpenDelete, setOpenDelete] = useState(false);
-  const [toastStatus, setToastStatus] = useState(null);
   const [mutationFunctionType, setMutationFunctionType] = useState("");
 
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const id = driver_data?._id;
-  const email = driver_data?.email || driver_data?.scheduled_personnel?.email;
-  const firstname =
-    driver_data.firstname || driver_data?.scheduled_personnel?.firstname;
-  const lastname =
-    driver_data.lastname || driver_data?.scheduled_personnel?.lastname;
-  const fullname = firstname + " " + lastname;
-  const user_type =
-    driver_data?.user_type || driver_data?.scheduled_personnel?.user_type;
+  const id = driver_data?.scheduled_personnel?._id ?? driver_data?._id;
+
+  const {
+    email = driver_data?.scheduled_personnel?.email,
+    firstname = driver_data?.scheduled_personnel?.firstname,
+    lastname = driver_data?.scheduled_personnel?.lastname,
+    user_type = driver_data?.scheduled_personnel?.user_type,
+  } = driver_data || {};
+
+  const fullname = `${firstname} ${lastname}`;
+
+  console.log(driver_data);
 
   const handleMutationFunctionType = (data) => {
     let axiosMethod;
@@ -50,10 +52,7 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
         axiosMethod = axios.delete;
     }
 
-    return axiosMethod(
-      `${ENDPOINT}auth/users/drivers/${driver_data?._id}`,
-      data
-    );
+    return axiosMethod(`${ENDPOINT}auth/users/drivers/${data}`);
   };
 
   const mutation = useMutation({
@@ -63,8 +62,8 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
     },
     onSuccess: () => {
       toast({
-        title: "Ambulance update.",
-        description: `Ambulance status is marked as ${toastStatus}`,
+        title: "Driver update.",
+        description: `Ambulance status is successfully deleted.}`,
         status: "success",
         duration: 2000,
         isClosable: true,
@@ -77,15 +76,15 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
     setOpen(!isOpen);
   };
 
-  /* const handleEditModal = () => {
-    setOpenUpdate(!isOpenUpdate);
-    setMutationFunctionType("UPDATE");
-  };
-  */
-
-  const handleDeleteModal = () => {
+  const handleDeleteModal = (e) => {
     setOpenDelete(!isOpenDelete);
     setMutationFunctionType("DELETE");
+  };
+
+  const handleClickDeleteDriver = (e) => {
+    e.preventDefault();
+    mutation.mutate(id);
+    setOpenDelete(!isOpenDelete);
   };
 
   return (
@@ -177,18 +176,28 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
 
       <ModalContainer
         header="Driverr ID"
-        header_detail="pqoerjflsdakfn"
+        header_detail={id}
         isOpen={isOpenDelete}
         onClose={handleDeleteModal}
       >
         <ModalBody>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Driver:
-            <Text as="span" fontWeight="normal" textTransform="capitalize">
-              Nero
-            </Text>
-          </Heading>
+          <Text my={4}>
+            Are you sure that you want to delete this ambulance?
+          </Text>
         </ModalBody>
+        <ModalFooter>
+          <Button
+            size={{ base: "sm", md: "md" }}
+            width="100%"
+            bgColor="red.600"
+            _hover={{ bgColor: "red.700" }}
+            color="white"
+            fontWeight="semibold"
+            onClick={handleClickDeleteDriver}
+          >
+            Delete
+          </Button>
+        </ModalFooter>
       </ModalContainer>
     </>
   );
