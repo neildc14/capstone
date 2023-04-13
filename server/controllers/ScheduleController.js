@@ -10,9 +10,10 @@ const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const getAllSchedule = async (req, res) => {
   try {
     const all_schedule = await Schedule.find()
-      .populate("scheduled_personnel", "firstname lastname")
+      .populate("scheduled_personnel", "firstname lastname email user_type")
       .sort({ createdAt: "desc" });
 
+    console.log(all_schedule);
     let errorMessage = "No schedules found.";
     if (all_schedule.length === 0) {
       throwError(errorMessage);

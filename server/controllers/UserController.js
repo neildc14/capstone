@@ -82,8 +82,31 @@ const getDrivers = async (req, res) => {
   }
 };
 
+const deleteDriver = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let errorMessage = "Invalid ID.";
+    if (isNotObjectId(id)) {
+      throwError(errorMessage);
+    }
+
+    const deleted_driver = await User.findOneAndDelete({ _id: id });
+
+    errorMessage = "Failed to delete driver";
+    validateInstanceMethod(deleted_driver, errorMessage);
+    const success = new HTTPResponse(res, 200, {
+      message: "Driver deleted successfully!",
+    });
+  } catch (error) {
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
+  }
+};
+
 module.exports = {
   signUp,
   logIn,
   getDrivers,
+  deleteDriver,
 };

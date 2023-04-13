@@ -29,17 +29,15 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const memoizedData = useMemo(() => {
-    return driver_data;
-  }, [driver_data]);
-
-  const id = memoizedData?._id;
-
-  const email = memoizedData?.email;
-  const firstname = memoizedData?.firstname;
-  const lastname = memoizedData?.lastname;
+  const id = driver_data?._id;
+  const email = driver_data?.email || driver_data?.scheduled_personnel?.email;
+  const firstname =
+    driver_data.firstname || driver_data?.scheduled_personnel?.firstname;
+  const lastname =
+    driver_data.lastname || driver_data?.scheduled_personnel?.lastname;
   const fullname = firstname + " " + lastname;
-  const user_type = memoizedData?.user_type;
+  const user_type =
+    driver_data?.user_type || driver_data?.scheduled_personnel?.user_type;
 
   const handleMutationFunctionType = (data) => {
     let axiosMethod;
@@ -79,10 +77,11 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
     setOpen(!isOpen);
   };
 
-  const handleEditModal = () => {
+  /* const handleEditModal = () => {
     setOpenUpdate(!isOpenUpdate);
     setMutationFunctionType("UPDATE");
   };
+  */
 
   const handleDeleteModal = () => {
     setOpenDelete(!isOpenDelete);
@@ -130,12 +129,7 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
                 >
                   <UilEye color="white" /> View
                 </Button>
-                <IconButton
-                  size="sm"
-                  aria-label="Edit driver details"
-                  onClick={handleEditModal}
-                  icon={<UilEdit />}
-                />
+
                 <IconButton
                   size="sm"
                   aria-label="Delete driver details"
@@ -163,7 +157,7 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
               fontWeight="normal"
               textTransform="capitalize"
             >
-              {fullname}
+              {fullname || driver_data.scheduled_pesonnel?.fullName}
             </Text>
           </Heading>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
@@ -182,23 +176,7 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
       </ModalContainer>
 
       <ModalContainer
-        header="Requestor ID"
-        header_detail="pqoerjflsdakfn"
-        isOpen={isOpenUpdate}
-        onClose={handleEditModal}
-      >
-        <ModalBody>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Driver:
-            <Text as="span" fontWeight="normal" textTransform="capitalize">
-              Nero
-            </Text>
-          </Heading>
-        </ModalBody>
-      </ModalContainer>
-
-      <ModalContainer
-        header="Requestor ID"
+        header="Driverr ID"
         header_detail="pqoerjflsdakfn"
         isOpen={isOpenDelete}
         onClose={handleDeleteModal}
@@ -216,4 +194,4 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
   );
 };
 
-export default React.memo(DriverCard);
+export default DriverCard;

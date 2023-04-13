@@ -45,7 +45,7 @@ const AdministratorDrivers = () => {
     [queryKey],
     fetchDetails,
     {
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,
     }
   );
 
