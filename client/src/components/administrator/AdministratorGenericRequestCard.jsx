@@ -82,13 +82,18 @@ const AdministratorGenericRequestCard = ({
   const dt = DateTime.fromISO(date_time);
   const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
 
-  const id = request_data?._id;
-  const name = `${request_data?.first_name} ${request_data?.last_name}`;
-  const pickup_location = request_data?.pickup_location;
-  const transfer_location = request_data?.transfer_location;
-  const referral_slip = request_data?.referral_slip;
-  const patient_condition = request_data?.patient_condition;
-  const status = request_data?.status;
+  const {
+    _id: _id,
+    first_name,
+    last_name,
+    pickup_location,
+    transfer_location,
+    referral_slip,
+    patient_condition,
+    status,
+  } = request_data || {};
+
+  const name = `${first_name} ${last_name}`;
 
   return (
     <>
@@ -163,7 +168,7 @@ const AdministratorGenericRequestCard = ({
 
       <ModalContainer
         header="Requestor ID"
-        header_detail={id}
+        header_detail={_id}
         isOpen={isOpen}
         onClose={handleOpenModal}
       >

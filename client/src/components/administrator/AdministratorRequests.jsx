@@ -171,11 +171,11 @@ const AdministratorRequests = () => {
                       <PaginatedItems itemsPerPage={4} items={tab.items}>
                         {(currentItems) => (
                           <Flex flexDirection="column" gap={2}>
-                            {currentItems &&
+                            {currentItems !== undefined &&
                               currentItems.map((item, i) => (
                                 <AdministratorGenericRequestCard
                                   request_data={item}
-                                  key={item._id}
+                                  key={item?._id}
                                   borderRadius="sm"
                                   name={`${item?.first_name} ${item?.last_name}`}
                                   date_time={item?.createdAt}
