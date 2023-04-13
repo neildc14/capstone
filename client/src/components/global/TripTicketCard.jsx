@@ -38,7 +38,7 @@ const PersonnelTripTicketCard = ({
         boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
         borderRadius="sm"
         bgColor={
-          ticketDetails._id === trip_ticket._id ? "orange.300" : "#F5F5F5"
+          ticketDetails?._id === trip_ticket?._id ? "orange.300" : "#F5F5F5"
         }
       >
         <CardBody>
@@ -56,7 +56,7 @@ const PersonnelTripTicketCard = ({
             >
               Ticket ID:{" "}
               <Text as="span" fontWeight="normal">
-                {trip_ticket._id}
+                {trip_ticket?._id}
               </Text>
             </Heading>
             <Button
@@ -66,7 +66,7 @@ const PersonnelTripTicketCard = ({
               width={{ base: "100%", md: "inherit" }}
               px={6}
               bgColor={
-                ticketDetails._id === trip_ticket._id
+                ticketDetails?._id === trip_ticket._id
                   ? "orange.500"
                   : "custom.primary"
               }
@@ -98,7 +98,7 @@ const PersonnelTripTicketCard = ({
                 Trip Ticket ID:
               </Heading>
               <Text as="span" fontWeight="normal">
-                {trip_ticket._id}
+                {trip_ticket?._id}
               </Text>
             </VStack>
             <VStack align="left" spacing={1} pb={2}>
@@ -111,7 +111,7 @@ const PersonnelTripTicketCard = ({
                 Driver:
               </Heading>
               <Text as="span" fontWeight="normal" textTransform="capitalize">
-                {trip_ticket.ambulance_personnel["fullName"]}
+                {trip_ticket?.ambulance_personnel?.fullName}
               </Text>
             </VStack>
             <VStack align="left" spacing={1} pb={2}>
@@ -124,7 +124,7 @@ const PersonnelTripTicketCard = ({
                 Ambulance Plate:
               </Heading>
               <Text as="span" fontWeight="normal">
-                {trip_ticket.ambulance["license_plate"]}
+                {trip_ticket?.ambulance?.license_plate}
               </Text>
             </VStack>
             <VStack align="left" spacing={1} pb={2}>
@@ -137,7 +137,7 @@ const PersonnelTripTicketCard = ({
                 Destination:
               </Heading>
               <Text as="span" fontWeight="normal" textTransform="capitalize">
-                {trip_ticket.destination}
+                {trip_ticket?.destination}
               </Text>
             </VStack>
             <VStack align="left" spacing={1} pb={2}>

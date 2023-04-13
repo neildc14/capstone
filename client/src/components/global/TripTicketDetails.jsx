@@ -29,7 +29,7 @@ const PersonnelTripTicketDetails = ({ ticketDetails }) => {
               Driver:
             </Heading>
             <Text as="span" fontWeight="normal" textTransform="capitalize">
-              {ticketDetails.ambulance_personnel["fullName"]}
+              {ticketDetails.ambulance_personnel?.fullName}
             </Text>
           </VStack>
           <VStack align="left" spacing={1} pb={3}>
@@ -42,7 +42,7 @@ const PersonnelTripTicketDetails = ({ ticketDetails }) => {
               Ambulance Plate:
             </Heading>
             <Text as="span" fontWeight="normal">
-              {ticketDetails.ambulance["license_plate"]}
+              {ticketDetails.ambulance?.license_plate}
             </Text>
           </VStack>
           <VStack align="left" spacing={1} pb={3}>
@@ -55,7 +55,7 @@ const PersonnelTripTicketDetails = ({ ticketDetails }) => {
               Destination:
             </Heading>
             <Text as="span" fontWeight="normal" textTransform="capitalize">
-              {ticketDetails.destination}
+              {ticketDetails?.destination}
             </Text>
           </VStack>
           <VStack align="left" spacing={1} pb={3}>
@@ -68,9 +68,11 @@ const PersonnelTripTicketDetails = ({ ticketDetails }) => {
             >
               Patient Name:
             </Heading>
-            <Text as="span" fontWeight="normal" textTransform="capitalize">
-              Macaraeg Macaraeg
-            </Text>
+            <Text
+              as="span"
+              fontWeight="normal"
+              textTransform="capitalize"
+            ></Text>
           </VStack>
         </CardBody>
       </Card>
