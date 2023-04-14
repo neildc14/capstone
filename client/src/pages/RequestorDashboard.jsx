@@ -1,20 +1,15 @@
 import React, { useContext } from "react";
 import { Box, useMediaQuery, useDisclosure, Flex } from "@chakra-ui/react";
-import Header from "../layouts/Header";
 import RequestorSidebar from "../components/requestor/RequestorSidebar";
 import RequestorMobileSidebar from "../components/requestor/RequestorMobileSidebar";
 import { Outlet } from "react-router-dom";
 import NewHeader from "../layouts/NewHeader";
-
-const DashboardContext = React.createContext();
+import { useDashboardContext } from "../App";
 
 const RequestorDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDashboardContext();
 
-  const toggleDashboard = () => {
-    onOpen();
-  };
   return (
     <>
       <Flex
@@ -29,9 +24,8 @@ const RequestorDashboard = () => {
         )}
 
         <Box width="100%" height="100%" overflowY="scroll" bgColor="white">
-          <DashboardContext.Provider value={toggleDashboard}>
-            <NewHeader />
-          </DashboardContext.Provider>
+          <NewHeader />
+
           <Box as="main" px={{ base: 4 }}>
             <Outlet />
           </Box>
@@ -41,5 +35,4 @@ const RequestorDashboard = () => {
   );
 };
 
-export const useDashboardContext = () => useContext(DashboardContext);
 export default RequestorDashboard;

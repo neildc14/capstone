@@ -5,16 +5,12 @@ import PersonnelSidebar from "../components/ambulance-personnel/PersonnelSidebar
 import RequestorMobileSidebar from "../components/requestor/RequestorMobileSidebar";
 import { Outlet } from "react-router-dom";
 import NewHeader from "../layouts/NewHeader";
-
-const DashboardContext = React.createContext();
+import { useDashboardContext } from "../App";
 
 const AmbulancePersonnelDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDashboardContext();
 
-  const toggleDashboard = () => {
-    onOpen();
-  };
   return (
     <>
       <Flex
@@ -29,9 +25,7 @@ const AmbulancePersonnelDashboard = () => {
         )}
 
         <Box width="100%" height="100%" overflowY="scroll" bgColor="white">
-          <DashboardContext.Provider value={toggleDashboard}>
-            <NewHeader />
-          </DashboardContext.Provider>
+          <NewHeader />
           <Box as="main" px={{ base: 4 }}>
             <Outlet />
           </Box>
@@ -42,5 +36,3 @@ const AmbulancePersonnelDashboard = () => {
 };
 
 export default AmbulancePersonnelDashboard;
-
-export const useDashboardContext = () => useContext(DashboardContext);

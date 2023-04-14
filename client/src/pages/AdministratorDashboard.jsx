@@ -4,16 +4,13 @@ import RequestorMobileSidebar from "../components/requestor/RequestorMobileSideb
 import { Outlet } from "react-router-dom";
 import NewHeader from "../layouts/NewHeader";
 import AdministratorSidebar from "../components/administrator/AdministratorSidebar";
-
-const DashboardContext = React.createContext();
+import { useDashboardContext } from "../App";
 
 const AdministratorDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDashboardContext();
+  console.log(isOpen);
 
-  const toggleDashboard = () => {
-    onOpen();
-  };
   return (
     <>
       <Flex
@@ -28,9 +25,8 @@ const AdministratorDashboard = () => {
         )}
 
         <Box width="100%" height="100%" overflowY="scroll" bgColor="white">
-          <DashboardContext.Provider value={toggleDashboard}>
-            <NewHeader />
-          </DashboardContext.Provider>
+          <NewHeader />
+
           <Box as="main" px={{ base: 4 }}>
             <Outlet />
           </Box>
@@ -41,5 +37,3 @@ const AdministratorDashboard = () => {
 };
 
 export default AdministratorDashboard;
-
-export const useDashboardContext = () => useContext(DashboardContext);
