@@ -17,7 +17,14 @@ const app = express();
 const server = http.createServer(app);
 
 //middlewares
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://127.0.0.1:5173",
+      "https://staging-capstone-client.onrender.com",
+    ],
+  })
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger("dev"));
