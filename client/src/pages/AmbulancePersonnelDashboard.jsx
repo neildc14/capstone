@@ -6,6 +6,7 @@ import RequestorMobileSidebar from "../components/requestor/RequestorMobileSideb
 import { Outlet } from "react-router-dom";
 import NewHeader from "../layouts/NewHeader";
 import { useDashboardContext } from "../App";
+import PersonnelMobileSidebar from "../components/ambulance-personnel/PersonnelMobileSidebar";
 
 const AmbulancePersonnelDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -21,7 +22,7 @@ const AmbulancePersonnelDashboard = () => {
         {isLargerThan768 ? (
           <PersonnelSidebar />
         ) : (
-          <RequestorMobileSidebar isOpen={isOpen} onClose={onClose} />
+          <PersonnelMobileSidebar isOpen={isOpen} onClose={onClose} />
         )}
 
         <Box width="100%" height="100%" overflowY="scroll" bgColor="white">
