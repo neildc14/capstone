@@ -237,7 +237,7 @@ const AdministratorSidebar = () => {
               {...bindHoverRequestMap}
             >
               <UilLocationPinAlt />
-              Locate Patient
+              Map
             </Link>
 
             <Link

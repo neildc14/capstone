@@ -1,15 +1,14 @@
-import React, { useContext } from "react";
-import { Box, useMediaQuery, useDisclosure, Flex } from "@chakra-ui/react";
-import RequestorMobileSidebar from "../components/requestor/RequestorMobileSidebar";
+import React from "react";
+import { Box, useMediaQuery, Flex } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import NewHeader from "../layouts/NewHeader";
 import AdministratorSidebar from "../components/administrator/AdministratorSidebar";
 import { useDashboardContext } from "../App";
+import AdministratorMobileSidebar from "../components/administrator/AdministratorMobileSidebar";
 
 const AdministratorDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const { isOpen, onClose } = useDashboardContext();
-  console.log(isOpen);
 
   return (
     <>
@@ -21,7 +20,7 @@ const AdministratorDashboard = () => {
         {isLargerThan768 ? (
           <AdministratorSidebar />
         ) : (
-          <RequestorMobileSidebar isOpen={isOpen} onClose={onClose} />
+          <AdministratorMobileSidebar isOpen={isOpen} onClose={onClose} />
         )}
 
         <Box width="100%" height="100%" overflowY="scroll" bgColor="white">
