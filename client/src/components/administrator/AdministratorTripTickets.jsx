@@ -9,6 +9,8 @@ import {
   useMediaQuery,
   Button,
   Input,
+  Card,
+  CardBody,
 } from "@chakra-ui/react";
 import {
   UilHistory,
@@ -92,7 +94,7 @@ const AdministratorTripTickets = () => {
                       display="inline-flex"
                       gap={2}
                       size="sm"
-                    > 
+                    >
                       <UilSearch size="16px" /> Search
                     </Button>
                   </Box>
