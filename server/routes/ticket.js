@@ -7,12 +7,13 @@ const {
   putTripTicket,
   deleteTripTicket,
 } = require("../controllers/TripTicketController");
+const corsHeaders = require("../middlewares/headers");
 
-router.get("/", getAllTripTicket);
-router.post("/", postTripTicket);
+router.get("/", corsHeaders, getAllTripTicket);
+router.post("/", corsHeaders, postTripTicket);
 
-router.get("/:id", getTripTicket);
-router.put("/:id", putTripTicket);
-router.delete("/:id", deleteTripTicket);
+router.get("/:id", corsHeaders, getTripTicket);
+router.put("/:id", corsHeaders, putTripTicket);
+router.delete("/:id", corsHeaders, deleteTripTicket);
 
 module.exports = router;

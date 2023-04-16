@@ -7,12 +7,13 @@ const {
   putAmbulance,
   deleteAmbulance,
 } = require("../controllers/AmbulanceController");
+const corsHeaders = require("../middlewares/headers");
 
-router.get("/", getAllAmbulance);
-router.post("/", postAmbulance);
+router.get("/", corsHeaders, getAllAmbulance);
+router.post("/", corsHeaders, postAmbulance);
 
-router.get("/:id", getAmbulance);
-router.put("/:id", putAmbulance);
-router.delete("/:id", deleteAmbulance);
+router.get("/:id", corsHeaders, getAmbulance);
+router.put("/:id", corsHeaders, putAmbulance);
+router.delete("/:id", corsHeaders, deleteAmbulance);
 
 module.exports = router;

@@ -9,12 +9,13 @@ const {
   putRequest,
   deleteRequest,
 } = require("../controllers/RequestController");
+const corsHeaders = require("../middlewares/headers");
 
-router.get("/", getAllRequests);
-router.post("/", upload.single("referral_slip"), postRequest);
+router.get("/", corsHeaders, getAllRequests);
+router.post("/", corsHeaders, upload.single("referral_slip"), postRequest);
 
-router.get("/:id", getRequest);
-router.put("/:id", putRequest);
-router.delete("/:id", deleteRequest);
+router.get("/:id", corsHeaders, getRequest);
+router.put("/:id", corsHeaders, putRequest);
+router.delete("/:id", corsHeaders, deleteRequest);
 
 module.exports = router;

@@ -7,10 +7,11 @@ const {
   deleteDriver,
 } = require("../controllers/UserController");
 const validateUserInput = require("../middlewares/validateUserInput");
+const corsHeaders = require("../middlewares/headers");
 
-router.post("/signup", validateUserInput, signUp);
-router.post("/login", logIn);
-router.get("/users/drivers", getDrivers);
-router.delete("/users/drivers/:id", deleteDriver);
+router.post("/signup", corsHeaders, validateUserInput, signUp);
+router.post("/login", corsHeaders, logIn);
+router.get("/users/drivers", corsHeaders, getDrivers);
+router.delete("/users/drivers/:id", corsHeaders, deleteDriver);
 
 module.exports = router;

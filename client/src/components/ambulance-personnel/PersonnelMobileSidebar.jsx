@@ -82,7 +82,7 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
         </Link>
         <Link
           as={RouterLink}
-          to="/ambulance_personnel/all_requests"
+          to="/ambulance_personnel/pending_requests"
           variant="ghost"
           display="flex"
           alignItems="center"
