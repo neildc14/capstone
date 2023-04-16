@@ -63,7 +63,7 @@ const PersonnelRequests2 = () => {
   const tabs = [
     {
       label: "Pending",
-      items: pendingRequests,
+      items: pendingRequests?.reverse(),
       get counter() {
         return this?.items?.length;
       },
