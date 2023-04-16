@@ -7,7 +7,8 @@ const isNotValidObjectId = require("../helpers/validateObjectId");
 const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 
 const signUp = async (req, res) => {
-  const { firstname, lastname, email, password, user_type } = req.body;
+  const { firstname, lastname, email, password, contact, address, user_type } =
+    req.body;
 
   try {
     const new_user = await User.signup(

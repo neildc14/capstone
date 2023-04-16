@@ -34,6 +34,8 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
     email = driver_data?.scheduled_personnel?.email,
     firstname = driver_data?.scheduled_personnel?.firstname,
     lastname = driver_data?.scheduled_personnel?.lastname,
+    contact = driver_data?.scheduled_personnel?.contact,
+    address = driver_data?.scheduled_personnel?.address,
     user_type = driver_data?.scheduled_personnel?.user_type,
   } = driver_data || {};
 
@@ -168,9 +170,21 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
             </Text>
           </Heading>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Contact:
+            <Text as="span" ps={2} fontWeight="normal">
+              {contact}
+            </Text>
+          </Heading>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
             Type:
             <Text as="span" ps={2} fontWeight="normal">
               {user_type}
+            </Text>
+          </Heading>
+          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+            Address:
+            <Text as="span" ps={2} fontWeight="normal">
+              {address}
             </Text>
           </Heading>
         </ModalBody>

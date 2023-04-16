@@ -10,7 +10,7 @@ import {
   Button,
   InputGroup,
   InputRightElement,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -76,6 +76,14 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
           <FormControl mb={2}>
             <FormLabel>Email</FormLabel>
             <Input type="email" name="email" />
+          </FormControl>
+          <FormControl mb={2}>
+            <FormLabel>Contact #</FormLabel>
+            <Input type="text" name="contact" />
+          </FormControl>
+          <FormControl mb={2}>
+            <FormLabel>Address</FormLabel>
+            <Input type="text" name="address" />
           </FormControl>
           <FormControl my={2}>
             <FormLabel>Password</FormLabel>

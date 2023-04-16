@@ -48,7 +48,6 @@ UserSchema.statics.signup = async function (
     contact,
     address,
     email,
-
     user_type,
     password: hash,
   });
