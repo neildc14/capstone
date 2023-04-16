@@ -4,6 +4,7 @@ import {
   Divider,
   Heading,
   Text,
+  Flex,
   Skeleton,
   Card,
   CardBody,
@@ -37,17 +38,27 @@ const RequestorAllRequests = () => {
   return (
     <Box>
       <Box>
-        <Heading
-          as="h2"
-          p={2}
-          display="flex"
-          fontSize="xl"
-          fontWeight="semibold"
-          bgColor="white"
+        <Flex
+          py={2}
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          <UilHistoryAlt color="#FF7A00" />{" "}
-          <Text as="span">Request History</Text>
-        </Heading>
+          <Heading
+            as="h2"
+            display="flex"
+            fontSize="xl"
+            fontWeight="semibold"
+            bgColor="white"
+          >
+            <UilHistoryAlt color="#FF7A00" />{" "}
+            <Text as="span">Request History</Text>
+          </Heading>
+
+          <Text color="#FF7A00" fontWeight="semibold">
+            Total: {memoizedData?.length}
+          </Text>
+        </Flex>
         <Divider />
         <Box
           as="section"

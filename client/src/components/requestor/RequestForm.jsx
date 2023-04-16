@@ -149,9 +149,6 @@ const RequestForm = () => {
             <Text as="i" color="gray.600" fontWeight="thin" fontSize="sm">
               Lokasyon ng pagsusunduan
             </Text>{" "}
-            <Text as="span" color="gray.500" fontWeight="normal" fontSize="sm">
-              (Optional)
-            </Text>
           </FormLabel>
           <Input
             required
