@@ -121,7 +121,7 @@ const PersonnelDashboardPanel = () => {
                   _hover={{ color: "white", bgColor: "custom.primary" }}
                   onClick={navigateToAllRequests}
                 >
-                  View All Requests
+                  View Pending Requests
                 </Button>
               </Flex>
               <Divider />
