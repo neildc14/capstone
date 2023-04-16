@@ -7,6 +7,8 @@ const UserSchema = new Schema(
   {
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
+    contact: { type: String, required: true },
+    address: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     user_type: {
@@ -21,10 +23,12 @@ const UserSchema = new Schema(
 UserSchema.virtual("fullName").get(function () {
   return this.firstname + " " + this.lastname;
 });
- 
+
 UserSchema.statics.signup = async function (
   firstname,
   lastname,
+  contact,
+  address,
   email,
   password,
   user_type
@@ -41,7 +45,10 @@ UserSchema.statics.signup = async function (
   const user = await this.create({
     firstname,
     lastname,
+    contact,
+    address,
     email,
+
     user_type,
     password: hash,
   });

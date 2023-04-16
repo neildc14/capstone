@@ -13,6 +13,8 @@ const signUp = async (req, res) => {
     const new_user = await User.signup(
       firstname,
       lastname,
+      contact,
+      address,
       email,
       password,
       user_type
@@ -24,6 +26,8 @@ const signUp = async (req, res) => {
       firstname,
       lastname,
       email,
+      contact,
+      address,
       user_type,
       token,
     });
@@ -48,6 +52,8 @@ const logIn = async (req, res) => {
       fullName,
       email,
       type,
+      user_type,
+      address,
       token,
     });
     return success.sendResponse();
@@ -69,6 +75,8 @@ const getDrivers = async (req, res) => {
           user_type: user.user_type,
           firstname: user.firstname,
           lastname: user.lastname,
+          contact: user.contact,
+          address: user.address,
         };
       });
     console.log(all_drivers);
