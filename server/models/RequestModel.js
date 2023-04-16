@@ -19,7 +19,8 @@ const RequestSchema = new Schema(
     },
     patient_condition: { type: String },
     referral_slip: { data: Buffer, contentType: String },
-    confirmation:{type:Boolean, required:true}
+    confirmation: { type: Boolean, required: true },
+    handled_by: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
