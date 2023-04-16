@@ -12,7 +12,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import PersonnelDashboardPanel from "./components/ambulance-personnel/PersonnelDashboardPanel";
 import HandledRequest from "./components/ambulance-personnel/PersonnelHandledRequest";
-import AllRequests from "./components/ambulance-personnel/PersonnelAllRequests";
 import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTripTickets";
 import PersonnelAmbulancePage from "./components/ambulance-personnel/PersonnelAmbulance";
 import RequestorTripTickets from "./components/requestor/RequestorTripTickets";
@@ -24,6 +23,7 @@ import AdministratorDashboardPanel from "./components/administrator/Administrato
 import AdministratorReports from "./components/administrator/AdministratorReports";
 import { useDisclosure } from "@chakra-ui/react";
 import React, { useContext } from "react";
+import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAllRequests2";
 
 const DashboardContext = React.createContext();
 
@@ -69,7 +69,10 @@ function App() {
             >
               <Route path="" element={<PersonnelDashboardPanel />} />
               <Route path="requests" element={<HandledRequest />} />
-              <Route path="all_requests" element={<AllRequests />} />
+              <Route
+                path="pending_requests"
+                element={<PersonnelAllRequests2 />}
+              />
               <Route path="trip_tickets" element={<PersonnelTripTickets />} />
               <Route path="ambulance" element={<PersonnelAmbulancePage />} />
               <Route path="map" element={<ViewMap />} />

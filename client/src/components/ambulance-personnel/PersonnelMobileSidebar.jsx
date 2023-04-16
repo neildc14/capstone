@@ -100,7 +100,7 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           }}
           onClick={onClose}
         >
-          <UilFolder /> All Requests
+          <UilFolder /> Pending Requests
         </Link>
 
         <Link

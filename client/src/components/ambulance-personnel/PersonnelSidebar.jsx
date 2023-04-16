@@ -109,7 +109,7 @@ const PersonnelSidebar = () => {
 
             <Link
               as={RouterLink}
-              to="/ambulance_personnel/all_requests"
+              to="/ambulance_personnel/pending_requests"
               variant="ghost"
               display="flex"
               justifyContent="flex-start"
@@ -123,12 +123,12 @@ const PersonnelSidebar = () => {
               fontSize={{ md: "sm", lg: "md" }}
               fontWeight="semibold"
               color={
-                location.pathname === "/ambulance_personnel/all_requests"
+                location.pathname === "/ambulance_personnel/pending_requests"
                   ? "#FF7A00"
                   : "whiteAlpha.900"
               }
               bgColor={
-                location.pathname === "/ambulance_personnel/all_requests" &&
+                location.pathname === "/ambulance_personnel/pending_requests" &&
                 "whiteAlpha.900"
               }
               _hover={{
@@ -137,7 +137,7 @@ const PersonnelSidebar = () => {
               {...bindHoverAllRequests}
             >
               <UilFolder />
-              All Requests
+              Pending Requests
             </Link>
 
             <Link
