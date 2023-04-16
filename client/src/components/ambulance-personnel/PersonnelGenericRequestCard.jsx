@@ -227,6 +227,7 @@ const PersonnelGenericRequestCard = ({
                 bgColor="yellow.500"
                 color="white"
                 _hover={{ bgColor: "yellow.600" }}
+                isDisabled={status === "rejected" && true}
                 onClick={rejectRequest}
               >
                 Decline
@@ -237,6 +238,7 @@ const PersonnelGenericRequestCard = ({
                 bgColor="green.500"
                 color="white"
                 _hover={{ bgColor: "green.600" }}
+                isDisabled={status === "approved" && true}
                 onClick={approveRequest}
               >
                 Approve

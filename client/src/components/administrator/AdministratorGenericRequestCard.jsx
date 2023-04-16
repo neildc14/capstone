@@ -227,6 +227,9 @@ const AdministratorGenericRequestCard = ({
                 bgColor="yellow.500"
                 color="white"
                 _hover={{ bgColor: "yellow.600" }}
+                isDisabled={
+                  status === "rejected" || (status === "rejected" && true)
+                }
                 onClick={rejectRequest}
               >
                 Decline
@@ -237,6 +240,7 @@ const AdministratorGenericRequestCard = ({
                 bgColor="green.500"
                 color="white"
                 _hover={{ bgColor: "green.600" }}
+                isDisabled={status === "approved" && true}
                 onClick={approveRequest}
               >
                 Approve
