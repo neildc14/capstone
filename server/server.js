@@ -21,7 +21,8 @@ app.use(
   cors({
     origin: [
       "http://127.0.0.1:5173",
-      "https://staging-capstone-client.onrender.com",
+     
+      "https://staging-capstone.netlify.app/",
     ],
   })
 );
