@@ -60,6 +60,7 @@ const postRequest = async (req, res) => {
     transfer_location,
     status,
     patient_condition,
+    confirmation,
     referral_slip,
   } = req.body;
   console.log(req.body);
@@ -76,6 +77,7 @@ const postRequest = async (req, res) => {
       transfer_location,
       status,
       patient_condition,
+      confirmation,
       /*referral_slip: {
         data: fs.readFileSync(
           path.join(__dirname + "/uploads/" + req.file.filename)

@@ -19,6 +19,7 @@ const RequestSchema = new Schema(
     },
     patient_condition: { type: String },
     referral_slip: { data: Buffer, contentType: String },
+    confirmation:{type:Boolean, required:true}
   },
   { timestamps: true }
 );

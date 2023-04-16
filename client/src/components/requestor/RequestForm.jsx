@@ -12,7 +12,7 @@ import {
   Flex,
   useToast,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { UilFileInfoAlt } from "@iconscout/react-unicons";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -27,9 +27,15 @@ const RequestForm = () => {
   const [destination, bindDestination] = useInput();
   const [patientCondition, bindPatientCondition] = useInput();
   const [referralSlip, bindReferralSlip] = useInput();
+  const [confirmation, setConfirrmation] = useState(false);
 
+  console.log({ confirmation });
   const toast = useToast();
   const navigate = useNavigate();
+
+  const handleConfirmationClick = () => {
+    setConfirrmation(!confirmation);
+  };
 
   const makeRequest = (new_request) => {
     return axios.post(`${ENDPOINT}request`, new_request);
@@ -37,7 +43,7 @@ const RequestForm = () => {
 
   const mutation = useMutation({
     mutationFn: makeRequest,
-    onError: (error, variables, context) => {
+    onError: (error) => {
       console.log(error);
     },
     onSuccess: () => {
@@ -56,11 +62,10 @@ const RequestForm = () => {
   const onRequestSubmit = (e) => {
     e.preventDefault();
 
-    let formData = new FormData();
-    formData.append("first_name", firstName);
-    formData.append("last_name", lastName);
+    if (confirmation === false) {
+      return;
+    }
 
-    console.log(formData.firstName);
     const body = {
       first_name: firstName,
       last_name: lastName,
@@ -68,6 +73,7 @@ const RequestForm = () => {
       transfer_location: destination,
       referral_slip: referralSlip,
       patient_condition: patientCondition,
+      confirmation: confirmation,
     };
     mutation.mutate(body);
   };
@@ -200,7 +206,7 @@ const RequestForm = () => {
         </FormControl>
 
         <FormControl my={2}>
-          <Checkbox defaultChecked>
+          <Checkbox checked={confirmation} onChange={handleConfirmationClick}>
             I hereby confirm that all the information above is true.{" "}
             <Text as="i" color="gray.600" fontWeight="thin" fontSize="sm">
               Aking pinatutunayan na ang lahat ng impormasyong nakasaad ay
