@@ -51,22 +51,35 @@ const PersonnelDashboardPanel = () => {
     }
   );
 
-  let pendingRequests;
-  const filterPendingRequests = () => {
-    if (Array.isArray(requestData)) {
-      pendingRequests = requestData?.filter((req) => req.status === "pending");
-    }
-  };
-  filterPendingRequests();
-
-  const recentPendingRequest = pendingRequests[pendingRequests?.length - 1];
-
   useEffect(() => {
     if (!isLoading && !isFetching) {
       setRequestData(data[0]?.value?.data);
       setAmbulanceData(data[2]?.value?.data);
     }
   }, [data, isLoading, isFetching]);
+
+  const filterPendingRequests = () => {
+    let pendingRequests;
+    if (Array.isArray(requestData)) {
+      pendingRequests = requestData?.filter((req) => req.status === "pending");
+    }
+    return pendingRequests;
+  };
+  const pendingRequests = filterPendingRequests();
+
+  const recentPendingRequest = pendingRequests[pendingRequests?.length - 1];
+
+  const totalAmbulanceAvailable = () => {
+    let available;
+    if (Array.isArray(ambulanceData)) {
+      available = ambulanceData?.filter(
+        (ambulance) => ambulance.status === "available"
+      ).length;
+    }
+    return available;
+  };
+  const available = totalAmbulanceAvailable();
+
 
   const panel_card_data = [
     {
@@ -77,7 +90,7 @@ const PersonnelDashboardPanel = () => {
 
     {
       title: "Total Ambulance",
-      total: 0,
+      total: available ?? 0,
       type: "Available",
     },
     {
