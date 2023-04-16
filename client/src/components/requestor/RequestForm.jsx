@@ -11,6 +11,7 @@ import {
   Textarea,
   Flex,
   useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { UilFileInfoAlt } from "@iconscout/react-unicons";
@@ -27,9 +28,8 @@ const RequestForm = () => {
   const [destination, bindDestination] = useInput();
   const [patientCondition, bindPatientCondition] = useInput();
   const [referralSlip, bindReferralSlip] = useInput();
-  const [confirmation, setConfirrmation] = useState(false);
+  const [confirmation, setConfirrmation] = useState("");
 
-  console.log({ confirmation });
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -43,7 +43,7 @@ const RequestForm = () => {
 
   const mutation = useMutation({
     mutationFn: makeRequest,
-    onError: (error) => {
+    onError: (error, variables, context) => {
       console.log(error);
     },
     onSuccess: () => {
@@ -59,10 +59,13 @@ const RequestForm = () => {
     },
   });
 
+  const isError = confirmation === false;
+
   const onRequestSubmit = (e) => {
     e.preventDefault();
 
-    if (confirmation === false) {
+    if (!confirmation || confirmation === "") {
+      setConfirrmation(false);
       return;
     }
 
@@ -107,6 +110,7 @@ const RequestForm = () => {
               </Text>
             </FormLabel>
             <Input
+              required
               type="text"
               name="first_name"
               width="100%"
@@ -124,6 +128,7 @@ const RequestForm = () => {
               </Text>
             </FormLabel>
             <Input
+              required
               type="text"
               name="last_name"
               width="100%"
@@ -145,6 +150,7 @@ const RequestForm = () => {
             </Text>
           </FormLabel>
           <Input
+            required
             type="text"
             name="pickup_location"
             width="100%"
@@ -165,6 +171,7 @@ const RequestForm = () => {
             </Text>
           </FormLabel>
           <Input
+            required
             type="text"
             name="transfer_location"
             width="100%"
@@ -182,6 +189,7 @@ const RequestForm = () => {
             </Text>
           </FormLabel>
           <Textarea
+            required
             width="100%"
             name="patient_condtion"
             size={{ base: "sm", md: "md" }}
@@ -205,7 +213,7 @@ const RequestForm = () => {
           />
         </FormControl>
 
-        <FormControl my={2}>
+        <FormControl my={2} isInvalid={isError}>
           <Checkbox checked={confirmation} onChange={handleConfirmationClick}>
             I hereby confirm that all the information above is true.{" "}
             <Text as="i" color="gray.600" fontWeight="thin" fontSize="sm">
@@ -213,6 +221,9 @@ const RequestForm = () => {
               totoo.
             </Text>
           </Checkbox>
+          {isError && (
+            <FormErrorMessage>Please confirm your request.</FormErrorMessage>
+          )}
         </FormControl>
 
         <Flex justifyContent="flex-start" gap="2rem" width="100%">
