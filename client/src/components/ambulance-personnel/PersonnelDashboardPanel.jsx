@@ -7,6 +7,8 @@ import {
   Button,
   Grid,
   GridItem,
+  Card,
+  CardBody,
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
@@ -69,6 +71,21 @@ const PersonnelDashboardPanel = () => {
 
   const recentPendingRequest = pendingRequests[pendingRequests?.length - 1];
 
+  const filterApprovedRequests = () => {
+    let approvedRequests;
+    if (Array.isArray(requestData)) {
+      approvedRequests = requestData?.filter(
+        (req) => req.status === "approved"
+      );
+    }
+    return approvedRequests;
+  };
+
+  const approvedRequests = filterApprovedRequests();
+  const recentApprovedRequest = approvedRequests[approvedRequests?.length - 1];
+
+  console.log({ recentApprovedRequest });
+
   const totalAmbulanceAvailable = () => {
     let available;
     if (Array.isArray(ambulanceData)) {
@@ -79,7 +96,6 @@ const PersonnelDashboardPanel = () => {
     return available;
   };
   const available = totalAmbulanceAvailable();
-
 
   const panel_card_data = [
     {
@@ -182,10 +198,26 @@ const PersonnelDashboardPanel = () => {
               <Divider />
             </Box>
             <Box px={4} py={4}>
-              <RequestCard
-                card_header="Request ID"
-                card_header_detail="dasdajhgsdfgdsgfd"
-              />
+              {recentApprovedRequest && (
+                <PersonnelGenericRequestCard
+                  request_data={recentApprovedRequest}
+                  borderRadius="sm"
+                  name={`${recentApprovedRequest?.first_name} ${recentApprovedRequest?.last_name}`}
+                  date_time={recentApprovedRequest?.createdAt}
+                />
+              )}
+              {recentApprovedRequest === undefined && (
+                <Card bgColor="orange.300">
+                  <CardBody
+                    display="inline-flex"
+                    alignItems="center"
+                    gap={2}
+                    color="white"
+                  >
+                    No pending request found.
+                  </CardBody>
+                </Card>
+              )}
             </Box>
           </Box>
           <Box border="1px solid #D9D9D9">
@@ -206,12 +238,26 @@ const PersonnelDashboardPanel = () => {
               <Divider />
             </Box>
             <Box px={4} py={4}>
-              <PersonnelGenericRequestCard
-                request_data={recentPendingRequest}
-                borderRadius="sm"
-                name={`${recentPendingRequest?.first_name} ${recentPendingRequest?.last_name}`}
-                date_time={recentPendingRequest?.createdAt}
-              />
+              {recentPendingRequest && (
+                <PersonnelGenericRequestCard
+                  request_data={recentPendingRequest}
+                  borderRadius="sm"
+                  name={`${recentPendingRequest?.first_name} ${recentPendingRequest?.last_name}`}
+                  date_time={recentPendingRequest?.createdAt}
+                />
+              )}
+              {recentPendingRequest === undefined && (
+                <Card bgColor="orange.300">
+                  <CardBody
+                    display="inline-flex"
+                    alignItems="center"
+                    gap={2}
+                    color="white"
+                  >
+                    No pending request found.
+                  </CardBody>
+                </Card>
+              )}
             </Box>
           </Box>
         </Box>
