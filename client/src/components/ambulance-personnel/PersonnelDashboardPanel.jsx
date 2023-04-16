@@ -82,7 +82,7 @@ const PersonnelDashboardPanel = () => {
   };
 
   const approvedRequests = filterApprovedRequests();
-  const recentApprovedRequest = approvedRequests[approvedRequests?.length - 1];
+  const recentApprovedRequest = approvedRequests[0];
 
   console.log({ recentApprovedRequest });
 
