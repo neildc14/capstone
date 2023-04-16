@@ -81,6 +81,10 @@ const RequestForm = () => {
     mutation.mutate(body);
   };
 
+  const onRequestCancel = () => {
+    history.back();
+  };
+
   return (
     <Card
       width={{ base: "100%", md: "90%", lg: "70%" }}
@@ -235,6 +239,7 @@ const RequestForm = () => {
             my={6}
             bgColor="gray.100"
             _hover={{ bgColor: "gray.200" }}
+            onClick={onRequestCancel}
           >
             Cancel
           </Button>
