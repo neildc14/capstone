@@ -13,7 +13,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import PersonnelDashboardPanel from "./components/ambulance-personnel/PersonnelDashboardPanel";
 import HandledRequest from "./components/ambulance-personnel/PersonnelHandledRequest";
 import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTripTickets";
-import PersonnelAmbulancePage from "./components/ambulance-personnel/PersonnelAmbulance";
 import RequestorTripTickets from "./components/requestor/RequestorTripTickets";
 import AdministratorTripTickets from "./components/administrator/AdministratorTripTickets";
 import AdministratorRequests from "./components/administrator/AdministratorRequests";
@@ -24,6 +23,7 @@ import AdministratorReports from "./components/administrator/AdministratorReport
 import { useDisclosure } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAllRequests2";
+import PersonnelAmbulance from "./components/ambulance-personnel/PersonnelAmbulance2";
 
 const DashboardContext = React.createContext();
 
@@ -74,7 +74,7 @@ function App() {
                 element={<PersonnelAllRequests2 />}
               />
               <Route path="trip_tickets" element={<PersonnelTripTickets />} />
-              <Route path="ambulance" element={<PersonnelAmbulancePage />} />
+              <Route path="ambulance" element={<PersonnelAmbulance />} />
               <Route path="map" element={<ViewMap />} />
             </Route>
           </Routes>
