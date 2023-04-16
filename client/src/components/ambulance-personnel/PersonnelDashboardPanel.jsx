@@ -21,7 +21,7 @@ const PersonnelDashboardPanel = () => {
   const navigate = useNavigate();
 
   const navigateToAllRequests = () => {
-    navigate("all_requests");
+    navigate("pending_requests");
   };
 
   const panel_card_data = [
