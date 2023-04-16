@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Box,
   Heading,
@@ -16,23 +16,65 @@ import {
   UilDocumentInfo,
 } from "@iconscout/react-unicons";
 import RequestCard from "../global/RequestCard";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import PersonnelGenericRequestCard from "./PersonnelGenericRequestCard";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const PersonnelDashboardPanel = () => {
   const navigate = useNavigate();
+  const [requestData, setRequestData] = useState([]);
+  const [ambulanceData, setAmbulanceData] = useState([]);
 
   const navigateToAllRequests = () => {
     navigate("pending_requests");
   };
 
+  const fetchDetails = useCallback(async () => {
+    const results = await Promise.allSettled([
+      axios.get(`${ENDPOINT}request`),
+      axios.get(`${ENDPOINT}ticket`),
+      axios.get(`${ENDPOINT}ambulance`),
+      axios.get(`${ENDPOINT}schedule`),
+    ]);
+
+    return results;
+  }, []);
+
+  const queryKey = "personnel_all_informations";
+  const { data, isLoading, isFetching, error } = useQuery(
+    [queryKey],
+    fetchDetails,
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
+
+  let pendingRequests;
+  const filterPendingRequests = () => {
+    if (Array.isArray(requestData)) {
+      pendingRequests = requestData?.filter((req) => req.status === "pending");
+    }
+  };
+  filterPendingRequests();
+
+  const recentPendingRequest = pendingRequests[pendingRequests?.length - 1];
+
+  useEffect(() => {
+    if (!isLoading && !isFetching) {
+      setRequestData(data[0]?.value?.data);
+      setAmbulanceData(data[2]?.value?.data);
+    }
+  }, [data, isLoading, isFetching]);
+
   const panel_card_data = [
-    { title: "Total Requests", total: 0, type: "Pending" },
     {
       title: "Total Requests",
-      total: 0,
-      type: "Approved",
+      total: pendingRequests?.length ?? 0,
+      type: "Pending",
     },
-    { title: "Total Requests", total: 0, type: "Fulfilled" },
-    { title: "Total Requests", total: 0, type: "Rejected" },
+
     {
       title: "Total Ambulance",
       total: 0,
@@ -151,9 +193,11 @@ const PersonnelDashboardPanel = () => {
               <Divider />
             </Box>
             <Box px={4} py={4}>
-              <RequestCard
-                card_header="Request ID"
-                card_header_detail="dasdajhgsdfgdsgfd"
+              <PersonnelGenericRequestCard
+                request_data={recentPendingRequest}
+                borderRadius="sm"
+                name={`${recentPendingRequest?.first_name} ${recentPendingRequest?.last_name}`}
+                date_time={recentPendingRequest?.createdAt}
               />
             </Box>
           </Box>
