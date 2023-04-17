@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
+import { Outlet } from "react-router-dom";
 import { Box, useMediaQuery, useDisclosure, Flex } from "@chakra-ui/react";
 import Header from "../layouts/Header";
 import PersonnelSidebar from "../components/ambulance-personnel/PersonnelSidebar";
-import RequestorMobileSidebar from "../components/requestor/RequestorMobileSidebar";
-import { Outlet } from "react-router-dom";
+import PersonnelMobileSidebar from "../components/ambulance-personnel/PersonnelMobileSidebar";
+import PersonnelHeader from "../layouts/PersonnelHeader";
 import NewHeader from "../layouts/NewHeader";
 import { useDashboardContext } from "../App";
-import PersonnelMobileSidebar from "../components/ambulance-personnel/PersonnelMobileSidebar";
 
 const AmbulancePersonnelDashboard = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -26,7 +26,7 @@ const AmbulancePersonnelDashboard = () => {
         )}
 
         <Box width="100%" height="100%" overflowY="scroll" bgColor="white">
-          <NewHeader />
+          <PersonnelHeader />
           <Box as="main" px={{ base: 4 }}>
             <Outlet />
           </Box>
