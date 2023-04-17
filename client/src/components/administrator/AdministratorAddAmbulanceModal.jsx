@@ -60,7 +60,7 @@ const AdministratorAddAmbulanceModal = ({ handleOpenModal, isOpen }) => {
         <Box as="form" onSubmit={handleSubmit}>
           <FormControl>
             <FormLabel>License Plate</FormLabel>
-            <Input type="text" name="license_plate" />
+            <Input type="text" name="license_plate" required />
           </FormControl>
           <Button
             type="sumbmit"

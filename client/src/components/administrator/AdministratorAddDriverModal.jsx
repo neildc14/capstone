@@ -21,7 +21,7 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
   const [show, setShow] = useState(false);
   const showHidePassword = () => setShow(!show);
-
+  const [validationErrors, setValidationErrors] = useState({});
   const toast = useToast();
   const queryClient = useQueryClient();
 
@@ -33,6 +33,7 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
     mutationFn: makeDriver,
     onError: (error) => {
       console.log(error);
+      setValidationErrors(error.response?.data);
     },
     onSuccess: () => {
       toast({
@@ -45,6 +46,8 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
       queryClient.invalidateQueries(["admin_all_informations"]);
     },
   });
+
+  console.log({ validationErrors });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -71,19 +74,19 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
 
           <FormControl mb={2}>
             <FormLabel>Last Name</FormLabel>
-            <Input type="text" name="lastname" />
+            <Input type="text" name="lastname" required />
           </FormControl>
           <FormControl mb={2}>
             <FormLabel>Email</FormLabel>
-            <Input type="email" name="email" />
+            <Input type="email" name="email" required />
           </FormControl>
           <FormControl mb={2}>
             <FormLabel>Contact #</FormLabel>
-            <Input type="text" name="contact" />
+            <Input type="text" name="contact" required />
           </FormControl>
           <FormControl mb={2}>
             <FormLabel>Address</FormLabel>
-            <Input type="text" name="address" />
+            <Input type="text" name="address" required />
           </FormControl>
           <FormControl my={2}>
             <FormLabel>Password</FormLabel>
@@ -93,6 +96,7 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
                 type={show ? "text" : "password"}
                 size={{ base: "sm", md: "md" }}
                 name="password"
+                required
               />
               <InputRightElement width="4.5rem">
                 <Button
