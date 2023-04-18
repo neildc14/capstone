@@ -18,14 +18,13 @@ import PaginatedItems from "../global/PaginatedItems";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AdministratorGenericRequestCard from "./AdministratorGenericRequestCard";
+import SearchBar from "../global/SearchBar";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorRequests = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [search, setSearch] = useState([]);
-  const [searchedTerm, setSearchTerm] = useState([]);
-  const [showNoRequest, setShowNoRequest] = useState(false);
 
   const fetchAllRequests = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}request`);
@@ -102,43 +101,6 @@ const AdministratorRequests = () => {
     },
   ];
 
-  const searchData = (data, searchTerm) => {
-    return data.filter((obj) =>
-      Object.values(obj).some(
-        (value) =>
-          typeof value === "string" &&
-          value.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-  };
-
-  const handleSearchInput = (e) => {
-    e.preventDefault();
-    const value = e.target.value;
-    setSearch([]);
-
-    if (value === "") {
-      setSearchTerm([]);
-      setShowNoRequest(false);
-      return;
-    }
-    const data = searchData(memoizedData, value);
-    setSearchTerm(data);
-    setShowNoRequest(false);
-  };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-
-    setSearch(searchedTerm);
-
-    if (searchedTerm.length === 0) {
-      setShowNoRequest(true);
-    } else {
-      setShowNoRequest(false);
-    }
-  };
-
   return (
     <>
       <Box>
@@ -167,38 +129,12 @@ const AdministratorRequests = () => {
                 >
                   <UilLayerGroup color="#FF7A00" /> All Requests
                 </Heading>
-                <Flex flexDirection="column">
-                  <Box
-                    as="form"
-                    display="inline-flex"
-                    flex="1"
-                    gap={2}
-                    onSubmit={handleSearchSubmit}
-                  >
-                    <Input
-                      type="search"
-                      size="sm"
-                      flex="1"
-                      placeholder="Search a request"
-                      onChange={handleSearchInput}
-                    />
-                    <Button
-                      type="submit"
-                      display="inline-flex"
-                      gap={2}
-                      size="sm"
-                    >
-                      <UilSearch size="16px" /> Search
-                    </Button>
-                  </Box>
-                  <Text
-                    fontSize="sm"
-                    color="orange.500"
-                    opacity={showNoRequest ? 1 : 0}
-                  >
-                    No requests found
-                  </Text>
-                </Flex>
+                <SearchBar
+                  memoizedData={memoizedData}
+                  setSearch={setSearch}
+                  placeholder="Search a request"
+                  noResultMessage="No request found."
+                />
               </Flex>
               <Divider />
             </Box>
@@ -258,8 +194,8 @@ const AdministratorRequests = () => {
             </Tabs>
           )}
 
-          {search.length > 0 && (
-            <Box>
+          {search.length > 0 && !error && (
+            <Box bgColor="custom.secondary" mt={4} py={8} px={4}>
               <Flex flexDirection="column" gap={4}>
                 <PaginatedItems itemsPerPage={4} items={search}>
                   {(currentItems) => (
