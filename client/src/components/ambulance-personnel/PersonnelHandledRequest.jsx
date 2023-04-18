@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Box,
   Heading,
@@ -16,10 +16,13 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PersonnelGenericRequestCard from "./PersonnelGenericRequestCard";
+import SearchBar from "../global/SearchBar";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const HandledRequest = () => {
+  const [search, setSearch] = useState([]);
+
   const fetchHandledRequests = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}request`);
     return response.data;
@@ -91,6 +94,14 @@ const HandledRequest = () => {
       </Box>
       <Box as="section">
         <Box px={4}>
+          <Box maxWidth={{ md: "50%" }} ms="auto">
+            <SearchBar
+              memoizedData={memoizedData}
+              setSearch={setSearch}
+              placeholder="Search a request"
+              noResultMessage="No request found."
+            />
+          </Box>
           <Flex
             py={2}
             flexDirection="row"
@@ -116,10 +127,22 @@ const HandledRequest = () => {
           </Flex>
           <Divider />
         </Box>
-        <Box px={4} py={2} height={{ md: "55vh" }} overflowY="scroll">
+        <Box px={4} py={2} height={{ md: "45vh" }} overflowY="scroll">
           <Flex flexDirection="column" gap={4}>
             {!error &&
+              search.length <= 0 &&
               memoizedData?.map((request) => (
+                <PersonnelGenericRequestCard
+                  key={request?._id}
+                  request_data={request}
+                  borderRadius="sm"
+                  name={`${request?.first_name} ${request?.last_name}`}
+                  date_time={request?.createdAt}
+                />
+              ))}
+            {!error &&
+              search?.length >= 0 &&
+              search?.map((request) => (
                 <PersonnelGenericRequestCard
                   key={request?._id}
                   request_data={request}
