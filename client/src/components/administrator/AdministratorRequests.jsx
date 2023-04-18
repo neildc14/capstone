@@ -25,6 +25,7 @@ const AdministratorRequests = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [search, setSearch] = useState([]);
   const [searchedTerm, setSearchTerm] = useState([]);
+  const [showNoRequest, setShowNoRequest] = useState(false);
 
   const fetchAllRequests = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}request`);
@@ -101,20 +102,7 @@ const AdministratorRequests = () => {
     },
   ];
 
-  const handleSearchInput = (e) => {
-    e.preventDefault();
-    const value = e.target.value;
-    setSearch([]);
-
-    if (value === "") {
-      setSearchTerm([]);
-      return;
-    }
-    const data = searchData(memoizedData, value);
-    setSearchTerm(data);
-  };
-
-  function searchData(data, searchTerm) {
+  const searchData = (data, searchTerm) => {
     return data.filter((obj) =>
       Object.values(obj).some(
         (value) =>
@@ -122,11 +110,33 @@ const AdministratorRequests = () => {
           value.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
-  }
+  };
+
+  const handleSearchInput = (e) => {
+    e.preventDefault();
+    const value = e.target.value;
+    setSearch([]);
+
+    if (value === "") {
+      setSearchTerm([]);
+      setShowNoRequest(false);
+      return;
+    }
+    const data = searchData(memoizedData, value);
+    setSearchTerm(data);
+    setShowNoRequest(false);
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
+
     setSearch(searchedTerm);
+
+    if (searchedTerm.length === 0) {
+      setShowNoRequest(true);
+    } else {
+      setShowNoRequest(false);
+    }
   };
 
   return (
@@ -157,24 +167,38 @@ const AdministratorRequests = () => {
                 >
                   <UilLayerGroup color="#FF7A00" /> All Requests
                 </Heading>
-                <Box
-                  as="form"
-                  display="inline-flex"
-                  flex="1"
-                  gap={2}
-                  onSubmit={handleSearchSubmit}
-                >
-                  <Input
-                    type="search"
-                    size="sm"
+                <Flex flexDirection="column">
+                  <Box
+                    as="form"
+                    display="inline-flex"
                     flex="1"
-                    placeholder="Search a request"
-                    onChange={handleSearchInput}
-                  />
-                  <Button type="submit" display="inline-flex" gap={2} size="sm">
-                    <UilSearch size="16px" /> Search
-                  </Button>
-                </Box>
+                    gap={2}
+                    onSubmit={handleSearchSubmit}
+                  >
+                    <Input
+                      type="search"
+                      size="sm"
+                      flex="1"
+                      placeholder="Search a request"
+                      onChange={handleSearchInput}
+                    />
+                    <Button
+                      type="submit"
+                      display="inline-flex"
+                      gap={2}
+                      size="sm"
+                    >
+                      <UilSearch size="16px" /> Search
+                    </Button>
+                  </Box>
+                  <Text
+                    fontSize="sm"
+                    color="orange.500"
+                    opacity={showNoRequest ? 1 : 0}
+                  >
+                    No requests found
+                  </Text>
+                </Flex>
               </Flex>
               <Divider />
             </Box>
@@ -250,11 +274,6 @@ const AdministratorRequests = () => {
                             date_time={item?.createdAt}
                           />
                         ))}
-                      {search?.counter === 0 && (
-                        <Text fontSize="md" color="orange.500">
-                          No requests found
-                        </Text>
-                      )}
                     </Flex>
                   )}
                 </PaginatedItems>
