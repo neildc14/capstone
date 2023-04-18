@@ -41,8 +41,6 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
 
   const fullname = `${firstname} ${lastname}`;
 
-  console.log(driver_data);
-
   const handleMutationFunctionType = (data) => {
     let axiosMethod;
 

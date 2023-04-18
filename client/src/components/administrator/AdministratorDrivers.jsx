@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
-  Button,
   Divider,
   Heading,
   Flex,
-  Input,
   Text,
   Tabs,
   TabList,
@@ -13,11 +11,12 @@ import {
   Tab,
   TabPanel,
 } from "@chakra-ui/react";
-import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
+import { UilLayerGroup } from "@iconscout/react-unicons";
 import DriverCard from "../global/DriverCard";
 import PaginatedItems from "../global/PaginatedItems";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import SearchBar from "../global/SearchBar";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -26,7 +25,9 @@ const AdministratorDrivers = () => {
   const [allDrivers, setAllDrivers] = useState([]);
   const [driverSchedules, setDriverSchedules] = useState([]);
   const [nonAssignedDrivers, setNonAssignedDrivers] = useState([]);
+  const [search, setSearch] = useState([]);
 
+  console.log({ search });
   const stand_by = [];
   const driving = [];
   const off_duty = [];
@@ -130,8 +131,6 @@ const AdministratorDrivers = () => {
 
       items: driversWithNoDuty,
       get counter() {
-        console.log(this?.items);
-        console.log(this?.items?.length);
         return this?.items?.length;
       },
     },
@@ -165,76 +164,101 @@ const AdministratorDrivers = () => {
                 >
                   <UilLayerGroup color="#FF7A00" /> All Drivers
                 </Heading>
-                <Box display="inline-flex" flex="1" gap={2}>
-                  <Input
-                    type="search"
-                    size="sm"
-                    flex="1"
-                    placeholder="Search driver"
-                  />
-                  <Button type="submit" display="inline-flex" gap={2} size="sm">
-                    <UilSearch size="16px" /> Search
-                  </Button>
-                </Box>
+                <SearchBar
+                  memoizedData={allDrivers}
+                  setSearch={setSearch}
+                  placeholder="Search a request"
+                  noResultMessage="No driver found."
+                />
               </Flex>
               <Divider />
             </Box>
           </Box>
-          <Tabs
-            variant="enclosed"
-            isLazy
-            selectedindex={selectedTab}
-            onChange={(index) => setSelectedTab(index)}
-          >
-            <TabList overflowX="scroll" overflowY="hidden">
-              {!error &&
-                tabs?.map((tab, index) => (
-                  <Tab
-                    key={tab.label}
-                    display="inline-block"
-                    fontSize={{ base: "xs", md: "md" }}
-                    _selected={{ color: "orange.500", fontWeight: "semibold" }}
-                  >
-                    {tab.label}{" "}
-                    <Text as="span" opacity={selectedTab === index ? 1 : 0}>
-                      {`(${tab.counter})`}
-                    </Text>
-                  </Tab>
-                ))}
-            </TabList>
+          {search?.length <= 0 && (
+            <Tabs
+              variant="enclosed"
+              isLazy
+              selectedindex={selectedTab}
+              onChange={(index) => setSelectedTab(index)}
+            >
+              <TabList overflowX="scroll" overflowY="hidden">
+                {!error &&
+                  tabs?.map((tab, index) => (
+                    <Tab
+                      key={tab.label}
+                      display="inline-block"
+                      fontSize={{ base: "xs", md: "md" }}
+                      _selected={{
+                        color: "orange.500",
+                        fontWeight: "semibold",
+                      }}
+                    >
+                      {tab.label}{" "}
+                      <Text as="span" opacity={selectedTab === index ? 1 : 0}>
+                        {`(${tab.counter})`}
+                      </Text>
+                    </Tab>
+                  ))}
+              </TabList>
 
-            <TabPanels bgColor="custom.secondary" mt={4} py={2}>
-              {tabs?.map((tab) => (
-                <TabPanel key={tab.label}>
-                  <Flex flexDirection="column" gap={4}>
-                    <PaginatedItems itemsPerPage={4} items={tab?.items}>
-                      {(currentItems) => (
-                        <Flex flexDirection="column" gap={2}>
-                          {currentItems !== undefined &&
-                            currentItems.map((item) => (
-                              <DriverCard
-                                key={item?._id}
-                                borderRadius="sm"
-                                driver_data={item}
-                                name={
-                                  item?.scheduled_personnel?.fullName ||
-                                  `${item?.firstname} ${item?.lastname}`
-                                }
-                              />
-                            ))}
-                          {tab?.counter === 0 && (
-                            <Text fontSize="md" color="orange.500">
-                              No drivers found
-                            </Text>
-                          )}
-                        </Flex>
-                      )}
-                    </PaginatedItems>
-                  </Flex>
-                </TabPanel>
-              ))}
-            </TabPanels>
-          </Tabs>
+              <TabPanels bgColor="custom.secondary" mt={4} py={2}>
+                {tabs?.map((tab) => (
+                  <TabPanel key={tab.label}>
+                    <Flex flexDirection="column" gap={4}>
+                      <PaginatedItems itemsPerPage={4} items={tab?.items}>
+                        {(currentItems) => (
+                          <Flex flexDirection="column" gap={2}>
+                            {currentItems !== undefined &&
+                              currentItems.map((item) => (
+                                <DriverCard
+                                  key={item?._id}
+                                  borderRadius="sm"
+                                  driver_data={item}
+                                  name={
+                                    item?.scheduled_personnel?.fullName ||
+                                    `${item?.firstname} ${item?.lastname}`
+                                  }
+                                />
+                              ))}
+                            {tab?.counter === 0 && (
+                              <Text fontSize="md" color="orange.500">
+                                No drivers found
+                              </Text>
+                            )}
+                          </Flex>
+                        )}
+                      </PaginatedItems>
+                    </Flex>
+                  </TabPanel>
+                ))}
+              </TabPanels>
+            </Tabs>
+          )}
+
+          {search?.length > 0 && !error && (
+            <Box bgColor="custom.secondary" mt={4} py={8} px={4}>
+              <Flex flexDirection="column" gap={4}>
+                <PaginatedItems itemsPerPage={4} items={search}>
+                  {(currentItems) => (
+                    <Flex flexDirection="column" gap={2}>
+                      {currentItems !== undefined &&
+                        currentItems.map((item, i) => (
+                          <DriverCard
+                            key={item?._id}
+                            borderRadius="sm"
+                            driver_data={item}
+                            name={
+                              item?.scheduled_personnel?.fullName ||
+                              `${item?.firstname} ${item?.lastname}`
+                            }
+                          />
+                        ))}
+                    </Flex>
+                  )}
+                </PaginatedItems>
+              </Flex>
+            </Box>
+          )}
         </Box>
       </Box>
     </>
