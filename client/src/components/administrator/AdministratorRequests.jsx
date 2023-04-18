@@ -23,6 +23,8 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorRequests = () => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [search, setSearch] = useState([]);
+  const [searchedTerm, setSearchTerm] = useState([]);
 
   const fetchAllRequests = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}request`);
@@ -99,6 +101,34 @@ const AdministratorRequests = () => {
     },
   ];
 
+  const handleSearchInput = (e) => {
+    e.preventDefault();
+    const value = e.target.value;
+    setSearch([]);
+
+    if (value === "") {
+      setSearchTerm([]);
+      return;
+    }
+    const data = searchData(memoizedData, value);
+    setSearchTerm(data);
+  };
+
+  function searchData(data, searchTerm) {
+    return data.filter((obj) =>
+      Object.values(obj).some(
+        (value) =>
+          typeof value === "string" &&
+          value.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    setSearch(searchedTerm);
+  };
+
   return (
     <>
       <Box>
@@ -127,12 +157,19 @@ const AdministratorRequests = () => {
                 >
                   <UilLayerGroup color="#FF7A00" /> All Requests
                 </Heading>
-                <Box display="inline-flex" flex="1" gap={2}>
+                <Box
+                  as="form"
+                  display="inline-flex"
+                  flex="1"
+                  gap={2}
+                  onSubmit={handleSearchSubmit}
+                >
                   <Input
                     type="search"
                     size="sm"
                     flex="1"
                     placeholder="Search a request"
+                    onChange={handleSearchInput}
                   />
                   <Button type="submit" display="inline-flex" gap={2} size="sm">
                     <UilSearch size="16px" /> Search
@@ -142,58 +179,88 @@ const AdministratorRequests = () => {
               <Divider />
             </Box>
           </Box>
-          <Tabs
-            variant="enclosed"
-            isLazy
-            selectedindex={selectedTab}
-            onChange={(index) => setSelectedTab(index)}
-          >
-            <TabList overflowX="scroll" overflowY="hidden">
-              {tabs?.map((tab, index) => (
-                <Tab
-                  key={tab.label}
-                  fontSize={{ base: "xs", md: "md" }}
-                  _selected={{ color: "orange.500", fontWeight: "semibold" }}
-                >
-                  {tab.label}{" "}
-                  <Text as="span" opacity={selectedTab === index ? 1 : 0}>
-                    {`(${tab.counter})`}
-                  </Text>
-                </Tab>
-              ))}
-            </TabList>
-
-            <TabPanels bgColor="custom.secondary" mt={4} py={2}>
-              {!error &&
-                tabs?.map((tab) => (
-                  <TabPanel key={tab.label + "panel"}>
-                    <Flex flexDirection="column" gap={4}>
-                      <PaginatedItems itemsPerPage={4} items={tab.items}>
-                        {(currentItems) => (
-                          <Flex flexDirection="column" gap={2}>
-                            {currentItems !== undefined &&
-                              currentItems.map((item, i) => (
-                                <AdministratorGenericRequestCard
-                                  request_data={item}
-                                  key={item?._id}
-                                  borderRadius="sm"
-                                  name={`${item?.first_name} ${item?.last_name}`}
-                                  date_time={item?.createdAt}
-                                />
-                              ))}
-                            {tab?.counter === 0 && (
-                              <Text fontSize="md" color="orange.500">
-                                No requests found
-                              </Text>
-                            )}
-                          </Flex>
-                        )}
-                      </PaginatedItems>
-                    </Flex>
-                  </TabPanel>
+          {search.length <= 0 && (
+            <Tabs
+              variant="enclosed"
+              isLazy
+              selectedindex={selectedTab}
+              onChange={(index) => setSelectedTab(index)}
+            >
+              <TabList overflowX="scroll" overflowY="hidden">
+                {tabs?.map((tab, index) => (
+                  <Tab
+                    key={tab.label}
+                    fontSize={{ base: "xs", md: "md" }}
+                    _selected={{ color: "orange.500", fontWeight: "semibold" }}
+                  >
+                    {tab.label}{" "}
+                    <Text as="span" opacity={selectedTab === index ? 1 : 0}>
+                      {`(${tab.counter})`}
+                    </Text>
+                  </Tab>
                 ))}
-            </TabPanels>
-          </Tabs>
+              </TabList>
+
+              <TabPanels bgColor="custom.secondary" mt={4} py={2}>
+                {!error &&
+                  tabs?.map((tab) => (
+                    <TabPanel key={tab.label + "panel"}>
+                      <Flex flexDirection="column" gap={4}>
+                        <PaginatedItems itemsPerPage={4} items={tab.items}>
+                          {(currentItems) => (
+                            <Flex flexDirection="column" gap={2}>
+                              {currentItems !== undefined &&
+                                currentItems.map((item, i) => (
+                                  <AdministratorGenericRequestCard
+                                    request_data={item}
+                                    key={item?._id}
+                                    borderRadius="sm"
+                                    name={`${item?.first_name} ${item?.last_name}`}
+                                    date_time={item?.createdAt}
+                                  />
+                                ))}
+                              {tab?.counter === 0 && (
+                                <Text fontSize="md" color="orange.500">
+                                  No requests found
+                                </Text>
+                              )}
+                            </Flex>
+                          )}
+                        </PaginatedItems>
+                      </Flex>
+                    </TabPanel>
+                  ))}
+              </TabPanels>
+            </Tabs>
+          )}
+
+          {search.length > 0 && (
+            <Box>
+              <Flex flexDirection="column" gap={4}>
+                <PaginatedItems itemsPerPage={4} items={search}>
+                  {(currentItems) => (
+                    <Flex flexDirection="column" gap={2}>
+                      {currentItems !== undefined &&
+                        currentItems.map((item, i) => (
+                          <AdministratorGenericRequestCard
+                            request_data={item}
+                            key={item?._id}
+                            borderRadius="sm"
+                            name={`${item?.first_name} ${item?.last_name}`}
+                            date_time={item?.createdAt}
+                          />
+                        ))}
+                      {search?.counter === 0 && (
+                        <Text fontSize="md" color="orange.500">
+                          No requests found
+                        </Text>
+                      )}
+                    </Flex>
+                  )}
+                </PaginatedItems>
+              </Flex>
+            </Box>
+          )}
         </Box>
       </Box>
     </>
