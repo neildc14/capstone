@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Box,
   Divider,
@@ -13,10 +13,13 @@ import RequestCard from "./RequestorRequestCard";
 import { UilHistoryAlt, UilFileSlash } from "@iconscout/react-unicons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import SearchBar from "../global/SearchBar";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const RequestorAllRequests = () => {
+  const [search, setSearch] = useState([]);
+
   const fetchAllRequests = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}request`);
     return response.data;
@@ -38,6 +41,14 @@ const RequestorAllRequests = () => {
   return (
     <Box>
       <Box>
+        <Box maxWidth={{ md: "50%" }} ms="auto">
+          <SearchBar
+            memoizedData={memoizedData}
+            setSearch={setSearch}
+            placeholder="Search a request"
+            noResultMessage="No request found."
+          />
+        </Box>
         <Flex
           py={2}
           flexDirection="row"
@@ -68,7 +79,20 @@ const RequestorAllRequests = () => {
         >
           <Skeleton isLoaded={!isLoading} height={{ base: "40vh", md: "100%" }}>
             {!error &&
+              search?.length <= 0 &&
               memoizedData?.map((request) => (
+                <RequestCard
+                  key={request._id}
+                  request_data={request}
+                  request_id={request._id}
+                  request_status={request.status}
+                  refetch={refetch}
+                  queryKey={queryKey}
+                />
+              ))}
+            {!error &&
+              search?.length > 0 &&
+              search?.map((request) => (
                 <RequestCard
                   key={request._id}
                   request_data={request}
