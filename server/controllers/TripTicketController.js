@@ -53,11 +53,23 @@ const getTripTicket = async (req, res) => {
 
 //POST new trip ticket
 const postTripTicket = async (req, res) => {
-  const { ambulance_personnel, ambulance, destination } = req.body;
+  const {
+    ambulance_personnel,
+    ambulance,
+    destination,
+    personnel_fullname,
+    patient_fullname,
+  } = req.body;
 
   try {
     let errorMessage = "Destination is not defined.";
     isEmpty(destination, errorMessage);
+
+    errorMessage = "Ambulance personnel name not defined.";
+    isEmpty(personnel_fullname, errorMessage);
+
+    errorMessage = "Patient name not defined.";
+    isEmpty(patient_fullname, errorMessage);
 
     errorMessage = "Invalid ambulance personnel ID.";
     if (isNotValidObjectId(ambulance_personnel)) {
@@ -99,7 +111,13 @@ const postTripTicket = async (req, res) => {
 //UPDATE trip ticket
 const putTripTicket = async (req, res) => {
   const { id } = req.params;
-  const { ambulance_personnel, ambulance, destination } = req.body;
+  const {
+    ambulance_personnel,
+    ambulance,
+    destination,
+    personnel_fullname,
+    patient_fullname,
+  } = req.body;
 
   try {
     let errorMessage = "Invalid trip ticket ID.";
@@ -120,6 +138,12 @@ const putTripTicket = async (req, res) => {
     errorMessage = "Destination is not defined.";
     isEmpty(destination, errorMessage);
 
+    errorMessage = "Ambulance personnel name not defined.";
+    isEmpty(personnel_fullname, errorMessage);
+
+    errorMessage = "Patient name not defined.";
+    isEmpty(patient_fullname, errorMessage);
+
     errorMessage = "Ambulance personnel not found";
     isEmpty(destination, errorMessage);
     const find_personnel = await User.findOne({
@@ -138,7 +162,7 @@ const putTripTicket = async (req, res) => {
 
     const filter = { _id: id };
     const body = req.body;
-    const updated_trip_ticket = await TripTicket.findOneAndUpdate(filter,body);
+    const updated_trip_ticket = await TripTicket.findOneAndUpdate(filter, body);
 
     errorMessage = "Failed to update trip ticket.";
     validateInstanceMethod(updated_trip_ticket, errorMessage);
