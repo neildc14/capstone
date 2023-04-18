@@ -15,6 +15,7 @@ import TripTicketCard from "../global/TripTicketCard";
 import TripTicketDetails from "../global/TripTicketDetails";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import SearchBar from "../global/SearchBar";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -22,6 +23,7 @@ const RequestorTripTickets = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const [show, setShow] = useState(false);
   const [ticketDetails, setTicketDetails] = useState({});
+  const [search, setSearch] = useState([]);
 
   const fetchTripTickets = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}ticket`);
@@ -70,13 +72,31 @@ const RequestorTripTickets = () => {
                   >
                     <UilHistory color="#FF7A00" /> Trip History
                   </Heading>
+                  <SearchBar
+                    memoizedData={memoizedData}
+                    setSearch={setSearch}
+                    placeholder="Search a request"
+                    noResultMessage="No trip ticket found."
+                  />
                 </Flex>
                 <Divider />
               </Box>
               <Box overflowY={{ md: "scroll" }} height={{ md: "80vh" }}>
                 <Flex flexDirection="column" gap={4} pe={{ md: 4 }} pt={4}>
                   {!error &&
+                    search.length <= 0 &&
                     memoizedData?.map((trip_ticket) => (
+                      <TripTicketCard
+                        key={trip_ticket._id}
+                        trip_ticket={trip_ticket}
+                        showTripTicketDetails={showTripTicketDetails}
+                        ticketDetails={ticketDetails}
+                        setTicketDetails={setTicketDetails}
+                      />
+                    ))}
+                  {!error &&
+                    search.length > 0 &&
+                    search?.map((trip_ticket) => (
                       <TripTicketCard
                         key={trip_ticket._id}
                         trip_ticket={trip_ticket}
