@@ -80,14 +80,6 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
             <FormLabel>Email</FormLabel>
             <Input type="email" name="email" required />
           </FormControl>
-          <FormControl mb={2}>
-            <FormLabel>Contact #</FormLabel>
-            <Input type="text" name="contact" required />
-          </FormControl>
-          <FormControl mb={2}>
-            <FormLabel>Address</FormLabel>
-            <Input type="text" name="address" required />
-          </FormControl>
           <FormControl my={2}>
             <FormLabel>Password</FormLabel>
             <InputGroup size="md">

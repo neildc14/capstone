@@ -13,22 +13,69 @@ import {
   Link,
   Select,
   Heading,
+  Image,
+  Grid,
+  AspectRatio,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import useSelect from "../hooks/useSelect";
 import ThemeButton from "../components/global/ThemeButton";
+import ARMSlogo1 from "../assets/images/ARMSlogo1.png";
+import ARMSlogo2 from "../assets/images/ARMSlogo2.png";
+import ARMSwhite from "../assets/images/ARMSwhite.png";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
   const showHidePassword = () => setShow(!show);
+  const toast = useToast();
 
   const [firstName, bindFirstName] = useInput();
   const [lastName, bindLastName] = useInput();
   const [email, bindEmail] = useInput();
   const [password, bindPassword] = useInput();
   const [value, selectChange] = useSelect();
+  console.log({ value });
+
+  const signUpUser = (user) => {
+    return axios.post(`${ENDPOINT}auth/signup`, user);
+  };
+
+  const mutation = useMutation({
+    mutationFn: signUpUser,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      toast({
+        title: "User registered.",
+        description: "You have been successfully registered.",
+        status: "success",
+        duration: 1000,
+        isClosable: true,
+      });
+      localStorage.setItem("user", JSON.stringify(response.data));
+      window.location.href = `/${value}`;
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const body = {
+      firstname: firstName,
+      lastname: lastName,
+      email: email,
+      password: password,
+      user_type: value,
+    };
+    mutation.mutate(body);
+  };
 
   return (
     <Container height="100%" maxW="full" px={0} position="relative">
@@ -51,12 +98,13 @@ const SignUp = () => {
             Sign up your account.
           </Heading>
 
-          <Box as="form">
+          <Box as="form" onSubmit={handleSubmit}>
             <FormControl my={2}>
               <FormLabel>First Name</FormLabel>
               <Input
                 type="text"
                 size={{ base: "sm", md: "md" }}
+                name="firstname"
                 {...bindFirstName}
               />
             </FormControl>
@@ -66,6 +114,7 @@ const SignUp = () => {
               <Input
                 type="text"
                 size={{ base: "sm", md: "md" }}
+                name="lastname"
                 {...bindLastName}
               />
             </FormControl>
@@ -75,6 +124,7 @@ const SignUp = () => {
               <Input
                 type="email"
                 size={{ base: "sm", md: "md" }}
+                name="email"
                 {...bindEmail}
               />
             </FormControl>
@@ -86,6 +136,7 @@ const SignUp = () => {
                   pr="4.5rem"
                   type={show ? "text" : "password"}
                   size={{ base: "sm", md: "md" }}
+                  name="password"
                   {...bindPassword}
                 />
                 <InputRightElement width="4.5rem">
@@ -106,11 +157,12 @@ const SignUp = () => {
               <Select
                 value={value}
                 size={{ base: "sm", md: "md" }}
+                name="user_type"
                 onChange={selectChange}
               >
-                <option value="Requestor">Requestor</option>
-                <option value="Ambulance Personnel">Ambulance Personnel</option>
-                <option value="Administrator">Administrator</option>
+                <option value="requestor">Requestor</option>
+                <option value="ambulance_personnel">Ambulance Personnel</option>
+                <option value="administrator">Administrator</option>
               </Select>
             </FormControl>
 
@@ -143,7 +195,7 @@ const SignUp = () => {
           height="100vh"
           width="100%"
           display={{ base: "none", md: "block" }}
-          bgColor="red.700"
+          bgColor="teal.700"
         ></Box>
       </Flex>
     </Container>

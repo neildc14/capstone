@@ -21,65 +21,77 @@ import AdministratorDrivers from "./components/administrator/AdministratorDriver
 import AdministratorDashboardPanel from "./components/administrator/AdministratorDashboardPanel";
 import AdministratorReports from "./components/administrator/AdministratorReports";
 import { useDisclosure } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAllRequests2";
 import PersonnelAmbulance from "./components/ambulance-personnel/PersonnelAmbulance2";
+import AuthContext from "./context/AuthContext";
 
 const DashboardContext = React.createContext();
 
 function App() {
   const queryClient = new QueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [user, setUser] = useState(null);
 
   const toggleDashboard = () => {
     onOpen();
   };
 
+  useEffect(() => {
+    let userLoggedIn = localStorage.getItem("user");
+    if (userLoggedIn) {
+      setUser(userLoggedIn);
+    }
+  });
+  console.log(user);
+
   return (
     <QueryClientProvider client={queryClient}>
       <DashboardContext.Provider value={{ toggleDashboard, isOpen, onClose }}>
-        <div className="App">
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/account/login" element={<Login />} />
-            <Route path="/account/signup" element={<SignUp />} />
-            <Route path="map" element={<ViewMap />} />
-            <Route path="requestor" element={<RequestorDashboard />}>
-              <Route path="" element={<RequestorDashboardPanel />} />
-              <Route path="request" element={<RequestForm />} />
-              <Route path="requests" element={<RequestorAllRequests />} />
-              <Route path="trip_tickets" element={<RequestorTripTickets />} />
+        <AuthContext.Provider value={user}>
+          <div className="App">
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/account/login" element={<Login />} />
+              <Route path="/account/signup" element={<SignUp />} />
               <Route path="map" element={<ViewMap />} />
-            </Route>
-            <Route path="/administrator" element={<AdministratorDashboard />}>
-              <Route path="" element={<AdministratorDashboardPanel />} />
-              <Route path="requests" element={<AdministratorRequests />} />
-              <Route path="ambulance" element={<AdministratorAmbulance />} />
-              <Route path="drivers" element={<AdministratorDrivers />} />
+              <Route path="requestor" element={<RequestorDashboard />}>
+                <Route path="" element={<RequestorDashboardPanel />} />
+                <Route path="request" element={<RequestForm />} />
+                <Route path="requests" element={<RequestorAllRequests />} />
+                <Route path="trip_tickets" element={<RequestorTripTickets />} />
+                <Route path="map" element={<ViewMap />} />
+              </Route>
+              <Route path="/administrator" element={<AdministratorDashboard />}>
+                <Route path="" element={<AdministratorDashboardPanel />} />
+                <Route path="requests" element={<AdministratorRequests />} />
+                <Route path="ambulance" element={<AdministratorAmbulance />} />
+                <Route path="drivers" element={<AdministratorDrivers />} />
+                <Route
+                  path="trip_tickets"
+                  element={<AdministratorTripTickets />}
+                />
+                <Route path="map" element={<ViewMap />} />
+                <Route path="reports" element={<AdministratorReports />} />
+              </Route>
               <Route
-                path="trip_tickets"
-                element={<AdministratorTripTickets />}
-              />
-              <Route path="map" element={<ViewMap />} />
-              <Route path="reports" element={<AdministratorReports />} />
-            </Route>
-            <Route
-              path="ambulance_personnel"
-              element={<AmbulancePersonnelDashboard />}
-            >
-              <Route path="" element={<PersonnelDashboardPanel />} />
-              <Route path="requests" element={<HandledRequest />} />
-              <Route
-                path="pending_requests"
-                element={<PersonnelAllRequests2 />}
-              />
-              <Route path="trip_tickets" element={<PersonnelTripTickets />} />
-              <Route path="ambulance" element={<PersonnelAmbulance />} />
-              <Route path="map" element={<ViewMap />} />
-            </Route>
-          </Routes>
-        </div>
-        <ReactQueryDevtools initialIsOpen={false} />
+                path="ambulance_personnel"
+                element={<AmbulancePersonnelDashboard />}
+              >
+                <Route path="" element={<PersonnelDashboardPanel />} />
+                <Route path="requests" element={<HandledRequest />} />
+                <Route
+                  path="pending_requests"
+                  element={<PersonnelAllRequests2 />}
+                />
+                <Route path="trip_tickets" element={<PersonnelTripTickets />} />
+                <Route path="ambulance" element={<PersonnelAmbulance />} />
+                <Route path="map" element={<ViewMap />} />
+              </Route>
+            </Routes>
+          </div>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </AuthContext.Provider>
       </DashboardContext.Provider>
     </QueryClientProvider>
   );
