@@ -13,14 +13,16 @@ import {
   useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { UilFileInfoAlt } from "@iconscout/react-unicons";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import useInput from "../../hooks/useInput";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
+
 const RequestForm = () => {
   const [firstName, bindFirstName] = useInput();
   const [lastName, bindLastName] = useInput();
@@ -29,6 +31,17 @@ const RequestForm = () => {
   const [patientCondition, bindPatientCondition] = useInput();
   const [referralSlip, bindReferralSlip] = useInput();
   const [confirmation, setConfirrmation] = useState("");
+  const user = useContext(AuthContext);
+
+  const parsed_user_data = JSON.parse(user);
+  console.log(parsed_user_data?.token);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${parsed_user_data?.token}`,
+      "Content-Type": "application/json",
+    },
+  };
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -38,7 +51,7 @@ const RequestForm = () => {
   };
 
   const makeRequest = (new_request) => {
-    return axios.post(`${ENDPOINT}request`, new_request);
+    return axios.post(`${ENDPOINT}request`, new_request, config);
   };
 
   const mutation = useMutation({

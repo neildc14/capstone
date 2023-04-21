@@ -9,8 +9,30 @@ const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 
 //GET all the requests
 const getAllRequests = async (req, res) => {
+  const user_id = await req.user._id;
+  console.log(user_id);
   try {
-    const all_requests = await Request.find()
+    const all_requests = await Request.find({ user_id })
+      .sort({ createdAt: "desc" })
+      .exec();
+
+    let errorMessage = "No requests found.";
+    if (all_requests.length === 0) {
+      return throwError(errorMessage);
+    }
+    const success = new HTTPResponse(res, 200, all_requests);
+    return success.sendResponse();
+  } catch (error) {
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
+  }
+};
+
+const getAllRequestsHandledByDriver = async (req, res) => {
+  const user_id = await req.user._id;
+
+  try {
+    const all_requests = await Request.find({ handled_by: user_id })
       .sort({ createdAt: "desc" })
       .exec();
 
@@ -29,6 +51,7 @@ const getAllRequests = async (req, res) => {
 //GET specific request
 const getRequest = async (req, res) => {
   const { id } = req.params;
+  const user_id = await req.user._id;
 
   try {
     let errorMessage = "Invalid ID";
@@ -52,8 +75,8 @@ const getRequest = async (req, res) => {
 
 //POST new request
 const postRequest = async (req, res) => {
+  const user_id = await req.user._id;
   const {
-    requestor_id,
     first_name,
     last_name,
     pickup_location,
@@ -70,7 +93,7 @@ const postRequest = async (req, res) => {
     isEmpty(pickup_location, errorMessage);
 
     const new_request = await Request.create({
-      requestor_id,
+      user_id,
       first_name,
       last_name,
       pickup_location,
@@ -155,6 +178,7 @@ const deleteRequest = async (req, res) => {
 
 module.exports = {
   getAllRequests,
+  getAllRequestsHandledByDriver,
   getRequest,
   postRequest,
   putRequest,

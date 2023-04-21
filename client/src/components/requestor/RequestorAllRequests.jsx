@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, useContext } from "react";
 import {
   Box,
   Divider,
@@ -14,14 +14,23 @@ import { UilHistoryAlt, UilFileSlash } from "@iconscout/react-unicons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import SearchBar from "../global/SearchBar";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const RequestorAllRequests = () => {
   const [search, setSearch] = useState([]);
+  const user = useContext(AuthContext);
+
+  const parsed_user_data = JSON.parse(user);
+  console.log(parsed_user_data?.token);
+
+  const headers = {
+    Authorization: `Bearer ${parsed_user_data?.token}`,
+  };
 
   const fetchAllRequests = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}request`);
+    const response = await axios.get(`${ENDPOINT}request`, { headers });
     return response.data;
   }, []);
 

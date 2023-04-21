@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useContext,
+} from "react";
 import {
   Box,
   Heading,
@@ -23,6 +29,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -32,15 +39,27 @@ const RequestorDashboardPanel = () => {
     useState(false);
   const [requestData, setRequestData] = useState([]);
   const [tripTicketData, setTripTicketData] = useState([]);
+  const user = useContext(AuthContext);
+
+  const parsed_user_data = JSON.parse(user);
 
   const fetchRecentRequestAndTicket = useCallback(async () => {
+    const token = await parsed_user_data.token;
+
+    console.log(token);
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
     const results = await Promise.allSettled([
-      axios.get(`${ENDPOINT}request`),
-      axios.get(`${ENDPOINT}ticket`),
+      axios.get(`${ENDPOINT}request`, {
+        headers,
+      }),
+      axios.get(`${ENDPOINT}ticket`, { headers }),
     ]);
 
     return results;
-  }, []);
+  }, [parsed_user_data?.token]);
 
   const queryKey = "ambulance_request_with_ticket";
   const { data, isLoading, isFetching, error, isFetched, refetch } = useQuery(

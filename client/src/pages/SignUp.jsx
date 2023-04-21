@@ -40,7 +40,7 @@ const SignUp = () => {
   const [lastName, bindLastName] = useInput();
   const [email, bindEmail] = useInput();
   const [password, bindPassword] = useInput();
-  const [value, selectChange] = useSelect();
+  const [value, selectChange] = useSelect("requestor");
   console.log({ value });
 
   const signUpUser = (user) => {

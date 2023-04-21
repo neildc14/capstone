@@ -55,13 +55,18 @@ function App() {
               <Route path="/account/login" element={<Login />} />
               <Route path="/account/signup" element={<SignUp />} />
               <Route path="map" element={<ViewMap />} />
-              <Route path="requestor" element={<RequestorDashboard />}>
-                <Route path="" element={<RequestorDashboardPanel />} />
-                <Route path="request" element={<RequestForm />} />
-                <Route path="requests" element={<RequestorAllRequests />} />
-                <Route path="trip_tickets" element={<RequestorTripTickets />} />
-                <Route path="map" element={<ViewMap />} />
-              </Route>
+              {user && (
+                <Route path="requestor" element={<RequestorDashboard />}>
+                  <Route path="" element={<RequestorDashboardPanel />} />
+                  <Route path="request" element={<RequestForm />} />
+                  <Route path="requests" element={<RequestorAllRequests />} />
+                  <Route
+                    path="trip_tickets"
+                    element={<RequestorTripTickets />}
+                  />
+                  <Route path="map" element={<ViewMap />} />
+                </Route>
+              )}
               <Route path="/administrator" element={<AdministratorDashboard />}>
                 <Route path="" element={<AdministratorDashboardPanel />} />
                 <Route path="requests" element={<AdministratorRequests />} />
