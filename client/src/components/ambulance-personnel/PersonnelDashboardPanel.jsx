@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import {
   Box,
   Heading,
@@ -17,10 +17,10 @@ import {
   UilThLarge,
   UilDocumentInfo,
 } from "@iconscout/react-unicons";
-import RequestCard from "../global/RequestCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PersonnelGenericRequestCard from "./PersonnelGenericRequestCard";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -28,16 +28,25 @@ const PersonnelDashboardPanel = () => {
   const navigate = useNavigate();
   const [requestData, setRequestData] = useState([]);
   const [ambulanceData, setAmbulanceData] = useState([]);
+  const user = useContext(AuthContext);
+
+  const parsed_user_data = JSON.parse(user);
 
   const navigateToAllRequests = () => {
     navigate("pending_requests");
   };
 
   const fetchDetails = useCallback(async () => {
+    const token = await parsed_user_data.token;
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
     const results = await Promise.allSettled([
-      axios.get(`${ENDPOINT}request`),
-      axios.get(`${ENDPOINT}ticket`),
-      axios.get(`${ENDPOINT}ambulance`),
+      axios.get(`${ENDPOINT}handled`, { headers }),
+      axios.get(`${ENDPOINT}ticket`, { headers }),
+      axios.get(`${ENDPOINT}ambulance`, { headers }),
     ]);
 
     return results;
@@ -68,7 +77,15 @@ const PersonnelDashboardPanel = () => {
   };
   const pendingRequests = filterPendingRequests();
 
-  const recentPendingRequest = pendingRequests[pendingRequests?.length - 1];
+  const filterRecentPendingRequest = () => {
+    let recentPendingRequest = undefined;
+    if (pendingRequests?.length > 0) {
+      recentPendingRequest = pendingRequests[pendingRequests?.length - 1];
+    }
+    return recentPendingRequest;
+  };
+
+  const recentPendingRequest = filterRecentPendingRequest();
 
   const filterApprovedRequests = () => {
     let approvedRequests;
@@ -81,7 +98,15 @@ const PersonnelDashboardPanel = () => {
   };
 
   const approvedRequests = filterApprovedRequests();
-  const recentApprovedRequest = approvedRequests[0];
+
+  const filterRecentApprovedRequest = () => {
+    let recentApprovedRequest = undefined;
+    if (approvedRequests?.length > 0) {
+      recentApprovedRequest = approvedRequests[0];
+    }
+    return recentApprovedRequest;
+  };
+  const recentApprovedRequest = filterRecentApprovedRequest();
 
   console.log({ recentApprovedRequest });
 
@@ -213,7 +238,7 @@ const PersonnelDashboardPanel = () => {
                     gap={2}
                     color="white"
                   >
-                    No pending request found.
+                    No approved request found.
                   </CardBody>
                 </Card>
               )}

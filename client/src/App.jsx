@@ -44,6 +44,9 @@ function App() {
     }
   });
   console.log(user);
+  const parsed_user_data = JSON.parse(user);
+  const user_type = parsed_user_data?.user_type;
+  console.log(user_type);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -55,7 +58,7 @@ function App() {
               <Route path="/account/login" element={<Login />} />
               <Route path="/account/signup" element={<SignUp />} />
               <Route path="map" element={<ViewMap />} />
-              {user && (
+              {user && user_type === "requestor" && (
                 <Route path="requestor" element={<RequestorDashboard />}>
                   <Route path="" element={<RequestorDashboardPanel />} />
                   <Route path="request" element={<RequestForm />} />
@@ -79,20 +82,25 @@ function App() {
                 <Route path="map" element={<ViewMap />} />
                 <Route path="reports" element={<AdministratorReports />} />
               </Route>
-              <Route
-                path="ambulance_personnel"
-                element={<AmbulancePersonnelDashboard />}
-              >
-                <Route path="" element={<PersonnelDashboardPanel />} />
-                <Route path="requests" element={<HandledRequest />} />
+              {user && user_type === "ambulance_personnel" && (
                 <Route
-                  path="pending_requests"
-                  element={<PersonnelAllRequests2 />}
-                />
-                <Route path="trip_tickets" element={<PersonnelTripTickets />} />
-                <Route path="ambulance" element={<PersonnelAmbulance />} />
-                <Route path="map" element={<ViewMap />} />
-              </Route>
+                  path="ambulance_personnel"
+                  element={<AmbulancePersonnelDashboard />}
+                >
+                  <Route path="" element={<PersonnelDashboardPanel />} />
+                  <Route path="requests" element={<HandledRequest />} />
+                  <Route
+                    path="pending_requests"
+                    element={<PersonnelAllRequests2 />}
+                  />
+                  <Route
+                    path="trip_tickets"
+                    element={<PersonnelTripTickets />}
+                  />
+                  <Route path="ambulance" element={<PersonnelAmbulance />} />
+                  <Route path="map" element={<ViewMap />} />
+                </Route>
+              )}
             </Routes>
           </div>
           <ReactQueryDevtools initialIsOpen={false} />

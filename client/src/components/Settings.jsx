@@ -13,8 +13,20 @@ import {
   Box,
   Text,
 } from "@chakra-ui/react";
+import AuthContext from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 
 const Settings = () => {
+  const user = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    if (user) {
+      localStorage.removeItem("user");
+      navigate("/account/login");
+    }
+  };
   return (
     <Tooltip label="Settings">
       <Menu overflow="hidden">
@@ -29,7 +41,7 @@ const Settings = () => {
           <UilUserCircle color="#ff7a00" size="24px" />
         </MenuButton>
         <MenuList>
-          <MenuItem>Logout</MenuItem>
+          <MenuItem onClick={handleLogOut}>Logout</MenuItem>
         </MenuList>
       </Menu>
     </Tooltip>

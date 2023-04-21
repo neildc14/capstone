@@ -7,8 +7,8 @@ const UserSchema = new Schema(
   {
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
-    contact: { type: String,},
-    address: { type: String, },
+    contact: { type: String },
+    address: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     user_type: {
@@ -54,10 +54,10 @@ UserSchema.statics.signup = async function (
   return user;
 };
 
-UserSchema.statics.login = async function (email, password, user_type) {
-  const user = await this.findOne({ email, user_type });
+UserSchema.statics.login = async function (email, password) {
+  const user = await this.findOne({ email });
 
-  let errorMessage = `${user_type} account not found.`;
+  let errorMessage = `User account not found.`;
   if (!user) {
     throwError(errorMessage);
   }

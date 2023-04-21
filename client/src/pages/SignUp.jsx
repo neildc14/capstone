@@ -61,7 +61,7 @@ const SignUp = () => {
         isClosable: true,
       });
       localStorage.setItem("user", JSON.stringify(response.data));
-      window.location.href = `/${value}`;
+      window.location.href = `/${response?.data?.user_type}`;
     },
   });
 

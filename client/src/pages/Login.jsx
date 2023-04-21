@@ -12,18 +12,55 @@ import {
   Button,
   Link,
   Heading,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import ThemeButton from "../components/global/ThemeButton";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+
+const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const Login = () => {
   const [show, setShow] = useState(false);
   const showHidePassword = () => setShow(!show);
+  const toast = useToast();
 
   const [email, bindEmail] = useInput();
   const [password, bindPassword] = useInput();
+
+  const loginnUpUser = (user) => {
+    return axios.post(`${ENDPOINT}auth/login`, user);
+  };
+
+  const mutation = useMutation({
+    mutationFn: loginnUpUser,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      toast({
+        title: "User logged in.",
+        description: "You have been successfully  logged in.",
+        status: "success",
+        duration: 1000,
+        isClosable: true,
+      });
+      localStorage.setItem("user", JSON.stringify(response.data));
+      window.location.href = `/${response?.data?.user_type}`;
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const body = {
+      email: email,
+      password: password,
+    };
+    mutation.mutate(body);
+  };
 
   return (
     <Container position="relative" height="100%" maxW="full" px={0}>
@@ -46,7 +83,7 @@ const Login = () => {
             Log in to your account.
           </Heading>
 
-          <Box as="form">
+          <Box as="form" onSubmit={handleSubmit}>
             <FormControl my={2}>
               <FormLabel>Email</FormLabel>
               <Input

@@ -40,21 +40,19 @@ const signUp = async (req, res) => {
 };
 
 const logIn = async (req, res) => {
-  const { email, password, user_type } = req.body;
+  const { email, password } = req.body;
 
   try {
-    const login_user = await User.login(email, password, user_type);
+    const login_user = await User.login(email, password);
     const id = login_user._id;
     const fullName = login_user.fullName;
-    const type = login_user.user_type;
+    const user_type = login_user.user_type;
     const token = createToken(login_user._id);
     const success = new HTTPResponse(res, 200, {
       id,
       fullName,
       email,
-      type,
       user_type,
-      address,
       token,
     });
     return success.sendResponse();
