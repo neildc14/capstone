@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Heading,
   Flex,
@@ -16,22 +16,35 @@ import { UilEye } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const PersonnelGenericRequestCard = ({
+  queryKey,
   date_time,
   request_data,
   borderRadius = "md",
 }) => {
   const [isOpen, setOpen] = useState(false);
   const [toastStatus, setToastStatus] = useState(null);
+  const user = useContext(AuthContext);
+
+  const parsed_user_data = JSON.parse(user);
 
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const updateRequest = (data) => {
-    return axios.put(`${ENDPOINT}request/${request_data?._id}`, data);
+  const updateRequest = async (data) => {
+    const token = await parsed_user_data.token;
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    return axios.put(`${ENDPOINT}request/${request_data?._id}`, data, {
+      headers,
+    });
   };
 
   const mutation = useMutation({
@@ -47,7 +60,7 @@ const PersonnelGenericRequestCard = ({
         duration: 2000,
         isClosable: true,
       });
-      queryClient.invalidateQueries(["ambulance_request"]);
+      queryClient.invalidateQueries([queryKey]);
     },
   });
 

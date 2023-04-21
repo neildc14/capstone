@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useContext } from "react";
 import {
   Box,
   Button,
@@ -19,15 +19,25 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PersonnelGenericRequestCard from "./PersonnelGenericRequestCard";
 import SearchBar from "../global/SearchBar";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const PersonnelRequests2 = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [search, setSearch] = useState([]);
+  const user = useContext(AuthContext);
+
+  const parsed_user_data = JSON.parse(user);
 
   const fetchAllRequests = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}request`);
+    const token = await parsed_user_data.token;
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const response = await axios.get(`${ENDPOINT}request/all`, { headers });
     return response.data;
   }, []);
 

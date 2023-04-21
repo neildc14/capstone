@@ -4,6 +4,7 @@ const upload = require("../helpers/uploadImage");
 
 const {
   getAllRequests,
+  getAllRequestsPerRequestor,
   getAllRequestsHandledByDriver,
   getRequest,
   postRequest,
@@ -15,7 +16,10 @@ const requireAuth = require("../middlewares/requireAuth");
 
 router.use(requireAuth);
 
-router.get("/", corsHeaders, getAllRequests);
+//universal requests
+router.get("/all", corsHeaders, getAllRequests);
+
+router.get("/", corsHeaders, getAllRequestsPerRequestor);
 router.post("/", corsHeaders, upload.single("referral_slip"), postRequest);
 
 router.get("/:id", corsHeaders, getRequest);

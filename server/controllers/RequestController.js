@@ -7,8 +7,26 @@ const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const { isEmpty } = require("../helpers/validateRequest");
 const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 
-//GET all the requests
 const getAllRequests = async (req, res) => {
+  try {
+    const all_requests = await Request.find()
+      .sort({ createdAt: "desc" })
+      .exec();
+
+    let errorMessage = "No requests found.";
+    if (all_requests.length === 0) {
+      return throwError(errorMessage);
+    }
+    const success = new HTTPResponse(res, 200, all_requests);
+    return success.sendResponse();
+  } catch (error) {
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
+  }
+};
+
+//GET all the requests per user
+const getAllRequestsPerRequestor = async (req, res) => {
   const user_id = await req.user._id;
   console.log(user_id);
   try {
@@ -178,6 +196,7 @@ const deleteRequest = async (req, res) => {
 
 module.exports = {
   getAllRequests,
+  getAllRequestsPerRequestor,
   getAllRequestsHandledByDriver,
   getRequest,
   postRequest,

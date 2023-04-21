@@ -27,6 +27,7 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const PersonnelDashboardPanel = () => {
   const navigate = useNavigate();
   const [requestData, setRequestData] = useState([]);
+  const [handledRequesData, setHandledRequestData] = useState([]);
   const [ambulanceData, setAmbulanceData] = useState([]);
   const user = useContext(AuthContext);
 
@@ -45,7 +46,7 @@ const PersonnelDashboardPanel = () => {
 
     const results = await Promise.allSettled([
       axios.get(`${ENDPOINT}handled`, { headers }),
-      axios.get(`${ENDPOINT}ticket`, { headers }),
+      axios.get(`${ENDPOINT}request/all`, { headers }),
       axios.get(`${ENDPOINT}ambulance`, { headers }),
     ]);
 
@@ -53,7 +54,7 @@ const PersonnelDashboardPanel = () => {
   }, []);
 
   const queryKey = "personnel_all_informations";
-  const { data, isLoading, isFetching, error } = useQuery(
+  const { data, isLoading, isFetching, error, refetch } = useQuery(
     [queryKey],
     fetchDetails,
     {
@@ -64,6 +65,7 @@ const PersonnelDashboardPanel = () => {
   useEffect(() => {
     if (!isLoading && !isFetching) {
       setRequestData(data[0]?.value?.data);
+      setRequestData(data[1]?.value?.data);
       setAmbulanceData(data[2]?.value?.data);
     }
   }, [data, isLoading, isFetching]);
@@ -89,8 +91,8 @@ const PersonnelDashboardPanel = () => {
 
   const filterApprovedRequests = () => {
     let approvedRequests;
-    if (Array.isArray(requestData)) {
-      approvedRequests = requestData?.filter(
+    if (Array.isArray(handledRequesData)) {
+      approvedRequests = handledRequesData?.filter(
         (req) => req.status === "approved"
       );
     }
@@ -107,8 +109,6 @@ const PersonnelDashboardPanel = () => {
     return recentApprovedRequest;
   };
   const recentApprovedRequest = filterRecentApprovedRequest();
-
-  console.log({ recentApprovedRequest });
 
   const totalAmbulanceAvailable = () => {
     let available;
@@ -224,6 +224,7 @@ const PersonnelDashboardPanel = () => {
             <Box px={4} py={4}>
               {recentApprovedRequest && (
                 <PersonnelGenericRequestCard
+                  queryKey={queryKey}
                   request_data={recentApprovedRequest}
                   borderRadius="sm"
                   name={`${recentApprovedRequest?.first_name} ${recentApprovedRequest?.last_name}`}
@@ -264,6 +265,7 @@ const PersonnelDashboardPanel = () => {
             <Box px={4} py={4}>
               {recentPendingRequest && (
                 <PersonnelGenericRequestCard
+                  queryKey={queryKey}
                   request_data={recentPendingRequest}
                   borderRadius="sm"
                   name={`${recentPendingRequest?.first_name} ${recentPendingRequest?.last_name}`}
