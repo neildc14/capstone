@@ -24,7 +24,7 @@ const HandledRequest = () => {
   const [search, setSearch] = useState([]);
 
   const fetchHandledRequests = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}request`);
+    const response = await axios.get(`${ENDPOINT}handled`);
     return response.data;
   }, []);
 

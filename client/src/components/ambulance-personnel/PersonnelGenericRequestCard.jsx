@@ -21,6 +21,7 @@ import AuthContext from "../../context/AuthContext";
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const PersonnelGenericRequestCard = ({
+  driver_id,
   queryKey,
   date_time,
   request_data,
@@ -82,7 +83,9 @@ const PersonnelGenericRequestCard = ({
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "approved",
+      handled_by: driver_id,
     };
+    console.log(body);
 
     mutation.mutate(body);
     setOpen(false);

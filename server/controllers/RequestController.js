@@ -28,7 +28,7 @@ const getAllRequests = async (req, res) => {
 //GET all the requests per user
 const getAllRequestsPerRequestor = async (req, res) => {
   const user_id = await req.user._id;
-  console.log(user_id);
+
   try {
     const all_requests = await Request.find({ user_id })
       .sort({ createdAt: "desc" })
@@ -48,13 +48,18 @@ const getAllRequestsPerRequestor = async (req, res) => {
 
 const getAllRequestsHandledByDriver = async (req, res) => {
   const user_id = await req.user._id;
-
+  console.log({ user_id }, "this is id");
   try {
+    let errorMessage = "Invalid ID";
+    if (isNotValidObjectId(user_id)) {
+      return throwError(errorMessage);
+    }
+
     const all_requests = await Request.find({ handled_by: user_id })
       .sort({ createdAt: "desc" })
       .exec();
 
-    let errorMessage = "No requests found.";
+    errorMessage = "No requests found.";
     if (all_requests.length === 0) {
       return throwError(errorMessage);
     }

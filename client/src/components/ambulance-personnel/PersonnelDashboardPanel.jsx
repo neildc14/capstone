@@ -45,7 +45,7 @@ const PersonnelDashboardPanel = () => {
     };
 
     const results = await Promise.allSettled([
-      axios.get(`${ENDPOINT}handled`, { headers }),
+      axios.get(`${ENDPOINT}request/handled`, { headers }),
       axios.get(`${ENDPOINT}request/all`, { headers }),
       axios.get(`${ENDPOINT}ambulance`, { headers }),
     ]);
@@ -64,7 +64,7 @@ const PersonnelDashboardPanel = () => {
 
   useEffect(() => {
     if (!isLoading && !isFetching) {
-      setRequestData(data[0]?.value?.data);
+      setHandledRequestData(data[0]?.value?.data);
       setRequestData(data[1]?.value?.data);
       setAmbulanceData(data[2]?.value?.data);
     }
@@ -225,6 +225,7 @@ const PersonnelDashboardPanel = () => {
               {recentApprovedRequest && (
                 <PersonnelGenericRequestCard
                   queryKey={queryKey}
+                  driver_id={parsed_user_data?.id}
                   request_data={recentApprovedRequest}
                   borderRadius="sm"
                   name={`${recentApprovedRequest?.first_name} ${recentApprovedRequest?.last_name}`}
