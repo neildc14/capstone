@@ -48,14 +48,14 @@ const getAllRequestsPerRequestor = async (req, res) => {
 
 const getAllRequestsHandledByDriver = async (req, res) => {
   const user_id = await req.user._id;
-  console.log({ user_id }, "this is id");
+
   try {
     let errorMessage = "Invalid ID";
     if (isNotValidObjectId(user_id)) {
       return throwError(errorMessage);
     }
 
-    const all_requests = await Request.find({ handled_by: user_id })
+    const all_requests = await Request.find()
       .sort({ createdAt: "desc" })
       .exec();
 
@@ -146,6 +146,7 @@ const postRequest = async (req, res) => {
 const putRequest = async (req, res) => {
   const { id } = req.params;
   const { pickup_location } = req.body;
+  console.log(req.body, "REQ");
 
   try {
     let errorMessage = "Invalid ID";

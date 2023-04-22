@@ -51,7 +51,7 @@ const RequestForm = () => {
   };
 
   const makeRequest = (new_request) => {
-    return axios.post(`${ENDPOINT}request`, new_request, config);
+    return axios.post(`${ENDPOINT}request/requestor`, new_request, config);
   };
 
   const mutation = useMutation({

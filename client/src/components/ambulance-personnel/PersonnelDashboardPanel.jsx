@@ -266,6 +266,7 @@ const PersonnelDashboardPanel = () => {
             <Box px={4} py={4}>
               {recentPendingRequest && (
                 <PersonnelGenericRequestCard
+                  driver_id={parsed_user_data?.id}
                   queryKey={queryKey}
                   request_data={recentPendingRequest}
                   borderRadius="sm"

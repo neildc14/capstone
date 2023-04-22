@@ -19,12 +19,17 @@ router.use(requireAuth);
 //universal requests
 router.get("/all", corsHeaders, getAllRequests);
 
-router.get("/", corsHeaders, getAllRequestsPerRequestor);
-router.post("/", corsHeaders, upload.single("referral_slip"), postRequest);
+router.get("/requestor", corsHeaders, getAllRequestsPerRequestor);
+router.post(
+  "/requestor",
+  corsHeaders,
+  upload.single("referral_slip"),
+  postRequest
+);
 
-router.get("/:id", corsHeaders, getRequest);
-router.put("/:id", corsHeaders, putRequest);
-router.delete("/:id", corsHeaders, deleteRequest);
+router.get("/requestor/:id", corsHeaders, getRequest);
+router.put("/requestor/:id", corsHeaders, putRequest);
+router.delete("/requestor/:id", corsHeaders, deleteRequest);
 
 //for drivers
 router.get("/handled", corsHeaders, getAllRequestsHandledByDriver);

@@ -33,6 +33,7 @@ const PersonnelGenericRequestCard = ({
 
   const parsed_user_data = JSON.parse(user);
 
+  console.log({ driver_id }, "Drivers");
   const toast = useToast();
   const queryClient = useQueryClient();
 
@@ -43,9 +44,13 @@ const PersonnelGenericRequestCard = ({
       Authorization: `Bearer ${token}`,
     };
 
-    return axios.put(`${ENDPOINT}request/${request_data?._id}`, data, {
-      headers,
-    });
+    return axios.put(
+      `${ENDPOINT}request/requestor/${request_data?._id}`,
+      data,
+      {
+        headers,
+      }
+    );
   };
 
   const mutation = useMutation({
@@ -71,6 +76,7 @@ const PersonnelGenericRequestCard = ({
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "rejected",
+      handled_by: driver_id,
     };
     mutation.mutate(body);
     setOpen(false);
@@ -85,7 +91,6 @@ const PersonnelGenericRequestCard = ({
       status: "approved",
       handled_by: driver_id,
     };
-    console.log(body);
 
     mutation.mutate(body);
     setOpen(false);
