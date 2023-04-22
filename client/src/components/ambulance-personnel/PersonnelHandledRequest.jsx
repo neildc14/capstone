@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, useContext } from "react";
 import {
   Box,
   Heading,
@@ -17,14 +17,24 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PersonnelGenericRequestCard from "./PersonnelGenericRequestCard";
 import SearchBar from "../global/SearchBar";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const HandledRequest = () => {
   const [search, setSearch] = useState([]);
+  const user = useContext(AuthContext);
+
+  const parsed_user_data = JSON.parse(user);
 
   const fetchHandledRequests = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}handled`);
+    const token = await parsed_user_data.token;
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const response = await axios.get(`${ENDPOINT}request/handled`, { headers });
     return response.data;
   }, []);
 
@@ -48,12 +58,14 @@ const HandledRequest = () => {
       approvedRequests = memoizedData?.filter(
         (req) => req.status === "approved"
       );
-      recentApprovedRequest = approvedRequests[0];
+
+      recentApprovedRequest = approvedRequests[approvedRequests?.length - 1];
     }
 
     return recentApprovedRequest;
   };
   const recentApprovedRequest = filterApprovedRequest();
+  console.log({ recentApprovedRequest });
 
   return (
     <Box>
@@ -83,12 +95,29 @@ const HandledRequest = () => {
             <Divider />
           </Box>
           <Box px={4} py={4}>
-            <PersonnelGenericRequestCard
-              request_data={recentApprovedRequest}
-              borderRadius="sm"
-              name={`${recentApprovedRequest?.first_name} ${recentApprovedRequest?.last_name}`}
-              date_time={recentApprovedRequest?.createdAt}
-            />
+            {recentApprovedRequest !== undefined && (
+              <PersonnelGenericRequestCard
+                queryKey={queryKey}
+                request_data={recentApprovedRequest}
+                borderRadius="sm"
+                name={`${recentApprovedRequest?.first_name} ${recentApprovedRequest?.last_name}`}
+                date_time={recentApprovedRequest?.createdAt}
+              />
+            )}
+            {recentApprovedRequest === undefined && (
+              <Card bgColor="orange.300">
+                <CardBody
+                  display="inline-flex"
+                  alignItems="center"
+                  gap={2}
+                  color="white"
+                  fontWeight="semibold"
+                >
+                  <UilFileSlash color="white" /> No recent approved request
+                  found.
+                </CardBody>
+              </Card>
+            )}
           </Box>
         </Box>
       </Box>
@@ -134,6 +163,7 @@ const HandledRequest = () => {
               memoizedData?.map((request) => (
                 <PersonnelGenericRequestCard
                   key={request?._id}
+                  queryKey={queryKey}
                   request_data={request}
                   borderRadius="sm"
                   name={`${request?.first_name} ${request?.last_name}`}
@@ -145,6 +175,7 @@ const HandledRequest = () => {
               search?.map((request) => (
                 <PersonnelGenericRequestCard
                   key={request?._id}
+                  queryKey={queryKey}
                   request_data={request}
                   borderRadius="sm"
                   name={`${request?.first_name} ${request?.last_name}`}
