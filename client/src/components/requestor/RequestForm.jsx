@@ -33,6 +33,13 @@ const RequestForm = () => {
   const [confirmation, setConfirrmation] = useState("");
   const user = useContext(AuthContext);
 
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  const handleConfirmationClick = () => {
+    setConfirrmation(!confirmation);
+  };
+
   const parsed_user_data = JSON.parse(user);
   console.log(parsed_user_data?.token);
 
@@ -41,13 +48,6 @@ const RequestForm = () => {
       Authorization: `Bearer ${parsed_user_data?.token}`,
       "Content-Type": "application/json",
     },
-  };
-
-  const toast = useToast();
-  const navigate = useNavigate();
-
-  const handleConfirmationClick = () => {
-    setConfirrmation(!confirmation);
   };
 
   const makeRequest = (new_request) => {

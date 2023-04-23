@@ -31,7 +31,7 @@ const AdministratorGenericRequestCard = ({
   const queryClient = useQueryClient();
 
   const updateRequest = (data) => {
-    return axios.put(`${ENDPOINT}request/${request_data?._id}`, data);
+    return axios.put(`${ENDPOINT}request/requestor/${request_data?._id}`, data);
   };
 
   const mutation = useMutation({

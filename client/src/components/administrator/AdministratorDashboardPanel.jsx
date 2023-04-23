@@ -39,7 +39,7 @@ const AdministratorDashboardPanel = () => {
 
   const fetchDetails = useCallback(async () => {
     const results = await Promise.allSettled([
-      axios.get(`${ENDPOINT}request`),
+      axios.get(`${ENDPOINT}request/all`),
       axios.get(`${ENDPOINT}ticket`),
       axios.get(`${ENDPOINT}ambulance`),
       axios.get(`${ENDPOINT}schedule`),

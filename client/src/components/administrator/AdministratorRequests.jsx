@@ -27,7 +27,7 @@ const AdministratorRequests = () => {
   const [search, setSearch] = useState([]);
 
   const fetchAllRequests = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}request`);
+    const response = await axios.get(`${ENDPOINT}request/all`);
     return response.data;
   }, []);
 

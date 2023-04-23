@@ -52,7 +52,7 @@ const RequestorDashboardPanel = () => {
       Authorization: `Bearer ${token}`,
     };
     const results = await Promise.allSettled([
-      axios.get(`${ENDPOINT}request`, {
+      axios.get(`${ENDPOINT}request/requestor`, {
         headers,
       }),
       axios.get(`${ENDPOINT}ticket`, { headers }),

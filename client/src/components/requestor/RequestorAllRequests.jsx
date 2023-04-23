@@ -30,7 +30,7 @@ const RequestorAllRequests = () => {
   };
 
   const fetchAllRequests = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}request`, { headers });
+    const response = await axios.get(`${ENDPOINT}request/requestor`, { headers });
     return response.data;
   }, []);
 

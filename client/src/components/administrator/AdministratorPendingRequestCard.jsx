@@ -22,7 +22,7 @@ import {
 import ModalContainer from "../global/ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
 import { useTable } from "react-table";
-import { useMutation , } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
@@ -38,7 +38,7 @@ const AdministratorPendingRequestCard = ({
   const toast = useToast();
 
   const updateRequest = (data) => {
-    return axios.put(`${ENDPOINT}request/${request_data?._id}`, data);
+    return axios.put(`${ENDPOINT}request/requestor/${request_data?._id}`, data);
   };
 
   const mutation = useMutation({
