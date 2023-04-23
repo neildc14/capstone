@@ -29,7 +29,7 @@ const PersonnelTripTicketDetails = ({ ticketDetails }) => {
               Driver:
             </Heading>
             <Text as="span" fontWeight="normal" textTransform="capitalize">
-              {ticketDetails.ambulance_personnel?.fullName}
+              {ticketDetails.personnel_fullname}
             </Text>
           </VStack>
           <VStack align="left" spacing={1} pb={3}>
@@ -72,7 +72,7 @@ const PersonnelTripTicketDetails = ({ ticketDetails }) => {
               as="span"
               fontWeight="normal"
               textTransform="capitalize"
-            ></Text>
+            >{ticketDetails?.patient_fullname}</Text>
           </VStack>
         </CardBody>
       </Card>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useContext } from "react";
 import {
   Box,
   Divider,
@@ -6,6 +6,8 @@ import {
   Grid,
   GridItem,
   Heading,
+  Card,
+  CardBody,
   useMediaQuery,
 } from "@chakra-ui/react";
 import TripTicketCard from "../global/TripTicketCard";
@@ -14,6 +16,7 @@ import TripTicketDetails from "../global/TripTicketDetails";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import SearchBar from "../global/SearchBar";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -23,8 +26,16 @@ const PersonnelTripTickets = () => {
   const [ticketDetails, setTicketDetails] = useState({});
   const [search, setSearch] = useState([]);
 
+  const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
+  const headers = {
+    Authorization: `Bearer ${parsed_user_data?.token}`,
+  };
+
   const fetchTripTickets = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}ticket`);
+    const response = await axios.get(`${ENDPOINT}ticket/ambulance_personnel`, {
+      headers,
+    });
     return response.data;
   }, []);
 

@@ -1,6 +1,7 @@
 const TripTicket = require("../models/TripTicketModel");
 const User = require("../models/UserModel");
 const Ambulance = require("../models/AmbulanceModel");
+const Request = require("../models/RequestModel");
 const throwError = require("../helpers/createError");
 const isNotValidObjectId = require("../helpers/validateObjectId");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
@@ -10,6 +11,49 @@ const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 const getAllTripTicket = async (req, res) => {
   try {
     const all_trip_tickets = await TripTicket.find()
+      .populate("ambulance_personnel", "firstname lastname")
+      .populate("ambulance", "license_plate")
+      .sort({ createdAt: "desc" });
+
+    let errorMessage = "No trip tickets were found";
+    if (all_trip_tickets.length === 0) {
+      throwError(errorMessage);
+    }
+    const success = new HTTPResponse(res, 200, all_trip_tickets);
+    return success.sendResponse();
+  } catch (error) {
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
+  }
+};
+
+const getAllTripTicketDriver = async (req, res) => {
+  const user_id = await req.user._id;
+  try {
+    const all_trip_tickets = await TripTicket.find({
+      ambulance_personnel: user_id,
+    })
+      .populate("ambulance_personnel", "firstname lastname")
+      .populate("ambulance", "license_plate")
+      .sort({ createdAt: "desc" });
+
+    let errorMessage = "No trip tickets were found";
+    if (all_trip_tickets.length === 0) {
+      throwError(errorMessage);
+    }
+    const success = new HTTPResponse(res, 200, all_trip_tickets);
+    return success.sendResponse();
+  } catch (error) {
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
+  }
+};
+const getAllTripTicketRequestor = async (req, res) => {
+  const user_id = await req.user._id;
+  try {
+    const all_trip_tickets = await TripTicket.find({
+      requestor: user_id,
+    })
       .populate("ambulance_personnel", "firstname lastname")
       .populate("ambulance", "license_plate")
       .sort({ createdAt: "desc" });
@@ -55,10 +99,11 @@ const getTripTicket = async (req, res) => {
 const postTripTicket = async (req, res) => {
   const {
     ambulance_personnel,
-    ambulance,
-    destination,
+    requestor,
     personnel_fullname,
     patient_fullname,
+    ambulance,
+    destination,
   } = req.body;
 
   try {
@@ -81,11 +126,16 @@ const postTripTicket = async (req, res) => {
     }
 
     errorMessage = "Ambulance personnel not found";
-    isEmpty(destination, errorMessage);
     const find_personnel = await User.findOne({
       _id: ambulance_personnel,
     }).exec();
     validateInstanceMethod(find_personnel, errorMessage);
+
+    errorMessage = "Requestor not found";
+    const find_requestor = await User.findOne({
+      _id: requestor,
+    }).exec();
+    validateInstanceMethod(find_requestor, errorMessage);
 
     errorMessage = "Ambulance not found.";
     isEmpty(ambulance, errorMessage);
@@ -94,6 +144,9 @@ const postTripTicket = async (req, res) => {
 
     const new_trip_ticket = await TripTicket.create({
       ambulance_personnel,
+      requestor,
+      personnel_fullname,
+      patient_fullname,
       ambulance,
       destination,
     });
@@ -194,6 +247,8 @@ const deleteTripTicket = async (req, res) => {
 
 module.exports = {
   getAllTripTicket,
+  getAllTripTicketDriver,
+  getAllTripTicketRequestor,
   getTripTicket,
   postTripTicket,
   putTripTicket,

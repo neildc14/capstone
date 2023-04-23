@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import {
   Heading,
   Flex,
@@ -14,14 +14,13 @@ import {
 import ModalContainer from "../global/ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const PersonnelGenericRequestCard = ({
-  driver_id,
   queryKey,
   date_time,
   request_data,
@@ -29,33 +28,78 @@ const PersonnelGenericRequestCard = ({
 }) => {
   const [isOpen, setOpen] = useState(false);
   const [toastStatus, setToastStatus] = useState(null);
-  const user = useContext(AuthContext);
 
+  const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
 
-  console.log({ driver_id }, "Drivers");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${parsed_user_data?.token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  const dt = DateTime.fromISO(date_time);
+  const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
+
+  const {
+    _id: _id,
+    user_id,
+    first_name,
+    last_name,
+    pickup_location,
+    transfer_location,
+    referral_slip,
+    patient_condition,
+    status,
+  } = request_data || {};
+
+  const name = `${first_name} ${last_name}`;
+
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const updateRequest = async (data) => {
-    const token = await parsed_user_data.token;
-
+  const fetchAllAmbulance = useCallback(async () => {
     const headers = {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${parsed_user_data.token}`,
     };
+    const response = await axios.get(`${ENDPOINT}ambulance`, { headers });
+    return response.data;
+  }, []);
 
+  const { data, error } = useQuery(["ambulance"], fetchAllAmbulance, {
+    refetchOnWindowFocus: true,
+  });
+
+  const filterAmbulance = () => {
+    let available = [];
+    if (Array.isArray(data)) {
+      available = data?.filter((req) => req.status === "available");
+    }
+    console.log({ available });
+    return available[0];
+  };
+  const available = filterAmbulance();
+
+  const updateRequest = async (data) => {
     return axios.put(
       `${ENDPOINT}request/requestor/${request_data?._id}`,
       data,
-      {
-        headers,
-      }
+      config
     );
   };
 
-  const mutation = useMutation({
+  const makeTicket = async (data) => {
+    return axios.post(`${ENDPOINT}ticket/all`, data, config);
+  };
+
+  const updateAmbulance = async (data) => {
+    return axios.put(`${ENDPOINT}ambulance/${available._id}`, data, config);
+  };
+
+  const requestMutation = useMutation({
     mutationFn: updateRequest,
-    onError: (error, variables, context) => {
+    onError: (error) => {
       console.log(error);
     },
     onSuccess: () => {
@@ -70,15 +114,35 @@ const PersonnelGenericRequestCard = ({
     },
   });
 
+  const ticketMutation = useMutation({
+    mutationFn: makeTicket,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      console.log(response);
+    },
+  });
+  const ambulanceMutation = useMutation({
+    mutationFn: updateAmbulance,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      console.log(response);
+      queryClient.invalidateQueries(["ambulance"]);
+    },
+  });
+
   const rejectRequest = (e) => {
     e.preventDefault();
     setToastStatus("Rejected");
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "rejected",
-      handled_by: driver_id,
+      handled_by: parsed_user_data?.id,
     };
-    mutation.mutate(body);
+    requestMutation.mutate(body);
     setOpen(false);
   };
 
@@ -89,32 +153,32 @@ const PersonnelGenericRequestCard = ({
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "approved",
-      handled_by: driver_id,
+      handled_by: parsed_user_data?.id,
     };
 
     mutation.mutate(body);
+
+    const ticketBody = {
+      ambulance_personnel: parsed_user_data?.id,
+      requestor: user_id,
+      personnel_fullname: parsed_user_data?.fullName,
+      patient_fullname: name,
+      ambulance: available?._id,
+      destination: transfer_location,
+    };
+
+    ticketMutation.mutate(ticketBody);
+
+    ambulanceMutation.mutate({
+      license_plate: available?.license_plate,
+      status: "travelling",
+    });
     setOpen(false);
   };
 
   const handleOpenModal = () => {
     setOpen(!isOpen);
   };
-
-  const dt = DateTime.fromISO(date_time);
-  const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
-
-  const {
-    _id: _id,
-    first_name,
-    last_name,
-    pickup_location,
-    transfer_location,
-    referral_slip,
-    patient_condition,
-    status,
-  } = request_data || {};
-
-  const name = `${first_name} ${last_name}`;
 
   return (
     <>

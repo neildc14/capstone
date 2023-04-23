@@ -8,6 +8,11 @@ const TripTicketSchema = new Schema(
       ref: "User",
       required: true,
     },
+    requestor: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     personnel_fullname: { type: String, required: true },
     patient_fullname: { type: String, required: true },
     ambulance: {
