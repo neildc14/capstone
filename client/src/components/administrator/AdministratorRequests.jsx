@@ -1,11 +1,9 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useContext } from "react";
 import {
   Box,
-  Button,
   Divider,
   Heading,
   Flex,
-  Input,
   Text,
   Tabs,
   TabList,
@@ -13,12 +11,13 @@ import {
   Tab,
   TabPanel,
 } from "@chakra-ui/react";
-import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
+import { UilLayerGroup } from "@iconscout/react-unicons";
 import PaginatedItems from "../global/PaginatedItems";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AdministratorGenericRequestCard from "./AdministratorGenericRequestCard";
 import SearchBar from "../global/SearchBar";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -26,8 +25,14 @@ const AdministratorRequests = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [search, setSearch] = useState([]);
 
+  const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
+  const headers = {
+    Authorization: `Bearer ${parsed_user_data?.token}`,
+  };
+
   const fetchAllRequests = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}request/all`);
+    const response = await axios.get(`${ENDPOINT}request/all`, { headers });
     return response.data;
   }, []);
 
@@ -203,7 +208,7 @@ const AdministratorRequests = () => {
                       {currentItems !== undefined &&
                         currentItems.map((item, i) => (
                           <AdministratorGenericRequestCard
-                            request_data={item}
+                            request_data={item} 
                             key={item?._id}
                             borderRadius="sm"
                             name={`${item?.first_name} ${item?.last_name}`}

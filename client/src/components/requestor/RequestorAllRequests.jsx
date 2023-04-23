@@ -20,11 +20,9 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const RequestorAllRequests = () => {
   const [search, setSearch] = useState([]);
+
   const user = useContext(AuthContext);
-
   const parsed_user_data = JSON.parse(user);
-  console.log(parsed_user_data?.token);
-
   const headers = {
     Authorization: `Bearer ${parsed_user_data?.token}`,
   };

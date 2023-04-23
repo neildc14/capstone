@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Heading,
   Flex,
@@ -16,6 +16,7 @@ import { UilEye } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -30,13 +31,25 @@ const AdministratorGenericRequestCard = ({
   const toast = useToast();
   const queryClient = useQueryClient();
 
+  const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${parsed_user_data?.token}`,
+      "Content-Type": "application/json",
+    },
+  };
   const updateRequest = (data) => {
-    return axios.put(`${ENDPOINT}request/requestor/${request_data?._id}`, data);
+    return axios.put(
+      `${ENDPOINT}request/requestor/${request_data?._id}`,
+      data,
+      config
+    );
   };
 
   const mutation = useMutation({
     mutationFn: updateRequest,
-    onError: (error, variables, context) => {
+    onError: (error) => {
       console.log(error);
     },
     onSuccess: () => {
@@ -57,6 +70,7 @@ const AdministratorGenericRequestCard = ({
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "rejected",
+      handled_by: parsed_user_data?.id,
     };
     mutation.mutate(body);
     setOpen(false);
@@ -69,6 +83,7 @@ const AdministratorGenericRequestCard = ({
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "approved",
+      handled_by: parsed_user_data?.id,
     };
 
     mutation.mutate(body);

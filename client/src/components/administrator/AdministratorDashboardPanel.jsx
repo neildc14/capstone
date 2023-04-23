@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import {
   Box,
   Heading,
@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AdministratorAddDriverModal from "./AdministratorAddDriverModal";
 import AdministratorAddAmbulanceModal from "./AdministratorAddAmbulanceModal";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -37,12 +38,18 @@ const AdministratorDashboardPanel = () => {
     navigate("requests");
   };
 
+  const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
+  const headers = {
+    Authorization: `Bearer ${parsed_user_data?.token}`,
+  };
+
   const fetchDetails = useCallback(async () => {
     const results = await Promise.allSettled([
-      axios.get(`${ENDPOINT}request/all`),
-      axios.get(`${ENDPOINT}ticket`),
-      axios.get(`${ENDPOINT}ambulance`),
-      axios.get(`${ENDPOINT}schedule`),
+      axios.get(`${ENDPOINT}request/all`, { headers }),
+      axios.get(`${ENDPOINT}ticket`, { headers }),
+      axios.get(`${ENDPOINT}ambulance`, { headers }),
+      axios.get(`${ENDPOINT}schedule`, { headers }),
     ]);
 
     return results;
@@ -122,6 +129,7 @@ const AdministratorDashboardPanel = () => {
 
   const items = pendingRequests?.reverse();
 
+  console.log({ pendingRequests });
   const handleOpenAddDriverModal = () => {
     setOpenAddDriverModal(!isOpenAddDriverModal);
   };
@@ -280,28 +288,30 @@ const AdministratorDashboardPanel = () => {
                 <Divider />
               </Box>
               <Box px={4} py={4}>
-                {!error && (
-                  <PaginatedItems itemsPerPage={4} items={items}>
-                    {(currentItems) => (
-                      <Flex flexDirection="column" gap={2}>
-                        {currentItems &&
-                          currentItems.map((item) => (
-                            <AdministratorPendingRequestCard
-                              key={item._id}
-                              request_data={item}
-                              bgColor="white"
-                              borderRadius="sm"
-                            />
-                          ))}
-                      </Flex>
-                    )}
-                  </PaginatedItems>
-                )}
-                {pendingRequests?.length === 0 && (
-                  <Text textAlign="center" color="orange.500">
-                    No pending request for now.
-                  </Text>
-                )}
+                {!error ||
+                  (pendingRequests !== undefined && (
+                    <PaginatedItems itemsPerPage={4} items={items}>
+                      {(currentItems) => (
+                        <Flex flexDirection="column" gap={2}>
+                          {currentItems &&
+                            currentItems.map((item) => (
+                              <AdministratorPendingRequestCard
+                                key={item._id}
+                                request_data={item}
+                                bgColor="white"
+                                borderRadius="sm"
+                              />
+                            ))}
+                        </Flex>
+                      )}
+                    </PaginatedItems>
+                  ))}
+                {pendingRequests === undefined ||
+                  (pendingRequests?.length === 0 && (
+                    <Text textAlign="center" color="orange.500">
+                      No pending request for now.
+                    </Text>
+                  ))}
               </Box>
             </Box>
           </Box>
