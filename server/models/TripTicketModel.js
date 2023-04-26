@@ -13,6 +13,7 @@ const TripTicketSchema = new Schema(
       ref: "User",
       required: true,
     },
+    request_id: { type: String, required: true },
     personnel_fullname: { type: String, required: true },
     patient_fullname: { type: String, required: true },
     ambulance: {

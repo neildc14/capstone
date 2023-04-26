@@ -1,4 +1,5 @@
 const Ambulance = require("../models/AmbulanceModel");
+const TripTicket = require("../models/TripTicketModel");
 const { HTTPResponse } = require("../helpers/sendResponseStatus");
 const throwError = require("../helpers/createError");
 const isNotObjectId = require("../helpers/validateObjectId");
@@ -44,6 +45,30 @@ const getAmbulance = async (req, res) => {
   }
 };
 
+const getAmbulanceFromTripTicket = async (req, res) => {
+  const { ticket_id } = req.query;
+  console.log(req.query, "TICKET  ID");
+
+  try {
+    const trip_ticket = await TripTicket.findOne({ _id: ticket_id });
+    let errorMessage = "No trip ticket found";
+    validateInstanceMethod(trip_ticket, errorMessage);
+    console.log({ trip_ticket });
+
+    const ambulance_id = trip_ticket.ambulance;
+    console.log({ ambulance_id });
+    const ambulance = await Ambulance.findById(ambulance_id);
+    errorMessage = "No ambulance found";
+    validateInstanceMethod(ambulance, errorMessage);
+
+    const success = new HTTPResponse(res, 200, ambulance);
+    return success.sendResponse();
+  } catch (error) {
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
+  }
+};
+
 //POST new ambulance
 const postAmbulance = async (req, res) => {
   const { license_plate, status } = req.body;
@@ -80,10 +105,6 @@ const putAmbulance = async (req, res) => {
 
     errorMessage = "No ambulance found";
     validateInstanceMethod(ambulance, errorMessage);
-
-    errorMessage = "License plate is not defined.";
-    const license_plate = req.body.license_plate;
-    isEmpty(license_plate, errorMessage);
 
     const filter = { _id: id };
     const body = req.body;
@@ -125,6 +146,7 @@ const deleteAmbulance = async (req, res) => {
 module.exports = {
   getAllAmbulance,
   getAmbulance,
+  getAmbulanceFromTripTicket,
   postAmbulance,
   putAmbulance,
   deleteAmbulance,

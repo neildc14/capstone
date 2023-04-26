@@ -25,7 +25,7 @@ const PersonnelAmbulance = () => {
   const [search, setSearch] = useState([]);
 
   const fetchAllAmbulance = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}ambulance`);
+    const response = await axios.get(`${ENDPOINT}ambulance/all`);
     return response.data;
   }, []);
 
@@ -133,7 +133,7 @@ const PersonnelAmbulance = () => {
               <TabList overflowX="scroll" overflowY="hidden">
                 {tabs?.map((tab, index) => (
                   <Tab
-                    key={tab.label}
+                    key={tab?.label}
                     fontSize={{ base: "xs", md: "md" }}
                     _selected={{ color: "orange.500", fontWeight: "semibold" }}
                   >
@@ -156,7 +156,7 @@ const PersonnelAmbulance = () => {
                               {currentItems &&
                                 currentItems.map((item) => (
                                   <PersonnelAmbulanceCard
-                                    key={item._id}
+                                    key={item?._id}
                                     borderRadius="sm"
                                     ambulance_data={item}
                                     license_plate={item?.license_plate}

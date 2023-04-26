@@ -25,7 +25,7 @@ const AdministratorAmbulance = () => {
   const [search, setSearch] = useState([]);
 
   const fetchAllAmbulance = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}ambulance`);
+    const response = await axios.get(`${ENDPOINT}ambulance/all`);
     return response.data;
   }, []);
 

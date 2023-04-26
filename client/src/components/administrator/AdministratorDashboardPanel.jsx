@@ -48,7 +48,7 @@ const AdministratorDashboardPanel = () => {
     const results = await Promise.allSettled([
       axios.get(`${ENDPOINT}request/all`, { headers }),
       axios.get(`${ENDPOINT}ticket`, { headers }),
-      axios.get(`${ENDPOINT}ambulance`, { headers }),
+      axios.get(`${ENDPOINT}ambulance/all`, { headers }),
       axios.get(`${ENDPOINT}schedule`, { headers }),
     ]);
 

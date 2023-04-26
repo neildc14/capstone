@@ -100,12 +100,13 @@ const postTripTicket = async (req, res) => {
   const {
     ambulance_personnel,
     requestor,
+    request_id,
     personnel_fullname,
     patient_fullname,
     ambulance,
     destination,
   } = req.body;
-
+  console.log({ ticket: ambulance });
   try {
     let errorMessage = "Destination is not defined.";
     isEmpty(destination, errorMessage);
@@ -120,7 +121,7 @@ const postTripTicket = async (req, res) => {
     if (isNotValidObjectId(ambulance_personnel)) {
       throwError(errorMessage);
     }
-    errorMessage = "Invalid ambulance ID.";
+    errorMessage = "Invalid ambulance IDd.";
     if (isNotValidObjectId(ambulance)) {
       throwError(errorMessage);
     }
@@ -145,6 +146,7 @@ const postTripTicket = async (req, res) => {
     const new_trip_ticket = await TripTicket.create({
       ambulance_personnel,
       requestor,
+      request_id,
       personnel_fullname,
       patient_fullname,
       ambulance,

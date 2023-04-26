@@ -47,7 +47,7 @@ const AmbulanceCard = ({
         axiosMethod = axios.delete;
     }
 
-    return axiosMethod(`${ENDPOINT}ambulance/${ambulance_data?._id}`, data);
+    return axiosMethod(`${ENDPOINT}ambulance/all/${ambulance_data?._id}`, data);
   };
 
   const mutation = useMutation({

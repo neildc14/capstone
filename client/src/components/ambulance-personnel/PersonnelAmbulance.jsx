@@ -120,7 +120,7 @@ const PersonnelAmbulancePage = () => {
           <Table {...getTableProps()}>
             <Thead>
               {headerGroups.map((headerGroup) => (
-                <Tr {...headerGroup.getHeaderGroupProps()}>
+                <Tr key={headerGroup} {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
                     <Th {...column.getHeaderProps()} textAlign="center">
                       {column.render("Header")}
@@ -133,10 +133,14 @@ const PersonnelAmbulancePage = () => {
               {rows.map((row) => {
                 prepareRow(row);
                 return (
-                  <Tr {...row.getRowProps()}>
+                  <Tr key={row} {...row.getRowProps()}>
                     {row.cells.map((cell) => {
                       return (
-                        <Td {...cell.getCellProps()} textAlign="center">
+                        <Td
+                          key={cell}
+                          {...cell.getCellProps()}
+                          textAlign="center"
+                        >
                           {cell.render("Cell")}
                         </Td>
                       );

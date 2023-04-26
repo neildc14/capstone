@@ -55,7 +55,7 @@ const getAllRequestsHandledByDriver = async (req, res) => {
       return throwError(errorMessage);
     }
 
-    const all_requests = await Request.find()
+    const all_requests = await Request.find({ handled_by: user_id })
       .sort({ createdAt: "desc" })
       .exec();
 
@@ -124,6 +124,7 @@ const postRequest = async (req, res) => {
       status,
       patient_condition,
       confirmation,
+
       /*referral_slip: {
         data: fs.readFileSync(
           path.join(__dirname + "/uploads/" + req.file.filename)

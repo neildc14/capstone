@@ -30,7 +30,7 @@ const AdministratorAddAmbulanceModal = ({ handleOpenModal, isOpen }) => {
   };
 
   const makeAmbulance = (new_ambulance) => {
-    return axios.post(`${ENDPOINT}ambulance`, new_ambulance, config);
+    return axios.post(`${ENDPOINT}ambulance/all`, new_ambulance, config);
   };
 
   const mutation = useMutation({

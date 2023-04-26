@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import {
   Heading,
   Flex,
@@ -22,16 +22,19 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const PersonnelGenericRequestCard = ({
   queryKey,
+  available,
   date_time,
   request_data,
   borderRadius = "md",
 }) => {
   const [isOpen, setOpen] = useState(false);
   const [toastStatus, setToastStatus] = useState(null);
+  const [tripTicketAmbulance, setTripTicketAmbulance] = useState({});
+  const [ambulanceStatus, setAmbulanceStatus] = useState("");
+  const [ticketMethod, setTicketMethod] = useState("");
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
-
   const config = {
     headers: {
       Authorization: `Bearer ${parsed_user_data?.token}`,
@@ -52,6 +55,7 @@ const PersonnelGenericRequestCard = ({
     referral_slip,
     patient_condition,
     status,
+    ticket_id,
   } = request_data || {};
 
   const name = `${first_name} ${last_name}`;
@@ -59,27 +63,33 @@ const PersonnelGenericRequestCard = ({
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const fetchAllAmbulance = useCallback(async () => {
+  const fetchAssignedAmbulance = async () => {
     const headers = {
       Authorization: `Bearer ${parsed_user_data.token}`,
     };
-    const response = await axios.get(`${ENDPOINT}ambulance`, { headers });
+    const response = await axios.get(
+      `${ENDPOINT}ambulance/travelling/?ticket_id=${ticket_id}`,
+      { headers }
+    );
     return response.data;
-  }, []);
-
-  const { data, error } = useQuery(["ambulance"], fetchAllAmbulance, {
-    refetchOnWindowFocus: true,
-  });
-
-  const filterAmbulance = () => {
-    let available = [];
-    if (Array.isArray(data)) {
-      available = data?.filter((req) => req.status === "available");
-    }
-    console.log({ available });
-    return available[0];
   };
-  const available = filterAmbulance();
+
+  const { data, error, refetch, isLoading, isFetching } = useQuery(
+    ["trip_ticket_ambulance"],
+    fetchAssignedAmbulance,
+    {
+      refetchOnWindowFocus: true,
+      enabled: false,
+    }
+  );
+
+  useEffect(() => {
+    if (!isLoading && !isFetching) {
+      setTripTicketAmbulance(data);
+    }
+  }, [data, isLoading, isFetching]);
+  console.log({ tripTicketAmbulance });
+  console.log(available, "AVAILABLE CARD");
 
   const updateRequest = async (data) => {
     return axios.put(
@@ -93,8 +103,21 @@ const PersonnelGenericRequestCard = ({
     return axios.post(`${ENDPOINT}ticket/all`, data, config);
   };
 
-  const updateAmbulance = async (data) => {
-    return axios.put(`${ENDPOINT}ambulance/${available._id}`, data, config);
+  const handleUpdateAmbulanceStatus = async (data) => {
+    let ambulance_id;
+    switch (ambulanceStatus) {
+      case "travelling":
+        ambulance_id = available?._id;
+        break;
+      case "available":
+        ambulance_id = tripTicketAmbulance?._id;
+        break;
+
+      default:
+        null;
+        break;
+    }
+    return axios.put(`${ENDPOINT}ambulance/all/${ambulance_id}`, data, config);
   };
 
   const requestMutation = useMutation({
@@ -102,7 +125,8 @@ const PersonnelGenericRequestCard = ({
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+      console.log({ request: response });
       toast({
         title: "Request update.",
         description: `Request is marked a ${toastStatus}`,
@@ -110,7 +134,20 @@ const PersonnelGenericRequestCard = ({
         duration: 2000,
         isClosable: true,
       });
+
       queryClient.invalidateQueries([queryKey]);
+      queryClient.invalidateQueries(["trip_ticket_ambulance"]);
+    },
+  });
+
+  const ambulanceMutation = useMutation({
+    mutationFn: handleUpdateAmbulanceStatus,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      console.log(response, "SUCCESS");
+      queryClient.invalidateQueries(["ambulance"]);
     },
   });
 
@@ -120,68 +157,92 @@ const PersonnelGenericRequestCard = ({
       console.log(error);
     },
     onSuccess: (response) => {
-      console.log(response);
-    },
-  });
-  const ambulanceMutation = useMutation({
-    mutationFn: updateAmbulance,
-    onError: (error) => {
-      console.log(error);
-    },
-    onSuccess: (response) => {
-      console.log(response);
-      queryClient.invalidateQueries(["ambulance"]);
+      if (response) {
+        console.log({ ticket: response }, "ON SUCCESS RESPONSE OF TICKET");
+
+        const requestBody = {
+          pickup_location: request_data?.pickup_location,
+          status: "approved",
+          handled_by: parsed_user_data?.id,
+          ticket_id: response.data._id,
+        };
+
+        requestMutation.mutate(requestBody);
+
+        ambulanceMutation.mutate({
+          status: "travelling",
+        });
+      }
     },
   });
 
   const rejectRequest = (e) => {
     e.preventDefault();
+
     setToastStatus("Rejected");
+    setAmbulanceStatus("available");
+
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "rejected",
       handled_by: parsed_user_data?.id,
     };
     requestMutation.mutate(body);
+
+    if (ticket_id !== undefined) {
+      ambulanceMutation.mutate({
+        status: "available",
+      });
+    }
     setOpen(false);
   };
 
   const approveRequest = (e) => {
     e.preventDefault();
     setToastStatus("Approved");
+    setAmbulanceStatus("travelling");
 
-    const body = {
-      pickup_location: request_data?.pickup_location,
-      status: "approved",
-      handled_by: parsed_user_data?.id,
-    };
+    if (ticket_id !== undefined) {
+      setTicketMethod("put");
+      const requestBody = {
+        pickup_location: request_data?.pickup_location,
+        status: "approved",
+      };
 
-    mutation.mutate(body);
+      requestMutation.mutate(requestBody);
 
-    const ticketBody = {
-      ambulance_personnel: parsed_user_data?.id,
-      requestor: user_id,
-      personnel_fullname: parsed_user_data?.fullName,
-      patient_fullname: name,
-      ambulance: available?._id,
-      destination: transfer_location,
-    };
+      ambulanceMutation.mutate({
+        status: "travelling",
+      });
+    } else if (ticket_id === undefined) {
+      setTicketMethod("post");
+      const ticketBody = {
+        ambulance_personnel: parsed_user_data?.id,
+        requestor: user_id,
+        request_id: _id,
+        personnel_fullname: parsed_user_data?.fullName,
+        patient_fullname: name,
+        ambulance: available?._id,
+        destination: transfer_location,
+      };
+      ticketMutation.mutate(ticketBody);
+    }
 
-    ticketMutation.mutate(ticketBody);
-
-    ambulanceMutation.mutate({
-      license_plate: available?.license_plate,
-      status: "travelling",
-    });
     setOpen(false);
   };
 
   const handleOpenModal = () => {
     setOpen(!isOpen);
+    if (ticket_id !== undefined) {
+      refetch();
+    }
   };
 
+  console.log({ ticket_id });
+  console.log(ticketMethod, "TICKET METHODS");
+  console.log({ tripTicketAmbulance });
   return (
-    <>
+    <>    
       <Card
         boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
         bgColor={isOpen ? "orange.300" : "white"}
@@ -253,7 +314,7 @@ const PersonnelGenericRequestCard = ({
 
       <ModalContainer
         header="Requestor ID"
-        header_detail={_id}
+        header_detail={user_id}
         isOpen={isOpen}
         onClose={handleOpenModal}
       >
@@ -336,4 +397,4 @@ const PersonnelGenericRequestCard = ({
   );
 };
 
-export default PersonnelGenericRequestCard;
+export default React.memo(PersonnelGenericRequestCard);

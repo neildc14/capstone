@@ -22,6 +22,7 @@ const RequestSchema = new Schema(
     referral_slip: { data: Buffer, contentType: String },
     confirmation: { type: Boolean, required: true },
     handled_by: { type: Schema.Types.ObjectId, ref: "User" },
+    ticket_id: { type: String },
   },
   { timestamps: true }
 );

@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo, useContext } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useContext,
+  useEffect,
+} from "react";
 import {
   Box,
   Button,
@@ -26,6 +32,8 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const PersonnelRequests2 = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [search, setSearch] = useState([]);
+  const [allPendingRequests, setAllPendingRequests] = useState([]);
+  const [allAmbulance, setAllAmbulance] = useState([]);
   const user = useContext(AuthContext);
 
   const parsed_user_data = JSON.parse(user);
@@ -41,20 +49,57 @@ const PersonnelRequests2 = () => {
     return response.data;
   }, []);
 
+  const fetchPendingRequestsAndAmbulance = async () => {
+    const headers = {
+      Authorization: `Bearer ${parsed_user_data.token}`,
+    };
+
+    const results = await Promise.allSettled([
+      axios.get(`${ENDPOINT}request/all`, { headers }),
+      axios.get(`${ENDPOINT}ambulance/all`, { headers }),
+    ]);
+    return results;
+  };
+
   const queryKey = "ambulance_request";
-  const { data, error } = useQuery([queryKey], fetchAllRequests, {
-    refetchOnWindowFocus: true,
-  });
+  const { data, error, isLoading, isFetching } = useQuery(
+    [queryKey],
+    fetchPendingRequestsAndAmbulance,
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
+
+  useEffect(() => {
+    if (!isLoading && !isFetching) {
+      setAllPendingRequests(data[0]?.value?.data);
+      setAllAmbulance(data[1]?.value?.data);
+    }
+  }, [data, isLoading, isFetching]);
+
+  const filterAmbulance = () => {
+    let available = [];
+    if (Array.isArray(allAmbulance)) {
+      available = allAmbulance?.filter((req) => req.status === "available");
+    }
+    console.log({ available }, "array");
+    return available[0];
+  };
+
+  const available = filterAmbulance();
+  console.log(available, "AMBULANCE REQUESTS");
 
   const memoizedData = useMemo(() => {
-    return data;
-  }, [data]);
+    return allPendingRequests;
+  }, [allPendingRequests]);
 
   let pendingRequests = [];
 
   const filterRequests = () => {
-    if (Array.isArray(memoizedData)) {
-      pendingRequests = memoizedData?.filter((req) => req.status === "pending");
+    if (Array.isArray(allPendingRequests)) {
+      pendingRequests = allPendingRequests?.filter(
+        (req) => req.status === "pending"
+      );
     }
   };
   filterRequests();
@@ -69,6 +114,7 @@ const PersonnelRequests2 = () => {
     },
   ];
 
+  console.log({ available }, "ALLREQUESTS");
   return (
     <>
       <Box>
@@ -140,8 +186,9 @@ const PersonnelRequests2 = () => {
                               {currentItems !== undefined &&
                                 currentItems.map((item, i) => (
                                   <PersonnelGenericRequestCard
-                                    request_data={item}
                                     key={item?._id}
+                                    available={available}
+                                    request_data={item}
                                     borderRadius="sm"
                                     name={`${item?.first_name} ${item?.last_name}`}
                                     date_time={item?.createdAt}
@@ -171,8 +218,9 @@ const PersonnelRequests2 = () => {
                       {currentItems !== undefined &&
                         currentItems.map((item, i) => (
                           <PersonnelGenericRequestCard
-                            request_data={item}
                             key={item?._id}
+                            available={available}
+                            request_data={item}
                             borderRadius="sm"
                             name={`${item?.first_name} ${item?.last_name}`}
                             date_time={item?.createdAt}
