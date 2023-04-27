@@ -40,7 +40,7 @@ const Login = () => {
   };
 
   const postSchedule = (user) => {
-    return axios.post(`${ENDPOINT}schedule`, user);
+    return axios.post(`${ENDPOINT}schedule/all_schedule`, user);
   };
 
   const scheduleMutation = useMutation({

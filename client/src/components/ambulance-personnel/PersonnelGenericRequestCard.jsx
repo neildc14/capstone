@@ -14,9 +14,10 @@ import {
 import ModalContainer from "../global/ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
+import ScheduleContext from "../../context/ScheduleContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -30,6 +31,7 @@ const PersonnelGenericRequestCard = ({
   const [isOpen, setOpen] = useState(false);
   const [toastStatus, setToastStatus] = useState(null);
   const [ambulanceID, setAmbulanceID] = useState(null);
+  const [scheduleID, setScheduleID] = useState(null);
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
@@ -39,6 +41,13 @@ const PersonnelGenericRequestCard = ({
       "Content-Type": "application/json",
     },
   };
+
+  const headers = {
+    Authorization: `Bearer ${parsed_user_data?.token}`,
+  };
+
+  const schedule = useContext(ScheduleContext);
+  const parsed_schedule = JSON.parse(schedule);
 
   const dt = DateTime.fromISO(date_time);
   const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
@@ -64,6 +73,24 @@ const PersonnelGenericRequestCard = ({
     const ambulance_id = localStorage.getItem("ambulance_id");
     setAmbulanceID(JSON.parse(ambulance_id));
   }, []);
+  console.log(scheduleID);
+  const fetchSchedule = async () => {
+    const response = await axios.get(
+      `${ENDPOINT}schedule/personnel/${parsed_schedule?._id} `,
+      { headers }
+    );
+    return response.data;
+  };
+
+  const { data, error, isLoading, isFetching } = useQuery(
+    ["schedule"],
+    fetchSchedule,
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
+
+  console.log(data, "SCHEDUIEDEI");
 
   const updateRequest = async (data) => {
     return axios.put(
@@ -107,7 +134,7 @@ const PersonnelGenericRequestCard = ({
       console.log(error);
     },
     onSuccess: (response) => {
- console.log(response, "AMBULANCE MUTATE")
+      console.log(response, "AMBULANCE MUTATE");
       queryClient.invalidateQueries(["ambulance"]);
     },
   });

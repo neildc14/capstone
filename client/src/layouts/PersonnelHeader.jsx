@@ -90,7 +90,11 @@ const PersonnelHeader = () => {
   }, [available]);
 
   const updateSchedule = async (data) => {
-    return axios.put(`${ENDPOINT}schedule/${schedule?._id}`, data, config);
+    return axios.put(
+      `${ENDPOINT}schedule/all_schedule/${schedule?._id}`,
+      data,
+      config
+    );
   };
 
   const scheduleMutation = useMutation({
@@ -100,7 +104,6 @@ const PersonnelHeader = () => {
     },
     onSuccess: (response) => {
       localStorage.setItem("schedule", JSON.stringify(response.data));
-      console.log(response.data, "SCHED");
       toast({
         title: "Schedule update.",
         description: `Schedule is successfully updated`,

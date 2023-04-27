@@ -51,6 +51,30 @@ const getSchedule = async (req, res) => {
     return failure.sendResponse();
   }
 };
+/**GET specific schedule */
+const getSchedulePerDriver = async (req, res) => {
+  const { id } = req.params;
+  console.log(id, "SCHED ID");
+
+  try {
+    let errorMessage = "Invalid ID.";
+    if (isNotValidObjectId(id)) {
+      throwError(errorMessage);
+    }
+
+    const schedule = await Schedule.findOne({ _id: id })
+      .populate("scheduled_personnel", "firstname lastname")
+      .sort({ createdAt: "desc" });
+
+    errorMessage = "No schedule found.";
+    validateInstanceMethod(schedule, errorMessage);
+    const success = new HTTPResponse(res, 200, schedule);
+    return success.sendResponse();
+  } catch (error) {
+    const failure = new HTTPResponse(res, 400, error.message);
+    return failure.sendResponse();
+  }
+};
 
 /*POST new schedule */
 const postSchedule = async (req, res) => {
@@ -156,6 +180,7 @@ const deleteSchedule = async (req, res) => {
 module.exports = {
   getAllSchedule,
   getSchedule,
+  getSchedulePerDriver,
   postSchedule,
   putSchedule,
   deleteSchedule,
