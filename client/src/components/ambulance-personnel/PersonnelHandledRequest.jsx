@@ -29,8 +29,6 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const HandledRequest = () => {
   const [search, setSearch] = useState([]);
-  const [handledRequests, setHandledRequests] = useState([]);
-  const [allAmbulance, setAllAmbulance] = useState([]);
   const user = useContext(AuthContext);
 
   const parsed_user_data = JSON.parse(user);
@@ -43,67 +41,29 @@ const HandledRequest = () => {
     return response.data;
   }, []);
 
-  const fetchHandledRequestsAndAmbulance = async () => {
-    const headers = {
-      Authorization: `Bearer ${parsed_user_data.token}`,
-    };
-
-    const results = await Promise.allSettled([
-      axios.get(`${ENDPOINT}request/handled`, { headers }),
-      axios.get(`${ENDPOINT}ambulance/all`, { headers }),
-    ]);
-    return results;
-  };
-
   const queryKey = "personnel_handled_requests";
   const { data, isLoading, isFetching, error } = useQuery(
     [queryKey],
-    fetchHandledRequestsAndAmbulance,
+    fetchHandledRequests,
     {
       refetchOnWindowFocus: true,
     }
   );
 
-  useEffect(() => {
-    if (!isLoading && !isFetching) {
-      setHandledRequests(data[0]?.value?.data);
-      setAllAmbulance(data[1]?.value?.data);
-    }
-  }, [data, isLoading, isFetching]);
-
-  const filterAmbulance = () => {
-    let available = [];
-    if (Array.isArray(allAmbulance)) {
-      available = allAmbulance?.filter((req) => req.status === "available");
-    }
-    console.log({ available }, "array");
-    return available[0];
-  };
-
-  const available = filterAmbulance();
-  console.log(available, "AMBULANCE REQUESTS");
-
-  console.log({ handledRequests });
-  console.log({ available });
-
   const gethandledRequests = useMemo(() => {
-    return handledRequests;
+    return data;
   }, [data]);
 
-  const filterApprovedRequest = () => {
-    let approvedRequests;
-    let recentApprovedRequest;
-    if (Array.isArray(handledRequests)) {
-      approvedRequests = handledRequests?.filter(
-        (req) => req.status === "approved"
-      );
-
-      recentApprovedRequest = approvedRequests[approvedRequests?.length - 1];
+  const filterApprovedRequests = (data) => {
+    if (!Array.isArray(data)) {
+      return [];
     }
-
-    return recentApprovedRequest;
+    return data.filter((request) => request.status === "approved");
   };
-  const recentApprovedRequest = filterApprovedRequest();
+
+  const approvedRequests = filterApprovedRequests(data);
+  const recentApprovedRequest = approvedRequests[approvedRequests.length - 1];
+  console.log(approvedRequests?.length, "REQUEST LENGTH");
 
   return (
     <Box>
@@ -136,8 +96,8 @@ const HandledRequest = () => {
             {recentApprovedRequest !== undefined && (
               <PersonnelGenericRequestCard
                 queryKey={queryKey}
-                available={available}
                 request_data={recentApprovedRequest}
+                approvedRequestsLength={approvedRequests?.length}
                 borderRadius="sm"
                 name={`${recentApprovedRequest?.first_name} ${recentApprovedRequest?.last_name}`}
                 date_time={recentApprovedRequest?.createdAt}
@@ -164,7 +124,7 @@ const HandledRequest = () => {
         <Box px={4}>
           <Box maxWidth={{ md: "50%" }} ms="auto">
             <SearchBar
-              memoizedData={handledRequests}
+              memoizedData={data}
               setSearch={setSearch}
               placeholder="Search a request"
               noResultMessage="No request found."
@@ -190,7 +150,7 @@ const HandledRequest = () => {
               Request History
             </Heading>
             <Text color="#FF7A00" fontWeight="semibold">
-              Total: {handledRequests?.length}
+              Total: {data?.length}
             </Text>
           </Flex>
           <Divider />
@@ -199,12 +159,12 @@ const HandledRequest = () => {
           <Flex flexDirection="column" gap={4}>
             {!error &&
               search.length <= 0 &&
-              handledRequests?.map((request) => (
+              data?.map((request) => (
                 <PersonnelGenericRequestCard
                   key={request?._id}
                   queryKey={queryKey}
-                  available={available}
                   request_data={request}
+                  approvedRequestsLength={approvedRequests?.length}
                   borderRadius="sm"
                   name={`${request?.first_name} ${request?.last_name}`}
                   date_time={request?.createdAt}
@@ -216,8 +176,8 @@ const HandledRequest = () => {
                 <PersonnelGenericRequestCard
                   key={request?._id}
                   queryKey={queryKey}
-                  available={available}
                   request_data={request}
+                  approvedRequestsLength={approvedRequests?.length}
                   borderRadius="sm"
                   name={`${request?.first_name} ${request?.last_name}`}
                   date_time={request?.createdAt}

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Heading,
   Flex,
@@ -14,7 +14,7 @@ import {
 import ModalContainer from "../global/ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 
@@ -22,16 +22,14 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const PersonnelGenericRequestCard = ({
   queryKey,
-  available,
+  approvedRequestsLength,
   date_time,
   request_data,
   borderRadius = "md",
 }) => {
   const [isOpen, setOpen] = useState(false);
   const [toastStatus, setToastStatus] = useState(null);
-  const [tripTicketAmbulance, setTripTicketAmbulance] = useState({});
-  const [ambulanceStatus, setAmbulanceStatus] = useState("");
-  const [ticketMethod, setTicketMethod] = useState("");
+  const [ambulanceID, setAmbulanceID] = useState(null);
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
@@ -50,46 +48,22 @@ const PersonnelGenericRequestCard = ({
     user_id,
     first_name,
     last_name,
+    ticket_id,
     pickup_location,
     transfer_location,
     referral_slip,
     patient_condition,
     status,
-    ticket_id,
   } = request_data || {};
 
   const name = `${first_name} ${last_name}`;
-
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const fetchAssignedAmbulance = async () => {
-    const headers = {
-      Authorization: `Bearer ${parsed_user_data.token}`,
-    };
-    const response = await axios.get(
-      `${ENDPOINT}ambulance/travelling/?ticket_id=${ticket_id}`,
-      { headers }
-    );
-    return response.data;
-  };
-
-  const { data, error, refetch, isLoading, isFetching } = useQuery(
-    ["trip_ticket_ambulance"],
-    fetchAssignedAmbulance,
-    {
-      refetchOnWindowFocus: true,
-      enabled: false,
-    }
-  );
-
   useEffect(() => {
-    if (!isLoading && !isFetching) {
-      setTripTicketAmbulance(data);
-    }
-  }, [data, isLoading, isFetching]);
-  console.log({ tripTicketAmbulance });
-  console.log(available, "AVAILABLE CARD");
+    const ambulance_id = localStorage.getItem("ambulance_id");
+    setAmbulanceID(JSON.parse(ambulance_id));
+  }, []);
 
   const updateRequest = async (data) => {
     return axios.put(
@@ -104,20 +78,7 @@ const PersonnelGenericRequestCard = ({
   };
 
   const handleUpdateAmbulanceStatus = async (data) => {
-    let ambulance_id;
-    switch (ambulanceStatus) {
-      case "travelling":
-        ambulance_id = available?._id;
-        break;
-      case "available":
-        ambulance_id = tripTicketAmbulance?._id;
-        break;
-
-      default:
-        null;
-        break;
-    }
-    return axios.put(`${ENDPOINT}ambulance/all/${ambulance_id}`, data, config);
+    return axios.put(`${ENDPOINT}ambulance/all/${ambulanceID}`, data, config);
   };
 
   const requestMutation = useMutation({
@@ -136,7 +97,7 @@ const PersonnelGenericRequestCard = ({
       });
 
       queryClient.invalidateQueries([queryKey]);
-      queryClient.invalidateQueries(["trip_ticket_ambulance"]);
+      queryClient.invalidateQueries(["ambulance_request"]);
     },
   });
 
@@ -145,8 +106,7 @@ const PersonnelGenericRequestCard = ({
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: (response) => {
-      console.log(response, "SUCCESS");
+    onSuccess: () => {
       queryClient.invalidateQueries(["ambulance"]);
     },
   });
@@ -158,15 +118,12 @@ const PersonnelGenericRequestCard = ({
     },
     onSuccess: (response) => {
       if (response) {
-        console.log({ ticket: response }, "ON SUCCESS RESPONSE OF TICKET");
-
         const requestBody = {
           pickup_location: request_data?.pickup_location,
           status: "approved",
           handled_by: parsed_user_data?.id,
           ticket_id: response.data._id,
         };
-
         requestMutation.mutate(requestBody);
 
         ambulanceMutation.mutate({
@@ -178,9 +135,7 @@ const PersonnelGenericRequestCard = ({
 
   const rejectRequest = (e) => {
     e.preventDefault();
-
     setToastStatus("Rejected");
-    setAmbulanceStatus("available");
 
     const body = {
       pickup_location: request_data?.pickup_location,
@@ -189,43 +144,41 @@ const PersonnelGenericRequestCard = ({
     };
     requestMutation.mutate(body);
 
-    if (ticket_id !== undefined) {
+    if (approvedRequestsLength <= 1) {
       ambulanceMutation.mutate({
         status: "available",
       });
     }
+
     setOpen(false);
   };
 
   const approveRequest = (e) => {
     e.preventDefault();
     setToastStatus("Approved");
-    setAmbulanceStatus("travelling");
 
-    if (ticket_id !== undefined) {
-      setTicketMethod("put");
-      const requestBody = {
-        pickup_location: request_data?.pickup_location,
-        status: "approved",
-      };
-
-      requestMutation.mutate(requestBody);
-
-      ambulanceMutation.mutate({
-        status: "travelling",
-      });
-    } else if (ticket_id === undefined) {
-      setTicketMethod("post");
+    if (ticket_id === undefined) {
       const ticketBody = {
         ambulance_personnel: parsed_user_data?.id,
         requestor: user_id,
         request_id: _id,
         personnel_fullname: parsed_user_data?.fullName,
         patient_fullname: name,
-        ambulance: available?._id,
+        ambulance: ambulanceID,
         destination: transfer_location,
       };
       ticketMutation.mutate(ticketBody);
+    } else if (ticket_id !== undefined) {
+      const requestBody = {
+        pickup_location: request_data?.pickup_location,
+        status: "approved",
+        handled_by: parsed_user_data?.id,
+      };
+      requestMutation.mutate(requestBody);
+
+      ambulanceMutation.mutate({
+        status: "travelling",
+      });
     }
 
     setOpen(false);
@@ -233,16 +186,10 @@ const PersonnelGenericRequestCard = ({
 
   const handleOpenModal = () => {
     setOpen(!isOpen);
-    if (ticket_id !== undefined) {
-      refetch();
-    }
   };
 
-  console.log({ ticket_id });
-  console.log(ticketMethod, "TICKET METHODS");
-  console.log({ tripTicketAmbulance });
   return (
-    <>    
+    <>
       <Card
         boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
         bgColor={isOpen ? "orange.300" : "white"}

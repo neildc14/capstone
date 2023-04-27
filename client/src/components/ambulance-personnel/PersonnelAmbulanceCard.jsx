@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Heading,
   Flex,
@@ -7,7 +7,6 @@ import {
   CardBody,
   Text,
   ModalBody,
-  IconButton,
   GridItem,
   Grid,
   Select,
@@ -18,6 +17,7 @@ import { UilEdit } from "@iconscout/react-unicons";
 import useSelect from "../../hooks/useSelect";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -32,8 +32,19 @@ const PersonnelAmbulanceCard = ({
   const [mutationFunctionType, setMutationFunctionType] = useState("");
   const status = ambulance_data?.status;
 
+  
   const toast = useToast();
   const queryClient = useQueryClient();
+
+  const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${parsed_user_data?.token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  console.log(config, "CONFIG");
 
   const handleMutationFunctionType = (data) => {
     let axiosMethod;
@@ -46,7 +57,11 @@ const PersonnelAmbulanceCard = ({
         axiosMethod = axios.delete;
     }
 
-    return axiosMethod(`${ENDPOINT}ambulance/all/${ambulance_data?._id}`, data);
+    return axiosMethod(
+      `${ENDPOINT}ambulance/all/${ambulance_data?._id}`,
+      data,
+      config
+    );
   };
 
   const mutation = useMutation({

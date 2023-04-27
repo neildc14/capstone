@@ -25,6 +25,7 @@ import React, { useContext, useState, useEffect } from "react";
 import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAllRequests2";
 import PersonnelAmbulance from "./components/ambulance-personnel/PersonnelAmbulance2";
 import AuthContext from "./context/AuthContext";
+import ScheduleContext from "./context/ScheduleContext";
 
 const DashboardContext = React.createContext();
 
@@ -32,6 +33,7 @@ function App() {
   const queryClient = new QueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [user, setUser] = useState(null);
+  const [schedule_id, seScheduleID] = useState(null);
   const [loadRoute, setLoadRoute] = useState(false);
 
   const toggleDashboard = () => {
@@ -40,9 +42,12 @@ function App() {
 
   useEffect(() => {
     let userLoggedIn = localStorage.getItem("user");
+    let schedule_id = sessionStorage.getItem("schedule_id");
     if (userLoggedIn) {
       setUser(userLoggedIn);
     }
+
+    seScheduleID(schedule_id);
     setLoadRoute(true);
   });
   console.log(user);

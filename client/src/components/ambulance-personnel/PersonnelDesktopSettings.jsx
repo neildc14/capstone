@@ -1,20 +1,18 @@
-import { SettingsIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { UilUserCircle } from "@iconscout/react-unicons";
 import {
-  IconButton,
-  Tooltip,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   MenuDivider,
   Button,
-  Select,
-  Box,
   Text,
+  Box,
+  Select,
 } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { UilUserCircle } from "@iconscout/react-unicons";
 
-const Settings = ({ changeStatusHandler, handleLogOut }) => {
+const PersonnelDesktopSettings = ({ handleLogOut, changeStatusHandler }) => {
   return (
     <Menu overflow="hidden">
       <MenuButton
@@ -24,8 +22,11 @@ const Settings = ({ changeStatusHandler, handleLogOut }) => {
         p={0}
         borderRadius={0}
         _hover={{ bgColor: "none" }}
+        rightIcon={<ChevronDownIcon />}
       >
-        <UilUserCircle color="#ff7a00" size="24px" />
+        <Box display="inline-flex" alignItems="center" gap=".2rem">
+          <UilUserCircle color="#ff7a00" size="24px" /> <Text>@username</Text>
+        </Box>
       </MenuButton>
       <MenuList>
         <Box
@@ -57,4 +58,4 @@ const Settings = ({ changeStatusHandler, handleLogOut }) => {
   );
 };
 
-export default Settings;
+export default PersonnelDesktopSettings;

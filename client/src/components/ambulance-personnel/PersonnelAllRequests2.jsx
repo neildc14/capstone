@@ -38,7 +38,7 @@ const PersonnelRequests2 = () => {
 
   const parsed_user_data = JSON.parse(user);
 
-  const fetchAllRequests = useCallback(async () => {
+  const fetchPendingRequests = useCallback(async () => {
     const token = await parsed_user_data.token;
 
     const headers = {
@@ -49,57 +49,24 @@ const PersonnelRequests2 = () => {
     return response.data;
   }, []);
 
-  const fetchPendingRequestsAndAmbulance = async () => {
-    const headers = {
-      Authorization: `Bearer ${parsed_user_data.token}`,
-    };
-
-    const results = await Promise.allSettled([
-      axios.get(`${ENDPOINT}request/all`, { headers }),
-      axios.get(`${ENDPOINT}ambulance/all`, { headers }),
-    ]);
-    return results;
-  };
-
   const queryKey = "ambulance_request";
   const { data, error, isLoading, isFetching } = useQuery(
     [queryKey],
-    fetchPendingRequestsAndAmbulance,
+    fetchPendingRequests,
     {
       refetchOnWindowFocus: true,
     }
   );
 
-  useEffect(() => {
-    if (!isLoading && !isFetching) {
-      setAllPendingRequests(data[0]?.value?.data);
-      setAllAmbulance(data[1]?.value?.data);
-    }
-  }, [data, isLoading, isFetching]);
-
-  const filterAmbulance = () => {
-    let available = [];
-    if (Array.isArray(allAmbulance)) {
-      available = allAmbulance?.filter((req) => req.status === "available");
-    }
-    console.log({ available }, "array");
-    return available[0];
-  };
-
-  const available = filterAmbulance();
-  console.log(available, "AMBULANCE REQUESTS");
-
   const memoizedData = useMemo(() => {
-    return allPendingRequests;
-  }, [allPendingRequests]);
+    return data;
+  }, [data]);
 
   let pendingRequests = [];
 
   const filterRequests = () => {
-    if (Array.isArray(allPendingRequests)) {
-      pendingRequests = allPendingRequests?.filter(
-        (req) => req.status === "pending"
-      );
+    if (Array.isArray(data)) {
+      pendingRequests = data?.filter((req) => req.status === "pending");
     }
   };
   filterRequests();
@@ -114,7 +81,6 @@ const PersonnelRequests2 = () => {
     },
   ];
 
-  console.log({ available }, "ALLREQUESTS");
   return (
     <>
       <Box>
@@ -187,7 +153,6 @@ const PersonnelRequests2 = () => {
                                 currentItems.map((item, i) => (
                                   <PersonnelGenericRequestCard
                                     key={item?._id}
-                                    available={available}
                                     request_data={item}
                                     borderRadius="sm"
                                     name={`${item?.first_name} ${item?.last_name}`}

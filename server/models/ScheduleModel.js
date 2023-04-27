@@ -14,6 +14,7 @@ const ScheduleSchema = new Schema(
       enum: ["stand-by", "driving", "off-duty"],
       required: true,
     },
+    ambulance: { type: Schema.Types.ObjectId, ref: "Ambulance" },
   },
   { timestamps: true }
 );

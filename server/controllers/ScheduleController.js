@@ -30,6 +30,7 @@ const getAllSchedule = async (req, res) => {
 /**GET specific schedule */
 const getSchedule = async (req, res) => {
   const { id } = req.params;
+  console.log(id, "SCHED ID");
 
   try {
     let errorMessage = "Invalid ID.";
@@ -53,8 +54,8 @@ const getSchedule = async (req, res) => {
 
 /*POST new schedule */
 const postSchedule = async (req, res) => {
-  const { scheduled_personnel, status } = req.body;
-
+  const { scheduled_personnel, status, ambulance } = req.body;
+  console.log(req.body, "POST");
   try {
     let errorMessage = "Scheduled personnel is not defined.";
     isEmpty(scheduled_personnel, errorMessage);
@@ -70,6 +71,7 @@ const postSchedule = async (req, res) => {
     const new_schedule = await Schedule.create({
       scheduled_personnel,
       status,
+      ambulance,
     });
 
     errorMessage = "Failed to post schedule";
@@ -98,19 +100,19 @@ const putSchedule = async (req, res) => {
     errorMessage = "No schedule found";
     validateInstanceMethod(schedule);
 
-    errorMessage = "Scheduled personnel is not defined";
-    isEmpty(scheduled_personnel, errorMessage);
+    // errorMessage = "Scheduled personnel is not defined";
+    // isEmpty(scheduled_personnel, errorMessage);
 
     errorMessage = "Status is not defined";
     isEmpty(status, errorMessage);
 
-    errorMessage = "Personnel not found.";
-    if (isNotValidObjectId(scheduled_personnel)) {
-      throwError(errorMessage);
-    }
+    // errorMessage = "Personnel not found.";
+    // if (isNotValidObjectId(scheduled_personnel)) {
+    //   throwError(errorMessage);
+    // }
 
-    const personnel = await User.findOne({ _id: scheduled_personnel }).exec();
-    validateInstanceMethod(personnel, errorMessage);
+    // const personnel = await User.findOne({ _id: scheduled_personnel }).exec();
+    // validateInstanceMethod(personnel, errorMessage);
 
     const filter = { _id: id };
     const body = req.body;

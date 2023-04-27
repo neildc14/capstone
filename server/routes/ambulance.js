@@ -9,6 +9,9 @@ const {
   deleteAmbulance,
 } = require("../controllers/AmbulanceController");
 const corsHeaders = require("../middlewares/headers");
+const requireAuth = require("../middlewares/requireAuth");
+
+router.use(requireAuth);
 
 router.get("/all", corsHeaders, getAllAmbulance);
 router.post("/all", corsHeaders, postAmbulance);

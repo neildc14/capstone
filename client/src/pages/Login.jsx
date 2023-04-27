@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -18,29 +18,57 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import ThemeButton from "../components/global/ThemeButton";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const Login = () => {
   const [show, setShow] = useState(false);
-  const showHidePassword = () => setShow(!show);
-  const toast = useToast();
-
   const [email, bindEmail] = useInput();
   const [password, bindPassword] = useInput();
+  const [schedule_id, seScheduleID] = useState(null);
+  const toast = useToast();
+
+  useEffect(() => {
+    const schedule_id = localStorage.getItem("schedule_id");
+    seScheduleID(JSON.parse(schedule_id));
+  });
 
   const loginnUpUser = (user) => {
     return axios.post(`${ENDPOINT}auth/login`, user);
   };
+
+  const postSchedule = (user) => {
+    return axios.post(`${ENDPOINT}schedule`, user);
+  };
+
+  const scheduleMutation = useMutation({
+    mutationFn: postSchedule,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      console.log({ schedule: response }, "RESPONS SCHED");
+      localStorage.setItem("schedule", JSON.stringify(response.data));
+    },
+  });
 
   const mutation = useMutation({
     mutationFn: loginnUpUser,
     onError: (error) => {
       console.log(error);
     },
+
     onSuccess: (response) => {
+      if (
+        response?.data.user_type === "ambulance_personnel" &&
+        schedule_id === null
+      ) {
+        scheduleMutation.mutate({
+          scheduled_personnel: response?.data.id,
+        });
+      }
       toast({
         title: "User logged in.",
         description: "You have been successfully  logged in.",
@@ -61,6 +89,8 @@ const Login = () => {
     };
     mutation.mutate(body);
   };
+
+  const showHidePassword = () => setShow(!show);
 
   return (
     <Container position="relative" height="100%" maxW="full" px={0}>

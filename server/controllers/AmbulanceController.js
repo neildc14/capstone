@@ -47,16 +47,14 @@ const getAmbulance = async (req, res) => {
 
 const getAmbulanceFromTripTicket = async (req, res) => {
   const { ticket_id } = req.query;
-  console.log(req.query, "TICKET  ID");
 
   try {
     const trip_ticket = await TripTicket.findOne({ _id: ticket_id });
     let errorMessage = "No trip ticket found";
     validateInstanceMethod(trip_ticket, errorMessage);
-    console.log({ trip_ticket });
 
     const ambulance_id = trip_ticket.ambulance;
-    console.log({ ambulance_id });
+
     const ambulance = await Ambulance.findById(ambulance_id);
     errorMessage = "No ambulance found";
     validateInstanceMethod(ambulance, errorMessage);
@@ -94,7 +92,7 @@ const postAmbulance = async (req, res) => {
 //UPDATE specific ambulance
 const putAmbulance = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
+
   try {
     let errorMessage = "Invalid ID.";
     if (isNotObjectId(id)) {
@@ -108,7 +106,6 @@ const putAmbulance = async (req, res) => {
 
     const filter = { _id: id };
     const body = req.body;
-    console.log(body);
     const updated_ambulance = await Ambulance.findOneAndUpdate(filter, body);
 
     errorMessage = "Failed to update ambulance status.";
