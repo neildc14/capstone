@@ -13,6 +13,12 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { UilUserCircle } from "@iconscout/react-unicons";
 
 const PersonnelDesktopSettings = ({ handleLogOut, changeStatusHandler }) => {
+  const options = [
+    { value: "stand-by", label: "Stand-by" },
+    { value: "driving", label: "Driving" },
+    { value: "off-duty", label: "Off-duty" },
+  ];
+
   return (
     <Menu overflow="hidden">
       <MenuButton
@@ -38,16 +44,16 @@ const PersonnelDesktopSettings = ({ handleLogOut, changeStatusHandler }) => {
           px={3}
         >
           <Text>Status:</Text>
-          <Select size="sm" onChange={changeStatusHandler}>
-            <option name="standy_by" value="stand-by">
-              Standy-by
-            </option>
-            <option name="driving" value="driving">
-              Driving
-            </option>
-            <option name="off_duty" value="off_duty">
-              Off-duty
-            </option>
+          <Select
+            size="sm"
+            onChange={changeStatusHandler}
+            defaultValue={options[2].value}
+          >
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </Select>
         </Box>
 

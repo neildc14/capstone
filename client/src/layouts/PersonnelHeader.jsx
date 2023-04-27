@@ -17,7 +17,7 @@ const PersonnelHeader = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const navigate = useNavigate();
   const toast = useToast();
-  const [personnelStatus, setPersonnelStatus] = useState("stand-by");
+  const [personnelStatus, setPersonnelStatus] = useState("");
   const [schedule, setScheduleID] = useState(null);
 
   const user = useContext(AuthContext);
@@ -121,6 +121,8 @@ const PersonnelHeader = () => {
       ambulance: available?._id,
     });
   };
+
+  console.log(personnelStatus);
 
   const handleLogOut = () => {
     if (user) {

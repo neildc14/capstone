@@ -15,6 +15,12 @@ import {
 } from "@chakra-ui/react";
 
 const Settings = ({ changeStatusHandler, handleLogOut }) => {
+  const options = [
+    { value: "stand-by", label: "Stand-by" },
+    { value: "driving", label: "Driving" },
+    { value: "off-duty", label: "Off-duty" },
+  ];
+
   return (
     <Menu overflow="hidden">
       <MenuButton
@@ -37,16 +43,16 @@ const Settings = ({ changeStatusHandler, handleLogOut }) => {
           px={3}
         >
           <Text>Status:</Text>
-          <Select size="sm" onChange={changeStatusHandler}>
-            <option name="standy_by" value="stand-by">
-              Standy-by
-            </option>
-            <option name="driving" value="driving">
-              Driving
-            </option>
-            <option name="off_duty" value="off_duty">
-              Off-duty
-            </option>
+          <Select
+            size="sm"
+            onChange={changeStatusHandler}
+            defaultValue={options[2].value}
+          >
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </Select>
         </Box>
 

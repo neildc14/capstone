@@ -47,7 +47,7 @@ const PersonnelDashboardPanel = () => {
     const results = await Promise.allSettled([
       axios.get(`${ENDPOINT}request/handled`, { headers }),
       axios.get(`${ENDPOINT}request/all`, { headers }),
-      axios.get(`${ENDPOINT}ambulance`, { headers }),
+      axios.get(`${ENDPOINT}ambulance/all`, { headers }),
     ]);
 
     return results;
