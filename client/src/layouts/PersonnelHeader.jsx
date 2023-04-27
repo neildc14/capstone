@@ -125,6 +125,8 @@ const PersonnelHeader = () => {
   const handleLogOut = () => {
     if (user) {
       localStorage.removeItem("user");
+      localStorage.removeItem("schedule");
+      localStorage.removeItem("ambulance_id");
       navigate("/account/login");
     }
   };
