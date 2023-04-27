@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Box, Flex, Divider, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Divider, useMediaQuery, useToast } from "@chakra-ui/react";
 import TopNav from "../components/TopNav";
 import DateTime from "../components/global/DisplayTime";
 import ThemeButton from "../components/global/ThemeButton";
@@ -16,8 +16,9 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const PersonnelHeader = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const navigate = useNavigate();
+  const toast = useToast();
   const [personnelStatus, setPesonnelStatus] = useState("stand-by");
-  const [schedule_id, seScheduleID] = useState(null);
+  const [schedule, setScheduleID] = useState(null);
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
@@ -58,7 +59,7 @@ const PersonnelHeader = () => {
 
   useEffect(() => {
     const schedule = localStorage.getItem("schedule");
-    seScheduleID(JSON.parse(schedule));
+    setScheduleID(JSON.parse(schedule));
   }, []);
 
   useEffect(() => {
@@ -82,6 +83,7 @@ const PersonnelHeader = () => {
       console.log(error);
     },
     onSuccess: (response) => {
+      localStorage.setItem("schedule", JSON.stringify(response.data));
       toast({
         title: "Schedule update.",
         description: `Schedule is successfully updated`,
