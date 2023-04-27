@@ -61,9 +61,10 @@ const Login = () => {
     },
 
     onSuccess: (response) => {
+      let schedule = localStorage.getItem("schedule");
       if (
         response?.data.user_type === "ambulance_personnel" &&
-        schedule_id === null
+        schedule === null
       ) {
         scheduleMutation.mutate({
           scheduled_personnel: response?.data.id,

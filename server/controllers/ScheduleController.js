@@ -87,8 +87,8 @@ const postSchedule = async (req, res) => {
 /**UPDATE schedule */
 const putSchedule = async (req, res) => {
   const { id } = req.params;
-  const { scheduled_personnel, status } = req.body;
-
+  const { scheduled_personnel, status, ambulance } = req.body;
+  console.log(req.body, "SCHED");
   try {
     let errorMessage = "Invalid ID.";
     if (isNotValidObjectId(id)) {

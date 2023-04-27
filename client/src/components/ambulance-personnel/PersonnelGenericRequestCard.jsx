@@ -106,7 +106,8 @@ const PersonnelGenericRequestCard = ({
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+ console.log(response, "AMBULANCE MUTATE")
       queryClient.invalidateQueries(["ambulance"]);
     },
   });

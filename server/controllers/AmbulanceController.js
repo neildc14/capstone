@@ -107,7 +107,7 @@ const putAmbulance = async (req, res) => {
     const filter = { _id: id };
     const body = req.body;
     const updated_ambulance = await Ambulance.findOneAndUpdate(filter, body);
-
+    console.log(updated_ambulance, "AMBULANCE");
     errorMessage = "Failed to update ambulance status.";
     validateInstanceMethod(updated_ambulance, errorMessage);
     const success = new HTTPResponse(res, 201, updated_ambulance);

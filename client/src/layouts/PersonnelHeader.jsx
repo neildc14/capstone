@@ -17,7 +17,7 @@ const PersonnelHeader = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const navigate = useNavigate();
   const toast = useToast();
-  const [personnelStatus, setPesonnelStatus] = useState("stand-by");
+  const [personnelStatus, setPersonnelStatus] = useState("stand-by");
   const [schedule, setScheduleID] = useState(null);
 
   const user = useContext(AuthContext);
@@ -68,13 +68,29 @@ const PersonnelHeader = () => {
 
   useEffect(() => {
     let ambulance_id = localStorage.getItem("ambulance_id");
-    if (ambulance_id === undefined) {
+    if (
+      ambulance_id === null ||
+      ambulance_id === undefined ||
+      ambulance_id === "undefined"
+    ) {
       localStorage.setItem("ambulance_id", JSON.stringify(available?._id));
+    } else if (
+      ambulance_id !== null ||
+      ambulance_id !== "undefined" ||
+      ambulance_id !== undefined
+    ) {
+      ambulance_id = localStorage.getItem("ambulance_id");
+      let parsed_ambulance_id = JSON.parse(ambulance_id);
+      let ambulanceId = parsed_ambulance_id
+        ?.replace(/\\/g, "")
+        ?.replace(/"/g, "");
+      console.log(ambulanceId);
+      localStorage.setItem("ambulance_id", JSON.stringify(ambulanceId));
     }
   }, [available]);
 
   const updateSchedule = async (data) => {
-    return axios.put(`${ENDPOINT}schedule/${schedule._id}`, data, config);
+    return axios.put(`${ENDPOINT}schedule/${schedule?._id}`, data, config);
   };
 
   const scheduleMutation = useMutation({
@@ -84,6 +100,7 @@ const PersonnelHeader = () => {
     },
     onSuccess: (response) => {
       localStorage.setItem("schedule", JSON.stringify(response.data));
+      console.log(response.data, "SCHED");
       toast({
         title: "Schedule update.",
         description: `Schedule is successfully updated`,
@@ -95,8 +112,11 @@ const PersonnelHeader = () => {
   });
 
   const changeStatusHandler = (e) => {
-    setPesonnelStatus(e.target.value);
-    scheduleMutation.mutate({ status: e.target.value });
+    setPersonnelStatus(e.target.value);
+    scheduleMutation.mutate({
+      status: e.target.value,
+      ambulance: available?._id,
+    });
   };
 
   const handleLogOut = () => {
