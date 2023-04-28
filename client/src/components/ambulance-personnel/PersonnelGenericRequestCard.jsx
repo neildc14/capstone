@@ -17,7 +17,7 @@ import { DateTime } from "luxon";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
-import ScheduleContext from "../../context/ScheduleContext";
+import AmbulanceContext from "../../context/AmbulanceContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -30,8 +30,6 @@ const PersonnelGenericRequestCard = ({
 }) => {
   const [isOpen, setOpen] = useState(false);
   const [toastStatus, setToastStatus] = useState(null);
-  const [ambulanceID, setAmbulanceID] = useState(null);
-  const [scheduleID, setScheduleID] = useState(null);
   const [mutationFunctionType, setMutationFunctionType] = useState("");
 
   const user = useContext(AuthContext);
@@ -43,12 +41,9 @@ const PersonnelGenericRequestCard = ({
     },
   };
 
-  const headers = {
-    Authorization: `Bearer ${parsed_user_data?.token}`,
-  };
-
-  const schedule = useContext(ScheduleContext);
-  const parsed_schedule = JSON.parse(schedule);
+  const ambulance = useContext(AmbulanceContext);
+  const parsed_ambulance_data = JSON.parse(ambulance);
+  console.log(parsed_ambulance_data);
 
   const dt = DateTime.fromISO(date_time);
   const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
@@ -70,27 +65,6 @@ const PersonnelGenericRequestCard = ({
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const ambulance_id = localStorage.getItem("ambulance_id");
-    setAmbulanceID(JSON.parse(ambulance_id));
-  }, []);
-
-  const fetchSchedule = async () => {
-    const response = await axios.get(
-      `${ENDPOINT}schedule/personnel/${parsed_schedule?._id} `,
-      { headers }
-    );
-    return response.data;
-  };
-
-  const { data, error, isLoading, isFetching } = useQuery(
-    ["schedule"],
-    fetchSchedule,
-    {
-      refetchOnWindowFocus: true,
-    }
-  );
-
   const updateRequest = async (data) => {
     return axios.put(
       `${ENDPOINT}request/requestor/${request_data?._id}`,
@@ -99,22 +73,21 @@ const PersonnelGenericRequestCard = ({
     );
   };
 
-  const makeTicket = async (data) => {
-    return axios.post(`${ENDPOINT}ticket/all`, data, config);
-  };
-
   const handleTicket = (data) => {
     switch (mutationFunctionType) {
       case "POST":
         return axios.post(`${ENDPOINT}ticket/all`, data, config);
-        break;
       case "UPDATE":
-        return axios.post(`${ENDPOINT}ticket/all/${ticket_id}`, data, config);
+        return axios.put(`${ENDPOINT}ticket/all/${ticket_id}`, data, config);
     }
   };
 
   const handleUpdateAmbulanceStatus = async (data) => {
-    return axios.put(`${ENDPOINT}ambulance/all/${ambulanceID}`, data, config);
+    return axios.put(
+      `${ENDPOINT}ambulance/all/${parsed_ambulance_data?._id}`,
+      data,
+      config
+    );
   };
 
   const requestMutation = useMutation({
@@ -127,7 +100,7 @@ const PersonnelGenericRequestCard = ({
         title: "Request update.",
         description: `Request is marked a ${toastStatus}`,
         status: "success",
-        duration: 2000,
+        duration: 1000,
         isClosable: true,
       });
 
@@ -147,7 +120,7 @@ const PersonnelGenericRequestCard = ({
   });
 
   const ticketMutation = useMutation({
-    mutationFn: makeTicket,
+    mutationFn: handleTicket,
     onError: (error) => {
       console.log(error);
     },
@@ -171,7 +144,6 @@ const PersonnelGenericRequestCard = ({
   const rejectRequest = (e) => {
     e.preventDefault();
     setToastStatus("Rejected");
-    handleTicket(ticket_id);
 
     const body = {
       pickup_location: request_data?.pickup_location,
@@ -199,33 +171,23 @@ const PersonnelGenericRequestCard = ({
       request_id: _id,
       personnel_fullname: parsed_user_data?.fullName,
       patient_fullname: name,
-      ambulance: ambulanceID,
+      ambulance: parsed_ambulance_data?._id,
       destination: transfer_location,
     };
 
-    if (ticket_id === undefined) {
+    if (ticket_id === undefined || ticket_id === null) {
       setMutationFunctionType("POST");
       ticketMutation.mutate(ticketBody);
-    } else if (ticket_id) {
+    } else if (ticket_id !== undefined || ticket_id !== null) {
       setMutationFunctionType("UPDATE");
       ticketMutation.mutate(ticketBody);
-
-      const requestBody = {
-        pickup_location: request_data?.pickup_location,
-        status: "approved",
-        handled_by: parsed_user_data?.id,
-      };
-      requestMutation.mutate(requestBody);
-
-      ambulanceMutation.mutate({
-        status: "travelling",
-      });
     }
 
     setOpen(false);
   };
 
   const fulfilledRequest = () => {
+    setToastStatus("Fulfilled");
     const requestBody = {
       pickup_location: request_data?.pickup_location,
       status: "fulfilled",
@@ -386,7 +348,7 @@ const PersonnelGenericRequestCard = ({
           {referral_slip && <Image src={referral_slip} alt="referral slip" />}
         </ModalBody>
         <Divider />
-        {request_data?.status !== "" && (
+        {request_data?.status !== "fulfilled" && (
           <ModalFooter>
             <Flex width="100%" justifyContent="space-between">
               <Button

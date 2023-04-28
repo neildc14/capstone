@@ -68,25 +68,32 @@ const PersonnelHeader = () => {
 
   useEffect(() => {
     let ambulance_id = localStorage.getItem("ambulance_id");
+    let ambulance = localStorage.getItem("ambulance");
+
     if (
       ambulance_id === null ||
       ambulance_id === undefined ||
-      ambulance_id === "undefined"
+      ambulance_id === "undefined" ||
+      ambulance === undefined
     ) {
       localStorage.setItem("ambulance_id", JSON.stringify(available?._id));
+      localStorage.setItem("ambulance", JSON.stringify(available));
+    }
+
+    /*
     } else if (
       ambulance_id !== null ||
       ambulance_id !== "undefined" ||
-      ambulance_id !== undefined
+      ambulance_id !== undefined ||
+      ambulance !== undefined
     ) {
       ambulance_id = localStorage.getItem("ambulance_id");
       let parsed_ambulance_id = JSON.parse(ambulance_id);
       let ambulanceId = parsed_ambulance_id
         ?.replace(/\\/g, "")
         ?.replace(/"/g, "");
-      console.log(ambulanceId);
       localStorage.setItem("ambulance_id", JSON.stringify(ambulanceId));
-    }
+    }*/
   }, [available]);
 
   const updateSchedule = async (data) => {
@@ -127,6 +134,7 @@ const PersonnelHeader = () => {
       localStorage.removeItem("user");
       localStorage.removeItem("schedule");
       localStorage.removeItem("ambulance_id");
+      localStorage.removeItem("ambulance");
       navigate("/account/login");
     }
   };

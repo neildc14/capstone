@@ -26,6 +26,7 @@ import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAll
 import PersonnelAmbulance from "./components/ambulance-personnel/PersonnelAmbulance2";
 import AuthContext from "./context/AuthContext";
 import ScheduleContext from "./context/ScheduleContext";
+import AmbulanceContext from "./context/AmbulanceContext";
 
 const DashboardContext = React.createContext();
 
@@ -33,8 +34,8 @@ function App() {
   const queryClient = new QueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [user, setUser] = useState(null);
-  const [loadRoute, setLoadRoute] = useState(false);
   const [schedule, setSchedule] = useState(null);
+  const [ambulance, setAmbulance] = useState(null);
 
   const toggleDashboard = () => {
     onOpen();
@@ -43,14 +44,16 @@ function App() {
   useEffect(() => {
     let userLoggedIn = localStorage.getItem("user");
     let schedule = localStorage.getItem("schedule");
+    let ambulance = localStorage.getItem("ambulance");
     if (userLoggedIn) {
       setUser(userLoggedIn);
     }
     if (schedule) {
       setSchedule(schedule);
     }
-
-    setLoadRoute(true);
+    if (ambulance) {
+      setAmbulance(ambulance);
+    }
   }, []);
   console.log(user, schedule);
   const parsed_user_data = JSON.parse(user);
@@ -92,72 +95,77 @@ function App() {
                 )}
               </Routes>
               <ScheduleContext.Provider value={schedule}>
-                <Routes>
-                  {user !== null && user_type === "administrator" ? (
-                    <>
-                      <Route
-                        path="administrator"
-                        element={<AdministratorDashboard />}
-                      >
+                <AmbulanceContext.Provider value={ambulance}>
+                  <Routes>
+                    {user !== null && user_type === "administrator" ? (
+                      <>
                         <Route
-                          path=""
-                          element={<AdministratorDashboardPanel />}
-                        />
+                          path="administrator"
+                          element={<AdministratorDashboard />}
+                        >
+                          <Route
+                            path=""
+                            element={<AdministratorDashboardPanel />}
+                          />
+                          <Route
+                            path="requests"
+                            element={<AdministratorRequests />}
+                          />
+                          <Route
+                            path="ambulance"
+                            element={<AdministratorAmbulance />}
+                          />
+                          <Route
+                            path="drivers"
+                            element={<AdministratorDrivers />}
+                          />
+                          <Route
+                            path="trip_tickets"
+                            element={<AdministratorTripTickets />}
+                          />
+                          <Route path="map" element={<ViewMap />} />
+                          <Route
+                            path="reports"
+                            element={<AdministratorReports />}
+                          />
+                        </Route>
+                      </>
+                    ) : (
+                      <Route element={<Navigate to="/account/login" />} />
+                    )}
+                  </Routes>
+                  <Routes>
+                    {user !== null && user_type === "ambulance_personnel" ? (
+                      <>
                         <Route
-                          path="requests"
-                          element={<AdministratorRequests />}
-                        />
-                        <Route
-                          path="ambulance"
-                          element={<AdministratorAmbulance />}
-                        />
-                        <Route
-                          path="drivers"
-                          element={<AdministratorDrivers />}
-                        />
-                        <Route
-                          path="trip_tickets"
-                          element={<AdministratorTripTickets />}
-                        />
-                        <Route path="map" element={<ViewMap />} />
-                        <Route
-                          path="reports"
-                          element={<AdministratorReports />}
-                        />
-                      </Route>
-                    </>
-                  ) : (
-                    <Route element={<Navigate to="/account/login" />} />
-                  )}
-                </Routes>
-                <Routes>
-                  {user !== null && user_type === "ambulance_personnel" ? (
-                    <>
-                      <Route
-                        path="ambulance_personnel"
-                        element={<AmbulancePersonnelDashboard />}
-                      >
-                        <Route path="" element={<PersonnelDashboardPanel />} />
-                        <Route path="requests" element={<HandledRequest />} />
-                        <Route
-                          path="pending_requests"
-                          element={<PersonnelAllRequests2 />}
-                        />
-                        <Route
-                          path="trip_tickets"
-                          element={<PersonnelTripTickets />}
-                        />
-                        <Route
-                          path="ambulance"
-                          element={<PersonnelAmbulance />}
-                        />
-                        <Route path="map" element={<ViewMap />} />
-                      </Route>{" "}
-                    </>
-                  ) : (
-                    <Route element={<Navigate to="/account/login" />} />
-                  )}
-                </Routes>
+                          path="ambulance_personnel"
+                          element={<AmbulancePersonnelDashboard />}
+                        >
+                          <Route
+                            path=""
+                            element={<PersonnelDashboardPanel />}
+                          />
+                          <Route path="requests" element={<HandledRequest />} />
+                          <Route
+                            path="pending_requests"
+                            element={<PersonnelAllRequests2 />}
+                          />
+                          <Route
+                            path="trip_tickets"
+                            element={<PersonnelTripTickets />}
+                          />
+                          <Route
+                            path="ambulance"
+                            element={<PersonnelAmbulance />}
+                          />
+                          <Route path="map" element={<ViewMap />} />
+                        </Route>{" "}
+                      </>
+                    ) : (
+                      <Route element={<Navigate to="/account/login" />} />
+                    )}
+                  </Routes>
+                </AmbulanceContext.Provider>
               </ScheduleContext.Provider>
             </React.Fragment>
           </div>
