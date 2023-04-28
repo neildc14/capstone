@@ -16,11 +16,13 @@ import {
   UilFileCheckAlt,
   UilThLarge,
   UilDocumentInfo,
+  UilFileSlash,
 } from "@iconscout/react-unicons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PersonnelGenericRequestCard from "./PersonnelGenericRequestCard";
 import AuthContext from "../../context/AuthContext";
+import AmbulanceContext from "../../context/AmbulanceContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -29,9 +31,11 @@ const PersonnelDashboardPanel = () => {
   const [requestData, setRequestData] = useState([]);
   const [handledRequesData, setHandledRequestData] = useState([]);
   const [ambulanceData, setAmbulanceData] = useState([]);
-  const user = useContext(AuthContext);
 
+  const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
+  const ambulance = useContext(AmbulanceContext);
+  const parsed_ambulance_data = JSON.parse(ambulance);
 
   const navigateToAllRequests = () => {
     navigate("pending_requests");
@@ -134,8 +138,8 @@ const PersonnelDashboardPanel = () => {
       type: "Available",
     },
     {
-      title: "Total Distance Travelled ",
-      total: 0,
+      title: "Assigned Ambulance ",
+      total: parsed_ambulance_data?.license_plate,
       type: "Today",
     },
   ];
@@ -239,8 +243,10 @@ const PersonnelDashboardPanel = () => {
                     alignItems="center"
                     gap={2}
                     color="white"
+                    fontWeight="normal"
                   >
-                    No approved request found.
+                    <UilFileSlash color="white" /> No recent approved request
+                    found.
                   </CardBody>
                 </Card>
               )}
@@ -281,8 +287,10 @@ const PersonnelDashboardPanel = () => {
                     alignItems="center"
                     gap={2}
                     color="white"
+                    fontWeight="normal"
                   >
-                    No pending request found.
+                    <UilFileSlash color="white" /> No recent pending request
+                    found.
                   </CardBody>
                 </Card>
               )}

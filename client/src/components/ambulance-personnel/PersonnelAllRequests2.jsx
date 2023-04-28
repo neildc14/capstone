@@ -21,7 +21,11 @@ import {
   Card,
   CardBody,
 } from "@chakra-ui/react";
-import { UilSearch, UilLayerGroup } from "@iconscout/react-unicons";
+import {
+  UilSearch,
+  UilLayerGroup,
+  UilFileSlash,
+} from "@iconscout/react-unicons";
 import PaginatedItems from "../global/PaginatedItems";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -168,8 +172,10 @@ const PersonnelRequests2 = () => {
                                     alignItems="center"
                                     gap={2}
                                     color="white"
+                                    fontSize="normal"
                                   >
-                                    No pending request found.
+                                    <UilFileSlash color="white" /> No pending
+                                    request found.
                                   </CardBody>
                                 </Card>
                               )}

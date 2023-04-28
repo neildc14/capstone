@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import {
   Heading,
   Flex,
@@ -14,7 +14,7 @@ import {
 import ModalContainer from "../global/ModalContainer";
 import { UilEye, UilCheck } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import AmbulanceContext from "../../context/AmbulanceContext";
@@ -43,7 +43,6 @@ const PersonnelGenericRequestCard = ({
 
   const ambulance = useContext(AmbulanceContext);
   const parsed_ambulance_data = JSON.parse(ambulance);
-  console.log(parsed_ambulance_data);
 
   const dt = DateTime.fromISO(date_time);
   const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
