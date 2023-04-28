@@ -32,6 +32,7 @@ const PersonnelGenericRequestCard = ({
   const [toastStatus, setToastStatus] = useState(null);
   const [ambulanceID, setAmbulanceID] = useState(null);
   const [scheduleID, setScheduleID] = useState(null);
+  const [mutationFunctionType, setMutationFunctionType] = useState("");
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
@@ -73,7 +74,7 @@ const PersonnelGenericRequestCard = ({
     const ambulance_id = localStorage.getItem("ambulance_id");
     setAmbulanceID(JSON.parse(ambulance_id));
   }, []);
-  console.log(scheduleID);
+
   const fetchSchedule = async () => {
     const response = await axios.get(
       `${ENDPOINT}schedule/personnel/${parsed_schedule?._id} `,
@@ -90,8 +91,6 @@ const PersonnelGenericRequestCard = ({
     }
   );
 
-  console.log(data, "SCHEDUIEDEI");
-
   const updateRequest = async (data) => {
     return axios.put(
       `${ENDPOINT}request/requestor/${request_data?._id}`,
@@ -104,6 +103,16 @@ const PersonnelGenericRequestCard = ({
     return axios.post(`${ENDPOINT}ticket/all`, data, config);
   };
 
+  const handleTicket = (data) => {
+    switch (mutationFunctionType) {
+      case "POST":
+        return axios.post(`${ENDPOINT}ticket/all`, data, config);
+        break;
+      case "UPDATE":
+        return axios.post(`${ENDPOINT}ticket/all/${ticket_id}`, data, config);
+    }
+  };
+
   const handleUpdateAmbulanceStatus = async (data) => {
     return axios.put(`${ENDPOINT}ambulance/all/${ambulanceID}`, data, config);
   };
@@ -114,7 +123,6 @@ const PersonnelGenericRequestCard = ({
       console.log(error);
     },
     onSuccess: (response) => {
-      console.log({ request: response });
       toast({
         title: "Request update.",
         description: `Request is marked a ${toastStatus}`,
@@ -134,7 +142,6 @@ const PersonnelGenericRequestCard = ({
       console.log(error);
     },
     onSuccess: (response) => {
-      console.log(response, "AMBULANCE MUTATE");
       queryClient.invalidateQueries(["ambulance"]);
     },
   });
@@ -164,6 +171,7 @@ const PersonnelGenericRequestCard = ({
   const rejectRequest = (e) => {
     e.preventDefault();
     setToastStatus("Rejected");
+    handleTicket(ticket_id);
 
     const body = {
       pickup_location: request_data?.pickup_location,
@@ -185,18 +193,23 @@ const PersonnelGenericRequestCard = ({
     e.preventDefault();
     setToastStatus("Approved");
 
+    const ticketBody = {
+      ambulance_personnel: parsed_user_data?.id,
+      requestor: user_id,
+      request_id: _id,
+      personnel_fullname: parsed_user_data?.fullName,
+      patient_fullname: name,
+      ambulance: ambulanceID,
+      destination: transfer_location,
+    };
+
     if (ticket_id === undefined) {
-      const ticketBody = {
-        ambulance_personnel: parsed_user_data?.id,
-        requestor: user_id,
-        request_id: _id,
-        personnel_fullname: parsed_user_data?.fullName,
-        patient_fullname: name,
-        ambulance: ambulanceID,
-        destination: transfer_location,
-      };
+      setMutationFunctionType("POST");
       ticketMutation.mutate(ticketBody);
-    } else if (ticket_id !== undefined) {
+    } else if (ticket_id) {
+      setMutationFunctionType("UPDATE");
+      ticketMutation.mutate(ticketBody);
+
       const requestBody = {
         pickup_location: request_data?.pickup_location,
         status: "approved",
@@ -216,6 +229,7 @@ const PersonnelGenericRequestCard = ({
     setOpen(!isOpen);
   };
 
+  console.log(mutationFunctionType);
   return (
     <>
       <Card

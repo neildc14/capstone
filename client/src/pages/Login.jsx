@@ -51,6 +51,10 @@ const Login = () => {
     onSuccess: (response) => {
       console.log({ schedule: response }, "RESPONS SCHED");
       localStorage.setItem("schedule", JSON.stringify(response.data));
+
+      let userLoggedIn = localStorage.getItem("user");
+      const parsed_user_data = JSON.parse(userLoggedIn);
+      window.location.href = `/${parsed_user_data.user_type}`;
     },
   });
 
@@ -61,13 +65,9 @@ const Login = () => {
     },
 
     onSuccess: (response) => {
-      let schedule = localStorage.getItem("schedule");
-      if (
-        response?.data.user_type === "ambulance_personnel" &&
-        schedule === null
-      ) {
+      if (response.data.user_type === "ambulance_personnel") {
         scheduleMutation.mutate({
-          scheduled_personnel: response?.data.id,
+          scheduled_personnel: response.data.id,
         });
       }
       toast({
@@ -78,7 +78,6 @@ const Login = () => {
         isClosable: true,
       });
       localStorage.setItem("user", JSON.stringify(response.data));
-      window.location.href = `/${response?.data?.user_type}`;
     },
   });
 
