@@ -12,7 +12,7 @@ import {
   ModalFooter,
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
-import { UilEye } from "@iconscout/react-unicons";
+import { UilEye, UilCheck } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -225,6 +225,21 @@ const PersonnelGenericRequestCard = ({
     setOpen(false);
   };
 
+  const fulfilledRequest = () => {
+    const requestBody = {
+      pickup_location: request_data?.pickup_location,
+      status: "fulfilled",
+      handled_by: parsed_user_data?.id,
+    };
+    requestMutation.mutate(requestBody);
+
+    if (approvedRequestsLength <= 1) {
+      ambulanceMutation.mutate({
+        status: "available",
+      });
+    }
+  };
+
   const handleOpenModal = () => {
     setOpen(!isOpen);
   };
@@ -284,19 +299,37 @@ const PersonnelGenericRequestCard = ({
                 {formattedDate}
               </Text>
             </Heading>
-            <Button
-              size="sm"
-              display="inline-flex"
-              gap={1}
-              width={{ base: "100%", md: "inherit" }}
-              px={6}
-              bgColor="custom.primary"
-              color="white"
-              _hover={{ bgColor: "orange.500" }}
-              onClick={handleOpenModal}
+            <Flex
+              gap={{ base: 2 }}
+              flexDirection={{ base: "column", md: "row" }}
             >
-              <UilEye color="white" /> View
-            </Button>
+              <Button
+                size="sm"
+                display="inline-flex"
+                gap={1}
+                width={{ base: "100%", md: "inherit" }}
+                px={6}
+                bgColor="custom.primary"
+                color="white"
+                _hover={{ bgColor: "orange.500" }}
+                onClick={handleOpenModal}
+              >
+                <UilEye color="white" /> View
+              </Button>
+              <Button
+                size="sm"
+                display="inline-flex"
+                gap={1}
+                width={{ base: "100%", md: "inherit" }}
+                px={6}
+                bgColor="teal.600"
+                color="white"
+                _hover={{ bgColor: "teal.800" }}
+                onClick={fulfilledRequest}
+              >
+                <UilCheck color="white" /> Fulfill
+              </Button>
+            </Flex>
           </Flex>
         </CardBody>
       </Card>
@@ -353,7 +386,7 @@ const PersonnelGenericRequestCard = ({
           {referral_slip && <Image src={referral_slip} alt="referral slip" />}
         </ModalBody>
         <Divider />
-        {request_data?.status !== "fulfilled" && (
+        {request_data?.status !== "" && (
           <ModalFooter>
             <Flex width="100%" justifyContent="space-between">
               <Button
