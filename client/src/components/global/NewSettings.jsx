@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 const NewSettings = () => {
   const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
   const navigate = useNavigate();
 
   const handleLogOut = () => {
@@ -38,7 +39,8 @@ const NewSettings = () => {
         rightIcon={<ChevronDownIcon />}
       >
         <Box display="inline-flex" alignItems="center" gap=".2rem">
-          <UilUserCircle color="#ff7a00" size="24px" /> <Text>@username</Text>
+          <UilUserCircle color="#ff7a00" size="24px" />{" "}
+          <Text>{parsed_user_data?.email}</Text>
         </Box>
       </MenuButton>
       <MenuList>

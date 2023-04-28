@@ -12,7 +12,11 @@ import {
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { UilUserCircle } from "@iconscout/react-unicons";
 
-const PersonnelDesktopSettings = ({ handleLogOut, changeStatusHandler }) => {
+const PersonnelDesktopSettings = ({
+  handleLogOut,
+  changeStatusHandler,
+  parsed_user_data,
+}) => {
   const options = [
     { value: "stand-by", label: "Stand-by" },
     { value: "driving", label: "Driving" },
@@ -31,7 +35,8 @@ const PersonnelDesktopSettings = ({ handleLogOut, changeStatusHandler }) => {
         rightIcon={<ChevronDownIcon />}
       >
         <Box display="inline-flex" alignItems="center" gap=".2rem">
-          <UilUserCircle color="#ff7a00" size="24px" /> <Text>@username</Text>
+          <UilUserCircle color="#ff7a00" size="24px" />{" "}
+          <Text>{parsed_user_data.email}</Text>
         </Box>
       </MenuButton>
       <MenuList>

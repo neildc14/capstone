@@ -122,8 +122,6 @@ const PersonnelHeader = () => {
     });
   };
 
-  console.log(personnelStatus);
-
   const handleLogOut = () => {
     if (user) {
       localStorage.removeItem("user");
@@ -149,11 +147,13 @@ const PersonnelHeader = () => {
             <PersonnelDesktopSettings
               handleLogOut={handleLogOut}
               changeStatusHandler={changeStatusHandler}
+              parsed_user_data={parsed_user_data}
             />
           ) : (
             <PersonnelSettings
               handleLogOut={handleLogOut}
               changeStatusHandler={changeStatusHandler}
+              parsed_user_data={parsed_user_data}
             />
           )}
         </Flex>

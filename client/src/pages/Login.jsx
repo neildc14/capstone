@@ -78,6 +78,9 @@ const Login = () => {
         isClosable: true,
       });
       localStorage.setItem("user", JSON.stringify(response.data));
+      if (response.data.user_type !== "ambulance_personnel") {
+        window.location.href = `/${response.data.user_type}`;
+      }
     },
   });
 
