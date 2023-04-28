@@ -38,10 +38,8 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const PersonnelRequests2 = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [search, setSearch] = useState([]);
-  const [allPendingRequests, setAllPendingRequests] = useState([]);
-  const [allAmbulance, setAllAmbulance] = useState([]);
-  const user = useContext(AuthContext);
 
+  const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
 
   const fetchPendingRequests = useCallback(async () => {
@@ -63,10 +61,6 @@ const PersonnelRequests2 = () => {
       refetchOnWindowFocus: true,
     }
   );
-
-  const memoizedData = useMemo(() => {
-    return data;
-  }, [data]);
 
   let pendingRequests = [];
 
