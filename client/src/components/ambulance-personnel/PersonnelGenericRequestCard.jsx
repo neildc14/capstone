@@ -18,6 +18,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import AmbulanceContext from "../../context/AmbulanceContext";
+import ScheduleContext from "../../context/ScheduleContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -41,9 +42,9 @@ const PersonnelGenericRequestCard = ({
     },
   };
 
-  const ambulance = useContext(AmbulanceContext);
-  const parsed_ambulance_data = JSON.parse(ambulance);
+  const { ambulance } = useContext(ScheduleContext);
 
+  console.log(ambulance, "card");
   const dt = DateTime.fromISO(date_time);
   const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
 
@@ -82,11 +83,7 @@ const PersonnelGenericRequestCard = ({
   };
 
   const handleUpdateAmbulanceStatus = async (data) => {
-    return axios.put(
-      `${ENDPOINT}ambulance/all/${parsed_ambulance_data?._id}`,
-      data,
-      config
-    );
+    return axios.put(`${ENDPOINT}ambulance/all/${ambulance}`, data, config);
   };
 
   const requestMutation = useMutation({

@@ -22,7 +22,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PersonnelGenericRequestCard from "./PersonnelGenericRequestCard";
 import AuthContext from "../../context/AuthContext";
-import AmbulanceContext from "../../context/AmbulanceContext";
+import ScheduleContext from "../../context/ScheduleContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -34,8 +34,8 @@ const PersonnelDashboardPanel = () => {
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
-  const ambulance = useContext(AmbulanceContext);
-  const parsed_ambulance_data = JSON.parse(ambulance);
+
+  const { status, ambulance_plate } = useContext(ScheduleContext);
 
   const navigateToAllRequests = () => {
     navigate("pending_requests");
@@ -139,7 +139,7 @@ const PersonnelDashboardPanel = () => {
     },
     {
       title: "Assigned Ambulance ",
-      total: parsed_ambulance_data?.license_plate,
+      total: ambulance_plate ?? "None",
       type: "Today",
     },
   ];

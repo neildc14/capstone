@@ -25,7 +25,7 @@ import React, { useContext, useState, useEffect } from "react";
 import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAllRequests2";
 import PersonnelAmbulance from "./components/ambulance-personnel/PersonnelAmbulance2";
 import AuthContext from "./context/AuthContext";
-import ScheduleContext from "./context/ScheduleContext";
+import ScheduleContext, { ScheduleProvider } from "./context/ScheduleContext";
 import AmbulanceContext from "./context/AmbulanceContext";
 
 const DashboardContext = React.createContext();
@@ -34,12 +34,13 @@ function App() {
   const queryClient = new QueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [user, setUser] = useState(null);
-  const [schedule, setSchedule] = useState(null);
   const [ambulance, setAmbulance] = useState(null);
-  const navigate = useNavigate();
+
   const toggleDashboard = () => {
     onOpen();
   };
+
+  const { updateScheduleData } = useContext(ScheduleContext);
 
   useEffect(() => {
     let userLoggedIn = localStorage.getItem("user");
@@ -49,16 +50,19 @@ function App() {
       setUser(userLoggedIn);
     }
     if (schedule) {
-      setSchedule(schedule);
+      updateScheduleData({
+        schedule: schedule.status,
+        ambulance: schedule.ambulance,
+        ambulance_plate: schedule.ambulance_plate,
+      });
     }
     if (ambulance) {
       setAmbulance(ambulance);
     }
   }, []);
-  console.log(user, schedule);
+
   const parsed_user_data = JSON.parse(user);
   const user_type = parsed_user_data?.user_type;
-  console.log(user_type);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -105,53 +109,53 @@ function App() {
                 )}
               </Routes>
 
-              <ScheduleContext.Provider value={schedule}>
+              <Routes>
+                {user !== null && user_type === "administrator" ? (
+                  <>
+                    <Route
+                      exact
+                      path="/administrator"
+                      element={<AdministratorDashboard />}
+                    >
+                      <Route
+                        exact
+                        path=""
+                        element={<AdministratorDashboardPanel />}
+                      />
+                      <Route
+                        exact
+                        path="requests"
+                        element={<AdministratorRequests />}
+                      />
+                      <Route
+                        exact
+                        path="ambulance"
+                        element={<AdministratorAmbulance />}
+                      />
+                      <Route
+                        exact
+                        path="drivers"
+                        element={<AdministratorDrivers />}
+                      />
+                      <Route
+                        exact
+                        path="trip_tickets"
+                        element={<AdministratorTripTickets />}
+                      />
+                      <Route exact path="map" element={<ViewMap />} />
+                      <Route
+                        exact
+                        path="reports"
+                        element={<AdministratorReports />}
+                      />
+                    </Route>
+                  </>
+                ) : (
+                  <Route exact element={<Navigate to="/account/login" />} />
+                )}
+              </Routes>
+              <ScheduleProvider>
                 <AmbulanceContext.Provider value={ambulance}>
-                  <Routes>
-                    {user !== null && user_type === "administrator" ? (
-                      <>
-                        <Route
-                          exact
-                          path="/administrator"
-                          element={<AdministratorDashboard />}
-                        >
-                          <Route
-                            exact
-                            path=""
-                            element={<AdministratorDashboardPanel />}
-                          />
-                          <Route
-                            exact
-                            path="requests"
-                            element={<AdministratorRequests />}
-                          />
-                          <Route
-                            exact
-                            path="ambulance"
-                            element={<AdministratorAmbulance />}
-                          />
-                          <Route
-                            exact
-                            path="drivers"
-                            element={<AdministratorDrivers />}
-                          />
-                          <Route
-                            exact
-                            path="trip_tickets"
-                            element={<AdministratorTripTickets />}
-                          />
-                          <Route exact path="map" element={<ViewMap />} />
-                          <Route
-                            exact
-                            path="reports"
-                            element={<AdministratorReports />}
-                          />
-                        </Route>
-                      </>
-                    ) : (
-                      <Route exact element={<Navigate to="/account/login" />} />
-                    )}
-                  </Routes>
                   <Routes>
                     {user !== null && user_type === "ambulance_personnel" ? (
                       <>
@@ -193,7 +197,7 @@ function App() {
                     )}
                   </Routes>
                 </AmbulanceContext.Provider>
-              </ScheduleContext.Provider>
+              </ScheduleProvider>
             </React.Fragment>
           </div>
           <ReactQueryDevtools initialIsOpen={false} />

@@ -9,7 +9,8 @@ import NotifBell from "../components/global/NotifBell";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import ScheduleContext from "../context/ScheduleContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -17,13 +18,13 @@ const PersonnelHeader = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const navigate = useNavigate();
   const toast = useToast();
-  const [personnelStatus, setPersonnelStatus] = useState("");
-  const [schedule, setScheduleID] = useState(null);
-  const [ambulanceID, setAmbulanceID] = useState(undefined);
-  const [ambulancePlate, setAmbulancePlate] = useState(undefined);
+
+  const [schedule, setSchedule] = useState(null);
+  const { ambulance, updateScheduleData } = useContext(ScheduleContext);
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
+
   const config = {
     headers: {
       Authorization: `Bearer ${parsed_user_data?.token}`,
@@ -31,59 +32,19 @@ const PersonnelHeader = () => {
     },
   };
 
-  const headers = {
-    Authorization: `Bearer ${parsed_user_data?.token}`,
-  };
-
-  const fetchAvailableAmbulance = async () => {
-    const response = await axios.get(`${ENDPOINT}ambulance/all`, { headers });
-    return response.data;
-  };
-
-  const { data, error, refetch, isLoading, isFetching } = useQuery(
-    ["ambulance"],
-    fetchAvailableAmbulance,
-    {
-      refetchOnWindowFocus: true,
-      enabled: false,
-    }
-  );
-
-  const filterAmbulance = () => {
-    let available = [];
-    if (Array.isArray(data)) {
-      available = data?.filter(
-        (req) => req.status === "available" && req.assigned === false
-      );
-    }
-
-    return available[0];
-  };
-  const available = filterAmbulance();
-
   useEffect(() => {
     const schedule = localStorage.getItem("schedule");
-    setScheduleID(JSON.parse(schedule));
-  }, [schedule]);
+    setSchedule(JSON.parse(schedule));
+  }, []);
 
-  useEffect(() => {
-    refetch();
-  }, [user]);
-
-  useEffect(() => {
-    let ambulance_id = localStorage.getItem("ambulance_id");
-    let ambulance = localStorage.getItem("ambulance");
-
-    if (
-      ambulance_id === null ||
-      ambulance_id === undefined ||
-      ambulance_id === "undefined" ||
-      ambulance === undefined
-    ) {
-      localStorage.setItem("ambulance_id", JSON.stringify(available?._id));
-      localStorage.setItem("ambulance", JSON.stringify(available));
-    }
-  }, [available]);
+  const updateData = (data) => {
+    updateScheduleData({
+      id: data._id,
+      status: data.status,
+      ambulance: data.ambulance,
+      ambulance_plate: data.ambulance_plate,
+    });
+  };
 
   const updateSchedule = async (data) => {
     const response = await axios.put(
@@ -100,7 +61,7 @@ const PersonnelHeader = () => {
       console.log(error);
     },
     onSuccess: (response) => {
-      console.log(response.data);
+      updateData(response.data);
       const currentSchedule = JSON.parse(localStorage.getItem("schedule"));
 
       const updatedSchedule = {
@@ -111,8 +72,6 @@ const PersonnelHeader = () => {
       };
 
       localStorage.setItem("schedule", JSON.stringify(updatedSchedule));
-      setAmbulanceID(currentSchedule.ambulance);
-      setAmbulancePlate(currentSchedule.ambulance_plate);
 
       toast({
         title: "Schedule update.",
@@ -125,15 +84,18 @@ const PersonnelHeader = () => {
   });
 
   const changeStatusHandler = (e) => {
-    setPersonnelStatus(e.target.value);
     console.log(schedule.ambulance);
     scheduleMutation.mutate({
       status: e.target.value,
-      ambulance: ambulanceID,
+      ambulance: ambulance,
     });
   };
 
   const handleLogOut = () => {
+    scheduleMutation.mutate({
+      status: "off-duty",
+      ambulance: ambulance,
+    });
     if (user) {
       localStorage.removeItem("user");
       localStorage.removeItem("schedule");
@@ -175,4 +137,4 @@ const PersonnelHeader = () => {
   );
 };
 
-export default PersonnelHeader;
+export default React.memo(PersonnelHeader);
