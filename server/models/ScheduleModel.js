@@ -15,7 +15,7 @@ const ScheduleSchema = new Schema(
       required: true,
     },
     ambulance: { type: Schema.Types.ObjectId, ref: "Ambulance" },
-    ambulance_plate:{type:String}
+    ambulance_plate: { type: String },
   },
   { timestamps: true }
 );

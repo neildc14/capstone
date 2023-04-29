@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useContext } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -29,8 +30,20 @@ const DeleteConfirmationModal = ({
   const queryClient = useQueryClient();
   const toast = useToast();
 
+  const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${parsed_user_data?.token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
   const deleteRequest = async () => {
-    const delete_recent_request = await axios.delete(`${ENDPOINT}${URL}/${id}`);
+    const delete_recent_request = await axios.delete(
+      `${ENDPOINT}${URL}/${id}`,
+      config
+    );
     return delete_recent_request;
   };
 
