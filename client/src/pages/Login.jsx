@@ -27,13 +27,7 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const [email, bindEmail] = useInput();
   const [password, bindPassword] = useInput();
-  const [schedule_id, seScheduleID] = useState(null);
   const toast = useToast();
-
-  useEffect(() => {
-    const schedule_id = localStorage.getItem("schedule_id");
-    seScheduleID(JSON.parse(schedule_id));
-  });
 
   const loginnUpUser = (user) => {
     return axios.post(`${ENDPOINT}auth/login`, user);
@@ -49,7 +43,6 @@ const Login = () => {
       console.log(error);
     },
     onSuccess: (response) => {
-      console.log({ schedule: response }, "RESPONS SCHED");
       localStorage.setItem("schedule", JSON.stringify(response.data));
 
       let userLoggedIn = localStorage.getItem("user");

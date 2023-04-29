@@ -1,5 +1,6 @@
 const Schedule = require("../models/ScheduleModel");
 const User = require("../models/UserModel");
+const Ambulance = require("../models/AmbulanceModel");
 const throwError = require("../helpers/createError");
 const validateInstanceMethod = require("../helpers/validateInstanceMethod");
 const isNotValidObjectId = require("../helpers/validateObjectId");
@@ -30,7 +31,6 @@ const getAllSchedule = async (req, res) => {
 /**GET specific schedule */
 const getSchedule = async (req, res) => {
   const { id } = req.params;
-  console.log(id, "SCHED ID");
 
   try {
     let errorMessage = "Invalid ID.";
@@ -79,7 +79,7 @@ const getSchedulePerDriver = async (req, res) => {
 /*POST new schedule */
 const postSchedule = async (req, res) => {
   const { scheduled_personnel, status, ambulance } = req.body;
-  console.log(req.body, "POST");
+
   try {
     let errorMessage = "Scheduled personnel is not defined.";
     isEmpty(scheduled_personnel, errorMessage);
@@ -111,8 +111,8 @@ const postSchedule = async (req, res) => {
 /**UPDATE schedule */
 const putSchedule = async (req, res) => {
   const { id } = req.params;
-  const { scheduled_personnel, status, ambulance } = req.body;
-  console.log(req.body, "SCHED");
+  const { status, ambulance } = req.body;
+
   try {
     let errorMessage = "Invalid ID.";
     if (isNotValidObjectId(id)) {
@@ -124,23 +124,52 @@ const putSchedule = async (req, res) => {
     errorMessage = "No schedule found";
     validateInstanceMethod(schedule);
 
-    // errorMessage = "Scheduled personnel is not defined";
-    // isEmpty(scheduled_personnel, errorMessage);
-
     errorMessage = "Status is not defined";
     isEmpty(status, errorMessage);
 
-    // errorMessage = "Personnel not found.";
-    // if (isNotValidObjectId(scheduled_personnel)) {
-    //   throwError(errorMessage);
-    // }
+    const all_ambulance = await Ambulance.find();
+    const available_ambulances = all_ambulance.filter(
+      (amb) => amb.assigned === false && amb.status === "available"
+    );
+    const available = available_ambulances[0];
 
-    // const personnel = await User.findOne({ _id: scheduled_personnel }).exec();
-    // validateInstanceMethod(personnel, errorMessage);
+    let assigned;
+    switch (status) {
+      case "driving":
+        assigned = true;
+        break;
+      case "stand-by":
+        assigned = true;
+        break;
+      case "off-duty":
+        assigned = false;
+        break;
+    }
+
+    const ambulance_id = ambulance !== undefined ? ambulance : available._id;
+    const assigned_ambulance = await Ambulance.findByIdAndUpdate(
+      ambulance_id,
+      {
+        assigned,
+      },
+      {
+        new: true,
+      }
+    );
+
+    console.log(assigned_ambulance);
 
     const filter = { _id: id };
-    const body = req.body;
-    const updated_schedule = await Schedule.findOneAndUpdate(filter, body);
+    const body = {
+      status,
+      ambulance: assigned_ambulance._id,
+      ambulance_plate: assigned_ambulance.license_plate,
+    };
+    const updated_schedule = await Schedule.findOneAndUpdate(filter, body, {
+      new: true,
+    });
+
+    console.log(updated_schedule, "UPDATED SCHED");
 
     errorMessage = "Failed to update scheduled personnel";
     validateInstanceMethod(updated_schedule, errorMessage);
@@ -177,6 +206,14 @@ const deleteSchedule = async (req, res) => {
   }
 };
 
+const deleteAll = async (req, res) => {
+  await Schedule.deleteMany({});
+  const success = new HTTPResponse(res, 200, {
+    message: "Schedule deleted successfully.",
+  });
+  return success.sendResponse();
+};
+
 module.exports = {
   getAllSchedule,
   getSchedule,
@@ -184,4 +221,5 @@ module.exports = {
   postSchedule,
   putSchedule,
   deleteSchedule,
+  deleteAll,
 };

@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import AdministratorDashboard from "./pages/AdministratorDashboard";
 import AmbulancePersonnelDashboard from "./pages/AmbulancePersonnelDashboard";
 import Login from "./pages/Login";
@@ -36,7 +36,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [schedule, setSchedule] = useState(null);
   const [ambulance, setAmbulance] = useState(null);
-
+  const navigate = useNavigate();
   const toggleDashboard = () => {
     onOpen();
   };

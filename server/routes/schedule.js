@@ -7,6 +7,7 @@ const {
   postSchedule,
   putSchedule,
   deleteSchedule,
+  deleteAll,
 } = require("../controllers/ScheduleController");
 const corsHeaders = require("../middlewares/headers");
 
@@ -16,6 +17,7 @@ router.post("/all_schedule/", corsHeaders, postSchedule);
 router.get("/all_schedule/:id", corsHeaders, getSchedule);
 router.put("/all_schedule/:id", corsHeaders, putSchedule);
 router.delete("/all_schedule/:id", corsHeaders, deleteSchedule);
+router.delete("/all_schedule/", corsHeaders, deleteAll);
 
 router.get("/personnel/:id", corsHeaders, getSchedulePerDriver);
 

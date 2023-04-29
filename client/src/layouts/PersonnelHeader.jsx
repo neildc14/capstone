@@ -19,6 +19,8 @@ const PersonnelHeader = () => {
   const toast = useToast();
   const [personnelStatus, setPersonnelStatus] = useState("");
   const [schedule, setScheduleID] = useState(null);
+  const [ambulanceID, setAmbulanceID] = useState(undefined);
+  const [ambulancePlate, setAmbulancePlate] = useState(undefined);
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
@@ -50,7 +52,9 @@ const PersonnelHeader = () => {
   const filterAmbulance = () => {
     let available = [];
     if (Array.isArray(data)) {
-      available = data?.filter((req) => req.status === "available");
+      available = data?.filter(
+        (req) => req.status === "available" && req.assigned === false
+      );
     }
 
     return available[0];
@@ -60,7 +64,7 @@ const PersonnelHeader = () => {
   useEffect(() => {
     const schedule = localStorage.getItem("schedule");
     setScheduleID(JSON.parse(schedule));
-  }, []);
+  }, [schedule]);
 
   useEffect(() => {
     refetch();
@@ -79,29 +83,15 @@ const PersonnelHeader = () => {
       localStorage.setItem("ambulance_id", JSON.stringify(available?._id));
       localStorage.setItem("ambulance", JSON.stringify(available));
     }
-
-    /*
-    } else if (
-      ambulance_id !== null ||
-      ambulance_id !== "undefined" ||
-      ambulance_id !== undefined ||
-      ambulance !== undefined
-    ) {
-      ambulance_id = localStorage.getItem("ambulance_id");
-      let parsed_ambulance_id = JSON.parse(ambulance_id);
-      let ambulanceId = parsed_ambulance_id
-        ?.replace(/\\/g, "")
-        ?.replace(/"/g, "");
-      localStorage.setItem("ambulance_id", JSON.stringify(ambulanceId));
-    }*/
   }, [available]);
 
   const updateSchedule = async (data) => {
-    return axios.put(
+    const response = await axios.put(
       `${ENDPOINT}schedule/all_schedule/${schedule?._id}`,
       data,
       config
     );
+    return response;
   };
 
   const scheduleMutation = useMutation({
@@ -110,7 +100,20 @@ const PersonnelHeader = () => {
       console.log(error);
     },
     onSuccess: (response) => {
-      localStorage.setItem("schedule", JSON.stringify(response.data));
+      console.log(response.data);
+      const currentSchedule = JSON.parse(localStorage.getItem("schedule"));
+
+      const updatedSchedule = {
+        ...currentSchedule,
+        status: response.data.status,
+        ambulance: response.data.ambulance,
+        ambulance_plate: response.data.ambulance_plate,
+      };
+
+      localStorage.setItem("schedule", JSON.stringify(updatedSchedule));
+      setAmbulanceID(currentSchedule.ambulance);
+      setAmbulancePlate(currentSchedule.ambulance_plate);
+
       toast({
         title: "Schedule update.",
         description: `Schedule is successfully updated`,
@@ -123,9 +126,10 @@ const PersonnelHeader = () => {
 
   const changeStatusHandler = (e) => {
     setPersonnelStatus(e.target.value);
+    console.log(schedule.ambulance);
     scheduleMutation.mutate({
       status: e.target.value,
-      ambulance: available?._id,
+      ambulance: ambulanceID,
     });
   };
 
