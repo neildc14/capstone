@@ -67,102 +67,129 @@ function App() {
           <div className="App">
             <React.Fragment>
               <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/account/login" element={<Login />} />
-                <Route path="/account/signup" element={<SignUp />} />
-                <Route path="map" element={<ViewMap />} />
+                <Route exact path="/" element={<Login />} />
+                <Route exact path="/account/login" element={<Login />} />
+                <Route exact path="/account/signup" element={<SignUp />} />
+                <Route exact path="/map" element={<ViewMap />} />
               </Routes>
 
               <Routes>
                 {user !== null && user_type === "requestor" ? (
                   <>
-                    <Route path="requestor" element={<RequestorDashboard />}>
-                      <Route path="" element={<RequestorDashboardPanel />} />
-                      <Route path="request" element={<RequestForm />} />
+                    <Route
+                      exact
+                      path="/requestor"
+                      element={<RequestorDashboard />}
+                    >
                       <Route
+                        exact
+                        path=""
+                        element={<RequestorDashboardPanel />}
+                      />
+                      <Route exact path="request" element={<RequestForm />} />
+                      <Route
+                        exact
                         path="requests"
                         element={<RequestorAllRequests />}
                       />
                       <Route
+                        exact
                         path="trip_tickets"
                         element={<RequestorTripTickets />}
                       />
-                      <Route path="map" element={<ViewMap />} />
+                      <Route exact path="map" element={<ViewMap />} />
                     </Route>
                   </>
                 ) : (
-                  <Route element={<Navigate to="/account/login" />} />
+                  <Route exact element={<Navigate to="/account/login" />} />
                 )}
               </Routes>
+
               <ScheduleContext.Provider value={schedule}>
                 <AmbulanceContext.Provider value={ambulance}>
                   <Routes>
                     {user !== null && user_type === "administrator" ? (
                       <>
                         <Route
-                          path="administrator"
+                          exact
+                          path="/administrator"
                           element={<AdministratorDashboard />}
                         >
                           <Route
+                            exact
                             path=""
                             element={<AdministratorDashboardPanel />}
                           />
                           <Route
+                            exact
                             path="requests"
                             element={<AdministratorRequests />}
                           />
                           <Route
+                            exact
                             path="ambulance"
                             element={<AdministratorAmbulance />}
                           />
                           <Route
+                            exact
                             path="drivers"
                             element={<AdministratorDrivers />}
                           />
                           <Route
+                            exact
                             path="trip_tickets"
                             element={<AdministratorTripTickets />}
                           />
-                          <Route path="map" element={<ViewMap />} />
+                          <Route exact path="map" element={<ViewMap />} />
                           <Route
+                            exact
                             path="reports"
                             element={<AdministratorReports />}
                           />
                         </Route>
                       </>
                     ) : (
-                      <Route element={<Navigate to="/account/login" />} />
+                      <Route exact element={<Navigate to="/account/login" />} />
                     )}
                   </Routes>
                   <Routes>
                     {user !== null && user_type === "ambulance_personnel" ? (
                       <>
                         <Route
-                          path="ambulance_personnel"
+                          exact
+                          path="/ambulance_personnel"
                           element={<AmbulancePersonnelDashboard />}
                         >
                           <Route
+                            exact
                             path=""
                             element={<PersonnelDashboardPanel />}
                           />
-                          <Route path="requests" element={<HandledRequest />} />
                           <Route
+                            exact
+                            path="requests"
+                            element={<HandledRequest />}
+                          />
+                          <Route
+                            exact
                             path="pending_requests"
                             element={<PersonnelAllRequests2 />}
                           />
                           <Route
+                            exact
                             path="trip_tickets"
                             element={<PersonnelTripTickets />}
                           />
                           <Route
+                            exact
                             path="ambulance"
                             element={<PersonnelAmbulance />}
                           />
-                          <Route path="map" element={<ViewMap />} />
-                        </Route>{" "}
+                          <Route exact path="map" element={<ViewMap />} />
+                        </Route>
                       </>
                     ) : (
-                      <Route element={<Navigate to="/account/login" />} />
+                      <Route exact path="/account/login" element={<Login />} />
                     )}
                   </Routes>
                 </AmbulanceContext.Provider>
