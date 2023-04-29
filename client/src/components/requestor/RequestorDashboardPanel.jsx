@@ -55,7 +55,7 @@ const RequestorDashboardPanel = () => {
       axios.get(`${ENDPOINT}request/requestor`, {
         headers,
       }),
-      axios.get(`${ENDPOINT}ticket`, { headers }),
+      axios.get(`${ENDPOINT}ticket/requestor`, { headers }),
     ]);
 
     return results;
@@ -89,6 +89,8 @@ const RequestorDashboardPanel = () => {
   let approved;
   let fulfilled;
   let rejected;
+
+  console.log(memoizeRequestData);
 
   const totalRequestCounts = () => {
     if (Array.isArray(requestData)) {

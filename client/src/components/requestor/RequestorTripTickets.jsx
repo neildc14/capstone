@@ -32,9 +32,10 @@ const RequestorTripTickets = () => {
     Authorization: `Bearer ${parsed_user_data?.token}`,
   };
 
-
   const fetchTripTickets = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}ticket`, {headers});
+    const response = await axios.get(`${ENDPOINT}ticket/requestor`, {
+      headers,
+    });
     return response.data;
   }, []);
 

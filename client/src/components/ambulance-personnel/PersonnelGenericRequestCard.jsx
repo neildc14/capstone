@@ -17,7 +17,6 @@ import { DateTime } from "luxon";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
-import AmbulanceContext from "../../context/AmbulanceContext";
 import ScheduleContext from "../../context/ScheduleContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
@@ -167,7 +166,7 @@ const PersonnelGenericRequestCard = ({
       request_id: _id,
       personnel_fullname: parsed_user_data?.fullName,
       patient_fullname: name,
-      ambulance: parsed_ambulance_data?._id,
+      ambulance: ambulance,
       destination: transfer_location,
     };
 

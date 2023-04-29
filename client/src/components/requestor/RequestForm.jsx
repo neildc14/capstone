@@ -16,7 +16,7 @@ import {
 import React, { useState, useContext } from "react";
 import { UilFileInfoAlt } from "@iconscout/react-unicons";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import useInput from "../../hooks/useInput";
 import AuthContext from "../../context/AuthContext";
@@ -33,6 +33,7 @@ const RequestForm = () => {
   const [confirmation, setConfirrmation] = useState("");
   const user = useContext(AuthContext);
 
+  const queryClient = useQueryClient();
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -56,7 +57,7 @@ const RequestForm = () => {
 
   const mutation = useMutation({
     mutationFn: makeRequest,
-    onError: (error, variables, context) => {
+    onError: (error) => {
       console.log(error);
     },
     onSuccess: () => {
@@ -67,7 +68,9 @@ const RequestForm = () => {
         duration: 2000,
         isClosable: true,
       });
-
+      queryClient.invalidateQueries(["admin_all_informations"]);
+      queryClient.invalidateQueries(["personnel_all_informations"]);
+      queryClient.invalidateQueries(["ambulance_request"]);
       navigate("/requestor/");
     },
   });
