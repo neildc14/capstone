@@ -47,12 +47,35 @@ const SignUp = () => {
     return axios.post(`${ENDPOINT}auth/signup`, user);
   };
 
+  const postSchedule = (user) => {
+    return axios.post(`${ENDPOINT}schedule/all_schedule`, user);
+  };
+
+  const scheduleMutation = useMutation({
+    mutationFn: postSchedule,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      localStorage.setItem("schedule", JSON.stringify(response.data));
+
+      let userLoggedIn = localStorage.getItem("user");
+      const parsed_user_data = JSON.parse(userLoggedIn);
+      window.location.href = `/${parsed_user_data.user_type}`;
+    },
+  });
+
   const mutation = useMutation({
     mutationFn: signUpUser,
     onError: (error) => {
       console.log(error);
     },
     onSuccess: (response) => {
+      if (response.data.user_type === "ambulance_personnel") {
+        scheduleMutation.mutate({
+          scheduled_personnel: response.data.id,
+        });
+      }
       toast({
         title: "User registered.",
         description: "You have been successfully registered.",
@@ -61,7 +84,9 @@ const SignUp = () => {
         isClosable: true,
       });
       localStorage.setItem("user", JSON.stringify(response.data));
-      window.location.href = `/${response?.data?.user_type}`;
+      if (response.data.user_type !== "ambulance_personnel") {
+        window.location.href = `/${response.data.user_type}`;
+      }
     },
   });
 
