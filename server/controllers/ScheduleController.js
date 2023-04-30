@@ -134,15 +134,19 @@ const putSchedule = async (req, res) => {
     const available = available_ambulances[0];
 
     let assigned;
+    let amb_status;
     switch (status) {
-      case "driving":
-        assigned = true;
-        break;
       case "stand-by":
         assigned = true;
+        amb_status = "available";
+        break;
+      case "driving":
+        assigned = true;
+        amb_status = "travelling";
         break;
       case "off-duty":
         assigned = false;
+        amb_status = "available";
         break;
     }
 
@@ -151,6 +155,7 @@ const putSchedule = async (req, res) => {
       ambulance_id,
       {
         assigned,
+        status:amb_status,
       },
       {
         new: true,

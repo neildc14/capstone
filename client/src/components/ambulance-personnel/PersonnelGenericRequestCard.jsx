@@ -43,7 +43,7 @@ const PersonnelGenericRequestCard = ({
 
   const { ambulance } = useContext(ScheduleContext);
 
-  console.log(ambulance, "card");
+  console.log(ambulance,  "card");
   const dt = DateTime.fromISO(date_time);
   const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
 

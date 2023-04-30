@@ -15,7 +15,7 @@ const requireAuth = require("../middlewares/requireAuth");
 
 
 router.get("/all_schedule/", corsHeaders, getAllSchedule);
-router.post("/all_schedule/", requireAuth,corsHeaders, postSchedule);
+router.post("/all_schedule/", corsHeaders, postSchedule);
 
 
 router.get("/all_schedule/:id", corsHeaders, getSchedule);

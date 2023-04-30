@@ -9,7 +9,7 @@ import NotifBell from "../components/global/NotifBell";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ScheduleContext from "../context/ScheduleContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
@@ -17,6 +17,7 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const PersonnelHeader = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const toast = useToast();
 
   const [schedule, setSchedule] = useState(null);
@@ -80,6 +81,7 @@ const PersonnelHeader = () => {
         duration: 2000,
         isClosable: true,
       });
+      queryClient.invalidateQueries(["ambulance"]);
     },
   });
 
