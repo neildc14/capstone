@@ -41,9 +41,9 @@ const PersonnelGenericRequestCard = ({
     },
   };
 
-  const { ambulance } = useContext(ScheduleContext);
+  const { ambulance, id, updateScheduleData } = useContext(ScheduleContext);
 
-  console.log(ambulance,  "card");
+  console.log(ambulance, "card");
   const dt = DateTime.fromISO(date_time);
   const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
 
@@ -83,6 +83,23 @@ const PersonnelGenericRequestCard = ({
 
   const handleUpdateAmbulanceStatus = async (data) => {
     return axios.put(`${ENDPOINT}ambulance/all/${ambulance}`, data, config);
+  };
+  const updateSchedule = async (data) => {
+    const response = await axios.put(
+      `${ENDPOINT}schedule/all_schedule/${id}`,
+      data,
+      config
+    );
+    return response;
+  };
+
+  const updateData = (data) => {
+    updateScheduleData({
+      id: data._id,
+      status: data.status,
+      ambulance: data.ambulance,
+      ambulance_plate: data.ambulance_plate,
+    });
   };
 
   const requestMutation = useMutation({
@@ -136,6 +153,26 @@ const PersonnelGenericRequestCard = ({
     },
   });
 
+  const scheduleMutation = useMutation({
+    mutationFn: updateSchedule,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      updateData(response.data);
+      const currentSchedule = JSON.parse(localStorage.getItem("schedule"));
+
+      const updatedSchedule = {
+        ...currentSchedule,
+        status: response.data.status,
+        ambulance: response.data.ambulance,
+        ambulance_plate: response.data.ambulance_plate,
+      };
+
+      localStorage.setItem("schedule", JSON.stringify(updatedSchedule));
+    },
+  });
+
   const rejectRequest = (e) => {
     e.preventDefault();
     setToastStatus("Rejected");
@@ -150,6 +187,11 @@ const PersonnelGenericRequestCard = ({
     if (approvedRequestsLength <= 1) {
       ambulanceMutation.mutate({
         status: "available",
+      });
+
+      scheduleMutation.mutate({
+        status: "stand-by",
+        ambulance: ambulance,
       });
     }
 
@@ -178,6 +220,10 @@ const PersonnelGenericRequestCard = ({
       ticketMutation.mutate(ticketBody);
     }
 
+    scheduleMutation.mutate({
+      status: "driving",
+      ambulance: ambulance,
+    });
     setOpen(false);
   };
 
@@ -193,6 +239,11 @@ const PersonnelGenericRequestCard = ({
     if (approvedRequestsLength <= 1) {
       ambulanceMutation.mutate({
         status: "available",
+      });
+
+      scheduleMutation.mutate({
+        status: "stand-by",
+        ambulance: ambulance,
       });
     }
   };
