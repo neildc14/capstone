@@ -10,6 +10,8 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Card,
+  CardBody,
 } from "@chakra-ui/react";
 import { UilLayerGroup } from "@iconscout/react-unicons";
 import DriverCard from "../global/DriverCard";
@@ -220,9 +222,17 @@ const AdministratorDrivers = () => {
                                 />
                               ))}
                             {tab?.counter === 0 && (
-                              <Text fontSize="md" color="orange.500">
-                                No drivers found
-                              </Text>
+                              <Card bgColor="orange.300">
+                                <CardBody
+                                  display="inline-flex"
+                                  alignItems="center"
+                                  gap={2}
+                                  color="white"
+                                  fontSize="normal"
+                                >
+                                  No pending request found.
+                                </CardBody>
+                              </Card>
                             )}
                           </Flex>
                         )}
