@@ -119,14 +119,18 @@ const AdministratorDashboardPanel = () => {
   const pendingRequests = filterPendingRequests();
 
   const filterDriver = useCallback(() => {
+    const today = new Date().toISOString().slice(0, 10);
     let driverOnDuty;
     let driverDriving;
     if (Array.isArray(scheduleData)) {
       driverOnDuty = scheduleData?.filter(
-        (driver) => driver.status === "stand-by"
+        (driver) =>
+          driver.status === "stand-by" &&
+          driver.createdAt.slice(0, 10) === today
       );
       driverDriving = scheduleData?.filter(
-        (driver) => driver.status === "driving"
+        (driver) =>
+          driver.status === "driving" && driver.createdAt.slice(0, 10) === today
       );
     }
     return [driverOnDuty, driverDriving];

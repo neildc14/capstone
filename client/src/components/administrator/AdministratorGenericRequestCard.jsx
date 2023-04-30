@@ -1,4 +1,3 @@
-import React, { useState, useContext } from "react";
 import {
   Heading,
   Flex,
@@ -11,10 +10,11 @@ import {
   Divider,
   ModalFooter,
 } from "@chakra-ui/react";
+import React, { useState, useContext, useCallback } from "react";
 import ModalContainer from "../global/ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 
@@ -27,6 +27,25 @@ const AdministratorGenericRequestCard = ({
 }) => {
   const [isOpen, setOpen] = useState(false);
   const [toastStatus, setToastStatus] = useState(null);
+  const [mutationFunctionType, setMutationFunctionType] = useState("");
+  
+  const dt = DateTime.fromISO(date_time);
+  const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
+
+  const {
+    _id: _id,
+    user_id,
+    first_name,
+    last_name,
+    ticket_id,
+    pickup_location,
+    transfer_location,
+    referral_slip,
+    patient_condition,
+    status,
+  } = request_data || {};
+
+  const name = `${first_name} ${last_name}`;
 
   const toast = useToast();
   const queryClient = useQueryClient();
@@ -39,6 +58,40 @@ const AdministratorGenericRequestCard = ({
       "Content-Type": "application/json",
     },
   };
+  const headers = { Authorization: `Bearer ${parsed_user_data?.token}` };
+
+  const fetchSchedules = async () => {
+    const response = await axios.get(`${ENDPOINT}schedule/all_schedule`, {
+      headers,
+    });
+    return response.data;
+  };
+
+  const { data, isLoading, isFetching, error } = useQuery(
+    ["schedules"],
+    fetchSchedules,
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
+
+  const filterDriver = useCallback(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    let driverOnDuty = [];
+    if (Array.isArray(data)) {
+      driverOnDuty = data?.filter(
+        (driver) =>
+          driver.status === "stand-by" &&
+          driver.createdAt.slice(0, 10) === today
+      );
+    }
+
+    return driverOnDuty[0];
+  }, [data]);
+
+  const driverOnDuty = filterDriver();
+  console.log(driverOnDuty);
+
   const updateRequest = (data) => {
     return axios.put(
       `${ENDPOINT}request/requestor/${request_data?._id}`,
@@ -47,7 +100,28 @@ const AdministratorGenericRequestCard = ({
     );
   };
 
-  const mutation = useMutation({
+  const handleTicket = (data) => {
+    switch (mutationFunctionType) {
+      case "POST":
+        return axios.post(`${ENDPOINT}ticket/all`, data, config);
+      case "UPDATE":
+        return axios.put(`${ENDPOINT}ticket/all/${ticket_id}`, data, config);
+    }
+  };
+
+  const handleUpdateAmbulanceStatus = async (data) => {
+    return axios.put(`${ENDPOINT}ambulance/all/${driverOnDuty.ambulance}`, data, config);
+  };
+  const updateSchedule = async (data) => {
+    const response = await axios.put(
+      `${ENDPOINT}schedule/all_schedule/${driverOnDuty._id}`,
+      data,
+      config
+    );
+    return response;
+  };
+
+  const requestMutation = useMutation({
     mutationFn: updateRequest,
     onError: (error) => {
       console.log(error);
@@ -64,51 +138,109 @@ const AdministratorGenericRequestCard = ({
     },
   });
 
+  const ambulanceMutation = useMutation({
+    mutationFn: handleUpdateAmbulanceStatus,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      queryClient.invalidateQueries(["ambulance"]);
+    },
+  });
+
+  const ticketMutation = useMutation({
+    mutationFn: handleTicket,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      if (response) {
+        const requestBody = {
+          pickup_location: request_data?.pickup_location,
+          status: "approved",
+          handled_by: parsed_user_data?.id,
+          ticket_id: response.data._id,
+        };
+        requestMutation.mutate(requestBody);
+
+        ambulanceMutation.mutate({
+          status: "travelling",
+        });
+      }
+    },
+  });
+
+  const scheduleMutation = useMutation({
+    mutationFn: updateSchedule,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {},
+  });
+
   const rejectRequest = (e) => {
     e.preventDefault();
+    if (driverOnDuty?.length === 0) {
+      alert("No driver on duty found");
+      return;
+    }
     setToastStatus("Rejected");
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "rejected",
-      handled_by: parsed_user_data?.id,
+      handled_by: driverOnDuty._id,
     };
-    mutation.mutate(body);
+    requestMutation.mutate(body);
+
+    if (approvedRequestsLength <= 1) {
+      ambulanceMutation.mutate({
+        status: "available",
+      });
+
+      scheduleMutation.mutate({
+        status: "stand-by",
+        ambulance: driverOnDuty.ambulance,
+      });
+    }
     setOpen(false);
   };
 
   const approveRequest = (e) => {
     e.preventDefault();
+    if (driverOnDuty?.length === 0) {
+      alert("No driver on duty found");
+      return;
+    }
     setToastStatus("Approved");
 
-    const body = {
-      pickup_location: request_data?.pickup_location,
-      status: "approved",
-      handled_by: parsed_user_data?.id,
+    const ticketBody = {
+      ambulance_personnel: parsed_user_data?.id,
+      requestor: user_id,
+      request_id: _id,
+      personnel_fullname: driverOnDuty.scheduled_personnel.fullName,
+      patient_fullname: name,
+      ambulance: driverOnDuty.ambulance,
+      destination: transfer_location,
     };
 
-    mutation.mutate(body);
+    if (ticket_id === undefined || ticket_id === null) {
+      setMutationFunctionType("POST");
+      ticketMutation.mutate(ticketBody);
+    } else if (ticket_id !== undefined || ticket_id !== null) {
+      setMutationFunctionType("UPDATE");
+      ticketMutation.mutate(ticketBody);
+    }
+
+    scheduleMutation.mutate({
+      status: "driving",
+      ambulance: driverOnDuty.ambulance,
+    });
     setOpen(false);
   };
 
   const handleOpenModal = () => {
     setOpen(!isOpen);
   };
-
-  const dt = DateTime.fromISO(date_time);
-  const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
-
-  const {
-    _id: _id,
-    first_name,
-    last_name,
-    pickup_location,
-    transfer_location,
-    referral_slip,
-    patient_condition,
-    status,
-  } = request_data || {};
-
-  const name = `${first_name} ${last_name}`;
 
   return (
     <>
