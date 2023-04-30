@@ -27,7 +27,6 @@ const AdministratorDrivers = () => {
   const [nonAssignedDrivers, setNonAssignedDrivers] = useState([]);
   const [search, setSearch] = useState([]);
 
-  console.log({ search });
   const stand_by = [];
   const driving = [];
   const off_duty = [];
@@ -35,7 +34,7 @@ const AdministratorDrivers = () => {
   const fetchDetails = useCallback(async () => {
     const results = await Promise.allSettled([
       axios.get(`${ENDPOINT}auth/users/drivers`),
-      axios.get(`${ENDPOINT}schedule`),
+      axios.get(`${ENDPOINT}schedule/all_schedule`),
     ]);
 
     return results;

@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo, useContext } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useContext,
+  Suspense,
+} from "react";
 import {
   Box,
   Divider,
@@ -12,11 +18,14 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 import { UilLayerGroup } from "@iconscout/react-unicons";
-import AmbulanceCard from "../global/AmbulanceCard";
+// import AmbulanceCard from "../global/AmbulanceCard";
 import PaginatedItems from "../global/PaginatedItems";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import SearchBar from "../global/SearchBar";
+import AuthContext from "../../context/AuthContext";
+
+const AmbulanceCard = React.lazy(() => import("../global/AmbulanceCard"));
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -24,8 +33,14 @@ const AdministratorAmbulance = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [search, setSearch] = useState([]);
 
+  const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
+  const headers = {
+    Authorization: `Bearer ${parsed_user_data?.token}`,
+  };
+
   const fetchAllAmbulance = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}ambulance/all`);
+    const response = await axios.get(`${ENDPOINT}ambulance/all`, { headers });
     return response.data;
   }, []);
 
@@ -156,12 +171,14 @@ const AdministratorAmbulance = () => {
                             <Flex flexDirection="column" gap={2}>
                               {currentItems &&
                                 currentItems.map((item) => (
-                                  <AmbulanceCard
-                                    key={item._id}
-                                    borderRadius="sm"
-                                    ambulance_data={item}
-                                    license_plate={item?.license_plate}
-                                  />
+                                  <Suspense>
+                                    <AmbulanceCard
+                                      key={item._id}
+                                      borderRadius="sm"
+                                      ambulance_data={item}
+                                      license_plate={item?.license_plate}
+                                    />
+                                  </Suspense>
                                 ))}
 
                               {tab?.counter === 0 && (

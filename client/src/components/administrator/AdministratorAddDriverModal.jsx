@@ -57,8 +57,6 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
     },
   });
 
-  console.log({ validationErrors });
-
   const handleSubmit = (e) => {
     e.preventDefault();
 

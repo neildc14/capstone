@@ -45,7 +45,6 @@ const AmbulanceCard = ({
       "Content-Type": "application/json",
     },
   };
-  console.log(config, "CONFIG");
 
   const handleMutationFunctionType = (data) => {
     let axiosMethod;

@@ -54,9 +54,9 @@ const PersonnelTripTicketCard = ({
               fontSize="md"
               fontWeight="semibold"
             >
-              Ticket ID:{" "}
+              Patient Name:{" "}
               <Text as="span" fontWeight="normal">
-                {trip_ticket?._id}
+                {trip_ticket?.patient_fullname}
               </Text>
             </Heading>
             <Button
@@ -111,7 +111,7 @@ const PersonnelTripTicketCard = ({
                 Driver:
               </Heading>
               <Text as="span" fontWeight="normal" textTransform="capitalize">
-                {trip_ticket?.personnel_fullmame}
+                {trip_ticket?.ambulance_personnel.fullName}
               </Text>
             </VStack>
             <VStack align="left" spacing={1} pb={2}>

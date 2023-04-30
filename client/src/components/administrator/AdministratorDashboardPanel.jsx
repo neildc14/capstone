@@ -1,4 +1,11 @@
-import React, { useState, useCallback, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useContext,
+  useMemo,
+  Suspense,
+} from "react";
 import {
   Box,
   Heading,
@@ -9,17 +16,32 @@ import {
   Grid,
   GridItem,
   useMediaQuery,
+  Card,
+  CardBody,
+  Skeleton,
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
-import { UilFileCheckAlt, UilThLarge, UilPlus } from "@iconscout/react-unicons";
+import {
+  UilFileCheckAlt,
+  UilThLarge,
+  UilPlus,
+  UilFileSlash,
+} from "@iconscout/react-unicons";
 import PaginatedItems from "../global/PaginatedItems";
-import AdministratorPendingRequestCard from "./AdministratorPendingRequestCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import AdministratorAddDriverModal from "./AdministratorAddDriverModal";
-import AdministratorAddAmbulanceModal from "./AdministratorAddAmbulanceModal";
 import AuthContext from "../../context/AuthContext";
+
+const AdministratorAddDriverModal = React.lazy(() =>
+  import("./AdministratorAddDriverModal")
+);
+const AdministratorAddAmbulanceModal = React.lazy(() =>
+  import("./AdministratorAddAmbulanceModal")
+);
+const AdministratorPendingRequestCard = React.lazy(() =>
+  import("./AdministratorPendingRequestCard")
+);
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -60,7 +82,7 @@ const AdministratorDashboardPanel = () => {
     [queryKey],
     fetchDetails,
     {
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -76,27 +98,29 @@ const AdministratorDashboardPanel = () => {
     setDisplayMobileAddbuttons(true);
   }, []);
 
-  let available;
-  const totalAmbulanceAvailable = () => {
+  const totalAmbulanceAvailable = useCallback(() => {
+    let available;
     if (Array.isArray(ambulanceData)) {
       available = ambulanceData?.filter(
         (ambulance) => ambulance.status === "available"
       ).length;
     }
-  };
-  totalAmbulanceAvailable();
+    return available;
+  }, [ambulanceData]);
+  const available = totalAmbulanceAvailable();
 
-  let pendingRequests;
-  const filterPendingRequests = () => {
+  const filterPendingRequests = useCallback(() => {
+    let pendingRequests;
     if (Array.isArray(requestData)) {
       pendingRequests = requestData?.filter((req) => req.status === "pending");
     }
-  };
-  filterPendingRequests();
+    return pendingRequests;
+  }, [requestData]);
+  const pendingRequests = filterPendingRequests();
 
-  let driverOnDuty;
-  let driverDriving;
-  const filterDriver = () => {
+  const filterDriver = useCallback(() => {
+    let driverOnDuty;
+    let driverDriving;
     if (Array.isArray(scheduleData)) {
       driverOnDuty = scheduleData?.filter(
         (driver) => driver.status === "stand-by"
@@ -105,11 +129,24 @@ const AdministratorDashboardPanel = () => {
         (driver) => driver.status === "driving"
       );
     }
-  };
-  filterDriver();
+    return [driverOnDuty, driverDriving];
+  }, [scheduleData]);
+  const [driverOnDuty, driverDriving] = filterDriver();
+
+  const requestToday = useCallback(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    const filteredData = requestData?.filter(
+      (item) => item.createdAt.slice(0, 10) === today
+    );
+
+    const requestsLength = filteredData?.length;
+    return requestsLength;
+  }, [requestData]);
+
+  const requestsLength = requestToday();
 
   const panel_card_data = [
-    { title: "Total Requests", total: requestData?.length ?? 0, type: "Today" },
+    { title: "Total Requests", total: requestsLength ?? 0, type: "Today" },
     {
       title: "Total Ambulance",
       total: available ?? 0,
@@ -129,7 +166,6 @@ const AdministratorDashboardPanel = () => {
 
   const items = pendingRequests?.reverse();
 
-  console.log({ pendingRequests });
   const handleOpenAddDriverModal = () => {
     setOpenAddDriverModal(!isOpenAddDriverModal);
   };
@@ -288,44 +324,58 @@ const AdministratorDashboardPanel = () => {
                 <Divider />
               </Box>
               <Box px={4} py={4}>
-                {!error ||
-                  (pendingRequests !== undefined && (
-                    <PaginatedItems itemsPerPage={4} items={items}>
-                      {(currentItems) => (
-                        <Flex flexDirection="column" gap={2}>
-                          {currentItems &&
-                            currentItems.map((item) => (
+                {!error && (
+                  <PaginatedItems itemsPerPage={4} items={items}>
+                    {(currentItems) => (
+                      <Flex flexDirection="column" gap={2}>
+                        {currentItems &&
+                          currentItems.map((item) => (
+                            <Suspense>
                               <AdministratorPendingRequestCard
                                 key={item._id}
                                 request_data={item}
                                 bgColor="white"
                                 borderRadius="sm"
                               />
-                            ))}
-                        </Flex>
-                      )}
-                    </PaginatedItems>
-                  ))}
-                {pendingRequests === undefined ||
-                  (pendingRequests?.length === 0 && (
-                    <Text textAlign="center" color="orange.500">
-                      No pending request for now.
-                    </Text>
-                  ))}
+                            </Suspense>
+                          ))}
+                      </Flex>
+                    )}
+                  </PaginatedItems>
+                )}
+                {pendingRequests === undefined &&
+                  !isLoading &&
+                  pendingRequests?.length === 0 && (
+                    <Card bgColor="orange.300">
+                      <CardBody
+                        display="inline-flex"
+                        alignItems="center"
+                        gap={2}
+                        color="white"
+                        fontSize="normal"
+                      >
+                        <UilFileSlash color="white" /> No pending request found.
+                      </CardBody>
+                    </Card> 
+                  )}
               </Box>
             </Box>
           </Box>
         </Flex>
       </Box>
 
-      <AdministratorAddDriverModal
-        handleOpenModal={handleOpenAddDriverModal}
-        isOpen={isOpenAddDriverModal}
-      />
-      <AdministratorAddAmbulanceModal
-        handleOpenModal={handleOpenAddAmbulanceModal}
-        isOpen={isOpenAddAmbulanceModal}
-      />
+      <Suspense>
+        <AdministratorAddDriverModal
+          handleOpenModal={handleOpenAddDriverModal}
+          isOpen={isOpenAddDriverModal}
+        />
+      </Suspense>
+      <Suspense>
+        <AdministratorAddAmbulanceModal
+          handleOpenModal={handleOpenAddAmbulanceModal}
+          isOpen={isOpenAddAmbulanceModal}
+        />
+      </Suspense>
     </>
   );
 };
