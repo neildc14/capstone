@@ -71,7 +71,7 @@ const AdministratorDashboardPanel = () => {
       axios.get(`${ENDPOINT}request/all`, { headers }),
       axios.get(`${ENDPOINT}ticket`, { headers }),
       axios.get(`${ENDPOINT}ambulance/all`, { headers }),
-      axios.get(`${ENDPOINT}schedule`, { headers }),
+      axios.get(`${ENDPOINT}schedule/all_schedule`, { headers }),
     ]);
 
     return results;
@@ -343,21 +343,19 @@ const AdministratorDashboardPanel = () => {
                     )}
                   </PaginatedItems>
                 )}
-                {pendingRequests === undefined &&
-                  !isLoading &&
-                  pendingRequests?.length === 0 && (
-                    <Card bgColor="orange.300">
-                      <CardBody
-                        display="inline-flex"
-                        alignItems="center"
-                        gap={2}
-                        color="white"
-                        fontSize="normal"
-                      >
-                        <UilFileSlash color="white" /> No pending request found.
-                      </CardBody>
-                    </Card> 
-                  )}
+                {!isLoading && pendingRequests?.length === 0 && (
+                  <Card bgColor="orange.300">
+                    <CardBody
+                      display="inline-flex"
+                      alignItems="center"
+                      gap={2}
+                      color="white"
+                      fontSize="normal"
+                    >
+                      <UilFileSlash color="white" /> No pending request found.
+                    </CardBody>
+                  </Card>
+                )}
               </Box>
             </Box>
           </Box>
