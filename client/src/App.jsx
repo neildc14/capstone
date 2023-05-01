@@ -1,23 +1,19 @@
 import React, { useContext, useState, useEffect, lazy, Suspense } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Spinner, Box } from "@chakra-ui/react";
+import { Box, Image, Text } from "@chakra-ui/react";
 import AuthContext from "./context/AuthContext";
 import ScheduleContext, { ScheduleProvider } from "./context/ScheduleContext";
 import AmbulanceContext from "./context/AmbulanceContext";
+import ambulanceIcon from "./assets/icons/ambulance.png";
 
-// import AdministratorDashboard from "./pages/AdministratorDashboard";
-// import AmbulancePersonnelDashboard from "./pages/AmbulancePersonnelDashboard";
 import Login from "./pages/Login";
-// import RequestorDashboard from "./pages/RequestorDashboard";
 import SignUp from "./pages/SignUp";
 import RequestForm from "./components/requestor/RequestForm";
 import RequestorAllRequests from "./components/requestor/RequestorAllRequests";
-// import ViewMap from "./components/global/ViewMap";
 import RequestorDashboardPanel from "./components/requestor/RequestorDashboardPanel";
-
 import PersonnelDashboardPanel from "./components/ambulance-personnel/PersonnelDashboardPanel";
 import HandledRequest from "./components/ambulance-personnel/PersonnelHandledRequest";
 import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTripTickets";
@@ -41,8 +37,9 @@ const AmbulancePersonnelDashboard = lazy(() =>
 const RequestorDashboard = lazy(() => import("./pages/RequestorDashboard"));
 
 const DashboardContext = React.createContext();
+export const useDashboardContext = () => useContext(DashboardContext);
 
-const FallbackSpinner = () => {
+const FallbackLoading = () => {
   return (
     <Box
       height="50vh"
@@ -50,8 +47,8 @@ const FallbackSpinner = () => {
       justifyContent="center"
       alignItems="center"
     >
-      Loading...
-      <Spinner size="md" color="gray.500" />
+      <Text fontSize={{ base: "2xl" }}> Loading...</Text>
+      <Image src={ambulanceIcon} boxSize={10} />
     </Box>
   );
 };
@@ -104,7 +101,7 @@ function App() {
                   exact
                   path="/map"
                   element={
-                    <Suspense fallback={<FallbackSpinner />}>
+                    <Suspense fallback={<FallbackLoading />}>
                       <ViewMap />
                     </Suspense>
                   }
@@ -118,7 +115,7 @@ function App() {
                       exact
                       path="/requestor"
                       element={
-                        <Suspense fallback={<FallbackSpinner />}>
+                        <Suspense fallback={<FallbackLoading />}>
                           <RequestorDashboard />
                         </Suspense>
                       }
@@ -154,7 +151,7 @@ function App() {
                       exact
                       path="/administrator"
                       element={
-                        <Suspense fallback={<FallbackSpinner />}>
+                        <Suspense fallback={<FallbackLoading />}>
                           <AdministratorDashboard />
                         </Suspense>
                       }
@@ -205,7 +202,7 @@ function App() {
                           exact
                           path="/ambulance_personnel"
                           element={
-                            <Suspense fallback={<FallbackSpinner />}>
+                            <Suspense fallback={<FallbackLoading />}>
                               <AmbulancePersonnelDashboard />
                             </Suspense>
                           }
@@ -254,4 +251,3 @@ function App() {
 }
 
 export default App;
-export const useDashboardContext = () => useContext(DashboardContext);
