@@ -3,7 +3,7 @@ import React, {
   useCallback,
   useEffect,
   useContext,
-  useMemo,
+
   Suspense,
 } from "react";
 import {
@@ -18,7 +18,7 @@ import {
   useMediaQuery,
   Card,
   CardBody,
-  Skeleton,
+
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +29,7 @@ import {
   UilFileSlash,
 } from "@iconscout/react-unicons";
 import PaginatedItems from "../global/PaginatedItems";
+import AreaChart from "../global/AreaChart";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
@@ -364,6 +365,20 @@ const AdministratorDashboardPanel = () => {
             </Box>
           </Box>
         </Flex>
+      </Box>
+      <Box as="section" my={10} px={4}>
+        <Heading
+          as="h2"
+          display="inline-flex"
+          gap={2}
+          py={2}
+          fontSize="xl"
+          fontWeight="semibold"
+          color="blackAlpha"
+        >
+          Weekly Requests Overview
+        </Heading>
+        <AreaChart data={requestData} />
       </Box>
 
       <Suspense>

@@ -44,13 +44,17 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`USER CONNECTED ${socket.id}`);
 
-  socket.on("join_map", (data) => {
-    socket.join(data);
+  socket.on("join_trip_ticket", (data) => {
+    socket.join(data.tripTicketId);
   });
+
+  if (socket.handshake.query.role === "ambulance") {
+    socket.join("admin-room");
+  }
 
   socket.on("send_location", (data) => {
     console.log(data.toString);
-    socket.to(data.map).emit("receive_location", data);
+    socket.to(data.tripTicketId).emit("receive_location", data);
   });
 });
 

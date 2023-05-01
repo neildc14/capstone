@@ -16,7 +16,7 @@ const RequestSchema = new Schema(
     status: {
       type: String,
       default: "pending",
-      enum: ["pending", "approved", "fulfilled"],
+      enum: ["pending", "approved", "fulfilled", "rejected"],
     },
     patient_condition: { type: String },
     referral_slip: { data: Buffer, contentType: String },
