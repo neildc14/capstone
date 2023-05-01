@@ -16,13 +16,13 @@ export default defineConfig({
           leaflet: ["leaflet", "react-leaflet"],
           other: [
             "axios",
-            "jotai",
             "luxon",
             "prop-types",
             "react-dotenv",
             "react-paginate",
             "react-router-dom",
             "react-table",
+            "recharts"
           ],
         },
       },

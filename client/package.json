@@ -30,8 +30,7 @@
     "react-paginate": "^8.1.5",
     "react-router-dom": "^6.8.1",
     "react-table": "^7.8.0",
-    "recharts": "^2.5.0",
-    "zustand": "^4.3.7"
+    "recharts": "^2.5.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
