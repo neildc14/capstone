@@ -179,12 +179,6 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
               {user_type}
             </Text>
           </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Address:
-            <Text as="span" ps={2} fontWeight="normal">
-              {address}
-            </Text>
-          </Heading>
         </ModalBody>
       </ModalContainer>
 

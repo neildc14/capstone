@@ -230,7 +230,7 @@ const AdministratorDrivers = () => {
                                   color="white"
                                   fontSize="normal"
                                 >
-                                  No pending request found.
+                                  No drivers found.
                                 </CardBody>
                               </Card>
                             )}

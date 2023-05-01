@@ -10,8 +10,10 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Card,
+  CardBody,
 } from "@chakra-ui/react";
-import { UilLayerGroup } from "@iconscout/react-unicons";
+import { UilLayerGroup, UilFileSlash } from "@iconscout/react-unicons";
 import PaginatedItems from "../global/PaginatedItems";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -185,9 +187,18 @@ const AdministratorRequests = () => {
                                   />
                                 ))}
                               {tab?.counter === 0 && (
-                                <Text fontSize="md" color="orange.500">
-                                  No requests found
-                                </Text>
+                                <Card bgColor="orange.300">
+                                  <CardBody
+                                    display="inline-flex"
+                                    alignItems="center"
+                                    gap={2}
+                                    color="white"
+                                    fontSize="normal"
+                                  >
+                                    <UilFileSlash color="white" /> No request
+                                    found.
+                                  </CardBody>
+                                </Card>
                               )}
                             </Flex>
                           )}
@@ -208,7 +219,7 @@ const AdministratorRequests = () => {
                       {currentItems !== undefined &&
                         currentItems.map((item, i) => (
                           <AdministratorGenericRequestCard
-                            request_data={item} 
+                            request_data={item}
                             key={item?._id}
                             borderRadius="sm"
                             name={`${item?.first_name} ${item?.last_name}`}

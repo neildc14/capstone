@@ -16,9 +16,10 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Card,
+  CardBody,
 } from "@chakra-ui/react";
 import { UilLayerGroup } from "@iconscout/react-unicons";
-// import AmbulanceCard from "../global/AmbulanceCard";
 import PaginatedItems from "../global/PaginatedItems";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -182,9 +183,17 @@ const AdministratorAmbulance = () => {
                                 ))}
 
                               {tab?.counter === 0 && (
-                                <Text fontSize="md" color="orange.500">
-                                  No ambulance found
-                                </Text>
+                                <Card bgColor="orange.300">
+                                  <CardBody
+                                    display="inline-flex"
+                                    alignItems="center"
+                                    gap={2}
+                                    color="white"
+                                    fontSize="normal"
+                                  >
+                                    No ambulance found.
+                                  </CardBody>
+                                </Card>
                               )}
                             </Flex>
                           )}
