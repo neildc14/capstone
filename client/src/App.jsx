@@ -1,15 +1,23 @@
+import React, { useContext, useState, useEffect, lazy, Suspense } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import AdministratorDashboard from "./pages/AdministratorDashboard";
-import AmbulancePersonnelDashboard from "./pages/AmbulancePersonnelDashboard";
+import { useDisclosure } from "@chakra-ui/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Spinner, Box } from "@chakra-ui/react";
+import AuthContext from "./context/AuthContext";
+import ScheduleContext, { ScheduleProvider } from "./context/ScheduleContext";
+import AmbulanceContext from "./context/AmbulanceContext";
+
+// import AdministratorDashboard from "./pages/AdministratorDashboard";
+// import AmbulancePersonnelDashboard from "./pages/AmbulancePersonnelDashboard";
 import Login from "./pages/Login";
-import RequestorDashboard from "./pages/RequestorDashboard";
+// import RequestorDashboard from "./pages/RequestorDashboard";
 import SignUp from "./pages/SignUp";
 import RequestForm from "./components/requestor/RequestForm";
 import RequestorAllRequests from "./components/requestor/RequestorAllRequests";
-import ViewMap from "./components/global/ViewMap";
+// import ViewMap from "./components/global/ViewMap";
 import RequestorDashboardPanel from "./components/requestor/RequestorDashboardPanel";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import PersonnelDashboardPanel from "./components/ambulance-personnel/PersonnelDashboardPanel";
 import HandledRequest from "./components/ambulance-personnel/PersonnelHandledRequest";
 import PersonnelTripTickets from "./components/ambulance-personnel/PersonnelTripTickets";
@@ -20,15 +28,33 @@ import AdministratorAmbulance from "./components/administrator/AdministratorAmbu
 import AdministratorDrivers from "./components/administrator/AdministratorDrivers";
 import AdministratorDashboardPanel from "./components/administrator/AdministratorDashboardPanel";
 import AdministratorReports from "./components/administrator/AdministratorReports";
-import { useDisclosure } from "@chakra-ui/react";
-import React, { useContext, useState, useEffect } from "react";
 import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAllRequests2";
 import PersonnelAmbulance from "./components/ambulance-personnel/PersonnelAmbulance2";
-import AuthContext from "./context/AuthContext";
-import ScheduleContext, { ScheduleProvider } from "./context/ScheduleContext";
-import AmbulanceContext from "./context/AmbulanceContext";
+
+const ViewMap = lazy(() => import("./components/global/ViewMap"));
+const AdministratorDashboard = lazy(() =>
+  import("./pages/AdministratorDashboard")
+);
+const AmbulancePersonnelDashboard = lazy(() =>
+  import("./pages/AmbulancePersonnelDashboard")
+);
+const RequestorDashboard = lazy(() => import("./pages/RequestorDashboard"));
 
 const DashboardContext = React.createContext();
+
+const FallbackSpinner = () => {
+  return (
+    <Box
+      height="50vh"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
+      Loading...
+      <Spinner size="md" color="gray.500" />
+    </Box>
+  );
+};
 
 function App() {
   const queryClient = new QueryClient();
@@ -74,7 +100,15 @@ function App() {
                 <Route exact path="/" element={<Login />} />
                 <Route exact path="/account/login" element={<Login />} />
                 <Route exact path="/account/signup" element={<SignUp />} />
-                <Route exact path="/map" element={<ViewMap />} />
+                <Route
+                  exact
+                  path="/map"
+                  element={
+                    <Suspense fallback={<FallbackSpinner />}>
+                      <ViewMap />
+                    </Suspense>
+                  }
+                />
               </Routes>
 
               <Routes>
@@ -83,7 +117,11 @@ function App() {
                     <Route
                       exact
                       path="/requestor"
-                      element={<RequestorDashboard />}
+                      element={
+                        <Suspense fallback={<FallbackSpinner />}>
+                          <RequestorDashboard />
+                        </Suspense>
+                      }
                     >
                       <Route
                         exact
@@ -115,7 +153,11 @@ function App() {
                     <Route
                       exact
                       path="/administrator"
-                      element={<AdministratorDashboard />}
+                      element={
+                        <Suspense fallback={<FallbackSpinner />}>
+                          <AdministratorDashboard />
+                        </Suspense>
+                      }
                     >
                       <Route
                         exact
@@ -162,7 +204,11 @@ function App() {
                         <Route
                           exact
                           path="/ambulance_personnel"
-                          element={<AmbulancePersonnelDashboard />}
+                          element={
+                            <Suspense fallback={<FallbackSpinner />}>
+                              <AmbulancePersonnelDashboard />
+                            </Suspense>
+                          }
                         >
                           <Route
                             exact
