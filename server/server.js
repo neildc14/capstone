@@ -48,7 +48,10 @@ io.on("connection", (socket) => {
     socket.join(data.tripTicketId);
   });
 
-  if (socket.handshake.query.role === "ambulance") {
+  if (
+    socket.handshake.query.role === "personnel" ||
+    socket.handshake.query.role === "requestor"
+  ) {
     socket.join("admin-room");
   }
 

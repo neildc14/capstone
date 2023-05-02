@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useEffect,
   useContext,
-
   Suspense,
 } from "react";
 import {
@@ -18,7 +17,6 @@ import {
   useMediaQuery,
   Card,
   CardBody,
-
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
@@ -140,10 +138,15 @@ const AdministratorDashboardPanel = () => {
 
   const requestToday = useCallback(() => {
     const today = new Date().toISOString().slice(0, 10);
+    const startOfDay = new Date(today);
+    const endOfDay = new Date(today);
+    startOfDay.setHours(0, 0, 0, 0);
+    endOfDay.setHours(23, 59, 59, 999);
     const filteredData = requestData?.filter(
-      (item) => item.createdAt.slice(0, 10) === today
+      (item) =>
+        item.createdAt >= startOfDay.toISOString() &&
+        item.createdAt <= endOfDay.toISOString()
     );
-
     const requestsLength = filteredData?.length;
     return requestsLength;
   }, [requestData]);
@@ -366,7 +369,12 @@ const AdministratorDashboardPanel = () => {
           </Box>
         </Flex>
       </Box>
-      <Box as="section" my={10} px={4}>
+      <Box
+        as="section"
+        my={10}
+        px={4}
+        overflowX={{ sm: "scroll", md: "inherit" }}
+      >
         <Heading
           as="h2"
           display="inline-flex"

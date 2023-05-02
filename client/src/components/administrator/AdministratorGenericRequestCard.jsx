@@ -28,7 +28,7 @@ const AdministratorGenericRequestCard = ({
   const [isOpen, setOpen] = useState(false);
   const [toastStatus, setToastStatus] = useState(null);
   const [mutationFunctionType, setMutationFunctionType] = useState("");
-  
+
   const dt = DateTime.fromISO(date_time);
   const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
 
@@ -110,7 +110,11 @@ const AdministratorGenericRequestCard = ({
   };
 
   const handleUpdateAmbulanceStatus = async (data) => {
-    return axios.put(`${ENDPOINT}ambulance/all/${driverOnDuty.ambulance}`, data, config);
+    return axios.put(
+      `${ENDPOINT}ambulance/all/${driverOnDuty.ambulance}`,
+      data,
+      config
+    );
   };
   const updateSchedule = async (data) => {
     const response = await axios.put(
@@ -180,10 +184,7 @@ const AdministratorGenericRequestCard = ({
 
   const rejectRequest = (e) => {
     e.preventDefault();
-    if (driverOnDuty?.length === 0) {
-      alert("No driver on duty found");
-      return;
-    }
+
     setToastStatus("Rejected");
     const body = {
       pickup_location: request_data?.pickup_location,
@@ -207,7 +208,7 @@ const AdministratorGenericRequestCard = ({
 
   const approveRequest = (e) => {
     e.preventDefault();
-    if (driverOnDuty?.length === 0) {
+    if (driverOnDuty?.length === 0 || driverOnDuty === undefined) {
       alert("No driver on duty found");
       return;
     }

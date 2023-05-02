@@ -6,38 +6,49 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  Label,
 } from "recharts";
+
 export default function Graph({ data }) {
-  // group data by date and status
   const dataGrouped = data?.reduce((acc, curr) => {
-    const date = curr.createdAt?.slice(0, 10); // extract date from createdAt string
+    const dateObj = new Date(curr.createdAt);
+    dateObj.setHours(0, 0, 0, 0);
+    const dateStart = dateObj.getTime();
+    dateObj.setHours(23, 59, 59, 999);
+    const dateEnd = dateObj.getTime();
     const status = curr.status;
     const index = acc?.findIndex(
-      (item) => item.date === date && item.status === status
+      (item) =>
+        item.dateStart === dateStart &&
+        item.dateEnd === dateEnd &&
+        item.status === status
     );
     if (index !== -1) {
       acc[index].count++;
     } else {
-      acc.push({ date, status, count: 1 });
+      acc.push({ dateStart, dateEnd, status, count: 1 });
     }
     return acc;
   }, []);
 
-  // transform data to match the shape expected by AreaChart
   const chartData = Array.from(
-    new Set(dataGrouped.map((item) => item.date))
+    new Set(dataGrouped.map((item) => item.dateStart))
   ).map((date) => {
     const item = { date };
     dataGrouped
-      .filter((d) => d.date === date)
+      .filter((d) => d.dateStart === date)
       .forEach((d) => (item[d.status] = d.count));
     return item;
   });
 
-  // define gradient colors
   const uvColor = "#8884d8";
   const pvColor = "#82ca9d";
   const rejectedColor = "#FF4136";
+
+  const formatXAxis = (tickItem) => {
+    const date = new Date(tickItem);
+    return `${date.getMonth() + 1}/${date.getDate()}`;
+  };
 
   return (
     <AreaChart
@@ -61,7 +72,15 @@ export default function Graph({ data }) {
         </linearGradient>
       </defs>
 
-      <XAxis dataKey="date" />
+      <XAxis
+        dataKey="date"
+        tickFormatter={(tick) => {
+          const date = new Date(tick);
+          return `${
+            date.getMonth() + 1
+          }/${date.getDate()}/${date.getFullYear()}`;
+        }}
+      />
 
       <YAxis />
       <CartesianGrid strokeDasharray="3 3" />
