@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext, useCallback } from "react";
 import {
   Heading,
   Flex,
@@ -22,8 +22,9 @@ import {
 import ModalContainer from "../global/ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
 import { useTable } from "react-table";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -33,51 +34,205 @@ const AdministratorPendingRequestCard = ({
   borderRadius = "md",
 }) => {
   const [isOpen, setOpen] = useState(false);
-  const [status, setStatus] = useState(null);
+  const [toastStatus, setToastStatus] = useState(null);
+  const [mutationFunctionType, setMutationFunctionType] = useState("");
+
+  const {
+    _id: _id,
+    user_id,
+    first_name,
+    last_name,
+    ticket_id,
+    pickup_location,
+    transfer_location,
+    referral_slip,
+    patient_condition,
+    status,
+  } = request_data || {};
+
+  const name = `${first_name} ${last_name}`;
 
   const toast = useToast();
+  const queryClient = useQueryClient();
 
-  const updateRequest = (data) => {
-    return axios.put(`${ENDPOINT}request/requestor/${request_data?._id}`, data);
+  const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${parsed_user_data?.token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  const headers = { Authorization: `Bearer ${parsed_user_data?.token}` };
+
+  const fetchSchedules = async () => {
+    const response = await axios.get(`${ENDPOINT}schedule/all_schedule`, {
+      headers,
+    });
+    return response.queryData;
   };
 
-  const mutation = useMutation({
+  const {
+    queryData: queryData,
+    isLoading,
+    isFetching,
+    error,
+  } = useQuery(["schedules"], fetchSchedules, {
+    refetchOnWindowFocus: true,
+  });
+
+  const filterDriver = useCallback(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    let driverOnDuty = [];
+    if (Array.isArray(queryData)) {
+      driverOnDuty = queryData?.filter(
+        (driver) =>
+          driver.status === "stand-by" &&
+          driver.createdAt.slice(0, 10) === today
+      );
+    }
+
+    return driverOnDuty[0];
+  }, [queryData]);
+
+  const driverOnDuty = filterDriver();
+  console.log(driverOnDuty);
+
+  const updateRequest = (data) => {
+    return axios.put(
+      `${ENDPOINT}request/requestor/${request_data?._id}`,
+      data,
+      config
+    );
+  };
+
+  const handleTicket = (data) => {
+    switch (mutationFunctionType) {
+      case "POST":
+        return axios.post(`${ENDPOINT}ticket/all`, data, config);
+      case "UPDATE":
+        return axios.put(`${ENDPOINT}ticket/all/${ticket_id}`, data, config);
+    }
+  };
+
+  const handleUpdateAmbulanceStatus = async (data) => {
+    return axios.put(
+      `${ENDPOINT}ambulance/all/${driverOnDuty.ambulance}`,
+      data,
+      config
+    );
+  };
+  const updateSchedule = async (data) => {
+    const response = await axios.put(
+      `${ENDPOINT}schedule/all_schedule/${driverOnDuty._id}`,
+      data,
+      config
+    );
+    return response;
+  };
+
+  const requestMutation = useMutation({
     mutationFn: updateRequest,
-    onError: (error, variables, context) => {
+    onError: (error) => {
       console.log(error);
     },
     onSuccess: () => {
       toast({
         title: "Request update.",
-        description: `Request is marked a ${status}`,
+        description: `Request is marked a ${toastStatus}`,
         status: "success",
         duration: 2000,
         isClosable: true,
       });
+      queryClient.invalidateQueries(["ambulance_request"]);
+      queryClient.invalidateQueries(["admin_all_informations"]);
     },
+  });
+
+  const ambulanceMutation = useMutation({
+    mutationFn: handleUpdateAmbulanceStatus,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      queryClient.invalidateQueries(["ambulance"]);
+    },
+  });
+
+  const ticketMutation = useMutation({
+    mutationFn: handleTicket,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      if (response) {
+        const requestBody = {
+          pickup_location: request_data?.pickup_location,
+          status: "approved",
+          handled_by: parsed_user_data?.id,
+          ticket_id: response.data._id,
+        };
+        requestMutation.mutate(requestBody);
+
+        ambulanceMutation.mutate({
+          status: "travelling",
+        });
+      }
+    },
+  });
+
+  const scheduleMutation = useMutation({
+    mutationFn: updateSchedule,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {},
   });
 
   const rejectRequest = (e) => {
     e.preventDefault();
-    setStatus("Rejected");
+
+    setToastStatus("Rejected");
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "rejected",
+      handled_by: parsed_user_data?.id,
     };
-    mutation.mutate(body);
+    requestMutation.mutate(body);
+
     setOpen(false);
   };
 
   const approveRequest = (e) => {
     e.preventDefault();
-    setStatus("Approved");
+    if (driverOnDuty?.length === 0 || driverOnDuty === undefined) {
+      alert("No driver on duty found");
+      return;
+    }
+    setToastStatus("Approved");
 
-    const body = {
-      pickup_location: request_data?.pickup_location,
-      status: "approved",
+    const ticketBody = {
+      ambulance_personnel: parsed_user_data?.id,
+      requestor: user_id,
+      request_id: _id,
+      personnel_fullname: driverOnDuty.scheduled_personnel.fullName,
+      patient_fullname: name,
+      ambulance: driverOnDuty.ambulance,
+      destination: transfer_location,
     };
 
-    mutation.mutate(body);
+    if (ticket_id === undefined || ticket_id === null) {
+      setMutationFunctionType("POST");
+      ticketMutation.mutate(ticketBody);
+    } else if (ticket_id !== undefined || ticket_id !== null) {
+      setMutationFunctionType("UPDATE");
+      ticketMutation.mutate(ticketBody);
+    }
+
+    scheduleMutation.mutate({
+      status: "driving",
+      ambulance: driverOnDuty.ambulance,
+    });
     setOpen(false);
   };
 
@@ -100,17 +255,10 @@ const AdministratorPendingRequestCard = ({
     </Button>
   );
 
-  const id = request_data?._id;
-  const name = `${request_data?.first_name} ${request_data?.last_name}`;
-  const pickup_location = request_data?.pickup_location;
-  const transfer_location = request_data?.transfer_location;
-  const referral_slip = request_data?.referral_slip;
-  const patient_condition = request_data?.patient_condition;
-
   const data = useMemo(
     () => [
       {
-        id,
+        _id,
         name,
         pickup_location,
         transfer_location,
@@ -153,30 +301,43 @@ const AdministratorPendingRequestCard = ({
         borderRadius={borderRadius}
       >
         <CardBody p={0}>
-          <TableContainer>
-            <Table {...getTableProps()}>
-              <Thead>
-                {headerGroups.map((headerGroup) => (
-                  <Tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
-                      <Th {...column.getHeaderProps()} textAlign="left">
+          <TableContainer width="100%">
+            <Table {...getTableProps()} width="100%%">
+              <Thead width="100%%">
+                {headerGroups.map((headerGroup, i) => (
+                  <Tr {...headerGroup.getHeaderGroupProps()} key={i}>
+                    {headerGroup.headers.map((column, index) => (
+                      <Th
+                        {...column.getHeaderProps()}
+                        key={index}
+                        textAlign="left"
+                        width={"30%"}
+                        maxWidth={index === 1 && "50px"}
+                      >
                         {column.render("Header")}
                       </Th>
                     ))}
                   </Tr>
                 ))}
               </Thead>
-              <Tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
+              <Tbody {...getTableBodyProps()} width="100%%">
+                {rows.map((row, i) => {
                   prepareRow(row);
                   return (
-                    <Tr {...row.getRowProps()}>
-                      {row.cells.map((cell) => {
+                    <Tr {...row.getRowProps()} key={i}>
+                      {row.cells.map((cell, index) => {
                         return (
                           <Td
                             {...cell.getCellProps()}
+                            key={index}
                             textAlign="left"
-                            width="30%"
+                            maxWidth={index === 1 && "50px"}
+                            width={"30%"}
+                            style={{
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}
                           >
                             {cell.render("Cell")}
                           </Td>
@@ -193,7 +354,7 @@ const AdministratorPendingRequestCard = ({
 
       <ModalContainer
         header="Requestor ID"
-        header_detail={id}
+        header_detail={_id}
         isOpen={isOpen}
         onClose={handleOpenModal}
       >

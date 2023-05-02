@@ -55,7 +55,7 @@ io.on("connection", (socket) => {
     socket.join("admin-room");
   }
 
-  socket.on("send_location", (data) => {
+  socket.on("send_location", (data) =>  {
     console.log(data.toString);
     socket.to(data.tripTicketId).emit("receive_location", data);
   });

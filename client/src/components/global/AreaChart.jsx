@@ -32,8 +32,8 @@ export default function Graph({ data }) {
   }, []);
 
   const chartData = Array.from(
-    new Set(dataGrouped.map((item) => item.dateStart))
-  ).map((date) => {
+    new Set(dataGrouped?.map((item) => item.dateStart))
+  )?.map((date) => {
     const item = { date };
     dataGrouped
       .filter((d) => d.dateStart === date)
