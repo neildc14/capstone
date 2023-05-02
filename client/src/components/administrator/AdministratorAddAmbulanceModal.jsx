@@ -72,6 +72,7 @@ const AdministratorAddAmbulanceModal = ({ handleOpenModal, isOpen }) => {
             <FormLabel>License Plate</FormLabel>
             <Input type="text" name="license_plate" required />
           </FormControl>
+          <Input type="hidden" name="assigned" value={false} />
           <Button
             type="sumbmit"
             mt={4}

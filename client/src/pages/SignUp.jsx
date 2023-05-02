@@ -187,7 +187,7 @@ const SignUp = () => {
               >
                 <option value="requestor">Requestor</option>
                 <option value="ambulance_personnel">Ambulance Personnel</option>
-                <option value="administrator">Administrator</option>
+                {/* <option value="administrator">Administrator</option> */}
               </Select>
             </FormControl>
 

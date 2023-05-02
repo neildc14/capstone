@@ -69,7 +69,7 @@ const getAmbulanceFromTripTicket = async (req, res) => {
 
 //POST new ambulance
 const postAmbulance = async (req, res) => {
-  const { license_plate, status } = req.body;
+  const { license_plate, status,assigned } = req.body;
   try {
     let errorMessage = "License plate is not defined.";
     isEmpty(license_plate, errorMessage);
@@ -77,6 +77,7 @@ const postAmbulance = async (req, res) => {
     const new_ambulance = await Ambulance.create({
       license_plate,
       status,
+      assigned
     });
 
     errorMessage = "Failed to create new ambulance";
