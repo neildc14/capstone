@@ -17,7 +17,7 @@ const ViewMap = () => {
 
   useEffect(() => {
     const newSocket = io(
-      "http://localhost:4000" || "https://staging-capstone.onrender.com"
+      "http://localhost:4000" || "https://staging-capstone.onrender.com/"
     );
 
     newSocket.on("connect", () => {
