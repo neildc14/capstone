@@ -22,7 +22,8 @@ export default defineConfig({
             "react-paginate",
             "react-router-dom",
             "react-table",
-            "recharts"
+            "recharts",
+            "socket.io-client",
           ],
         },
       },
