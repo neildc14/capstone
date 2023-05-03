@@ -204,7 +204,7 @@ const PersonnelSidebar = () => {
               <UilAmbulance />
               Ambulance
             </Link>
-            <Link
+            {/* <Link
               as={RouterLink}
               to="/ambulance_personnel/map"
               variant="ghost"
@@ -235,7 +235,7 @@ const PersonnelSidebar = () => {
             >
               <UilLocationPinAlt />
               Locate Patient
-            </Link>
+            </Link> */}
           </Box>
         </Box>
       </Box>

@@ -136,7 +136,11 @@ function App() {
                         path="trip_tickets"
                         element={<RequestorTripTickets />}
                       />
-                      <Route exact path="map" element={<ViewMap />} />
+                      <Route
+                        exact
+                        path="map/:id/:user_type/:user"
+                        element={<ViewMap />}
+                      />
                     </Route>
                   </>
                 ) : (
@@ -232,7 +236,11 @@ function App() {
                             path="ambulance"
                             element={<PersonnelAmbulance />}
                           />
-                          <Route exact path="map" element={<ViewMap />} />
+                          <Route
+                            exact
+                            path="map/:id/:user_type/:user"
+                            element={<ViewMap />}
+                          />
                         </Route>
                       </>
                     ) : (

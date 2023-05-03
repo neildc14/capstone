@@ -126,7 +126,7 @@ const RequestForm = () => {
             <FormLabel>
               First Name{" "}
               <Text as="i" color="gray.600" fontWeight="thin" fontSize="sm">
-                Pangalan
+                Pangalan ng pasyente
               </Text>
             </FormLabel>
             <Input
@@ -144,7 +144,7 @@ const RequestForm = () => {
             <FormLabel>
               Last Name{" "}
               <Text as="i" color="gray.600" fontWeight="thin" fontSize="sm">
-                Apelyido
+                Apelyido ng pasyente
               </Text>
             </FormLabel>
             <Input

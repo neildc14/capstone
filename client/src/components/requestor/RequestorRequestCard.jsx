@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   Button,
@@ -8,9 +8,11 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import { UilEye, UilTrashAlt } from "@iconscout/react-unicons";
+import { UilEye, UilTrashAlt, UilUserLocation } from "@iconscout/react-unicons";
 import RequestCardDetailsModal from "../RequestCardDetailsModal";
 import DeleteConfirmationModal from "./RequestorDeleteConfirmationModal";
+import { useLocation } from "react-router-dom";
+import AuthContext from "../../context/AuthContext"
 
 const RequestCard = ({
   refetch,
@@ -32,6 +34,11 @@ const RequestCard = ({
   const toggleDeleteConfirmationModal = () => {
     setOpenDeleteConfirmationModal(!isOpenDeleteConfirmationModal);
   };
+
+  console.log(request_data);
+  const location = useLocation();
+  const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
 
   return (
     <>
@@ -94,6 +101,24 @@ const RequestCard = ({
               >
                 Delete Request
               </Button>
+
+              {location.pathname === "/requestor" &&
+                request_data?.ticket_id && (
+                  <Button
+                    as="a"
+                    href={`/requestor/map/${request_data?.ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}
+                    size="sm"
+                    display="inline-flex"
+                    gap={1}
+                    px={6}
+                    bgColor="blue.600"
+                    color="white"
+                    _hover={{ bgColor: "blue.800" }}
+                  >
+                    <UilUserLocation color="white" />
+                    Locate
+                  </Button>
+                )}
             </Flex>
           </Flex>
         </CardBody>

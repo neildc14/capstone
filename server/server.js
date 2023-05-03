@@ -44,20 +44,19 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`USER CONNECTED ${socket.id}`);
 
-  socket.on("join_trip_ticket", (data) => {
-    socket.join(data.tripTicketId);
+  socket.on("admin_room", (data) => {
+    socket.join(data);
   });
 
-  if (
-    socket.handshake.query.role === "personnel" ||
-    socket.handshake.query.role === "requestor"
-  ) {
-    socket.join("admin-room");
-  }
+  socket.on("patient_driver_room", (data) => {
+    console.log(data, "data");
+    socket.join(data);
+  });
 
-  socket.on("send_location", (data) =>  {
-    console.log(data.toString);
-    socket.to(data.tripTicketId).emit("receive_location", data);
+  socket.on("send_location", (data) => {
+    console.log(data);
+
+    io.to(...data.room).emit("receive_location", data);
   });
 });
 

@@ -12,12 +12,13 @@ import {
   ModalFooter,
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
-import { UilEye, UilCheck } from "@iconscout/react-unicons";
+import { UilEye, UilCheck, UilUserLocation } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import ScheduleContext from "../../context/ScheduleContext";
+import { useLocation } from "react-router-dom";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -31,6 +32,7 @@ const PersonnelGenericRequestCard = ({
   const [isOpen, setOpen] = useState(false);
   const [toastStatus, setToastStatus] = useState(null);
   const [mutationFunctionType, setMutationFunctionType] = useState("");
+  const location = useLocation();
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
@@ -337,6 +339,23 @@ const PersonnelGenericRequestCard = ({
               >
                 <UilCheck color="white" /> Fulfill
               </Button>
+              {location.pathname === "/ambulance_personnel" && ticket_id && (
+                <Button
+                  as="a"
+                  href={`/ambulance_personnel/map/${ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}
+                  size="sm"
+                  display="inline-flex"
+                  gap={1}
+                  width={{ base: "100%", md: "inherit" }}
+                  px={6}
+                  bgColor="blue.600"
+                  color="white"
+                  _hover={{ bgColor: "blue.800" }}
+                >
+                  <UilUserLocation color="white" />
+                  Locate
+                </Button>
+              )}
             </Flex>
           </Flex>
         </CardBody>
