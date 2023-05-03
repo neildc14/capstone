@@ -5,8 +5,10 @@ import "leaflet/dist/leaflet.css";
 import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import { Button, Box } from "@chakra-ui/react";
-// import ambulanceIcon from "../../assets/icons/ambulance2.png";
-// import patientIcon from "../../assets/icons/patient2.png";
+import L from "leaflet";
+
+import ambulance_icon from "../../assets/icons/ambulance3.png";
+import patient_icon from "../../assets/icons/patient3.png";
 
 const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
 
@@ -67,6 +69,24 @@ const ViewMap = () => {
     return () => navigator.geolocation.clearWatch(watchId);
   }, [id, socket]);
 
+  const ambulanceIcon = new L.Icon({
+    iconUrl: ambulance_icon,
+    iconRetinaUrl: ambulance_icon,
+    iconSize: [35, 35],
+  });
+
+  const patientIcon = new L.Icon({
+    iconUrl: patient_icon,
+    iconRetinaUrl: patient_icon,
+    iconSize: [35, 35],
+  });
+
+  const iconByUserType = (userType) => {
+    if (userType === "ambulance_personnel") {
+      return ambulanceIcon;
+    }
+    return patientIcon;
+  };
   return (
     <>
       <Button
@@ -93,6 +113,7 @@ const ViewMap = () => {
                 <Marker
                   key={index}
                   position={{ lat: location.lat, lng: location.lng }}
+                  icon={iconByUserType(location.user_type)}
                 >
                   <Popup>{location.name}</Popup>
                 </Marker>
