@@ -8,6 +8,8 @@ import { Button, Box } from "@chakra-ui/react";
 // import ambulanceIcon from "../../assets/icons/ambulance2.png";
 // import patientIcon from "../../assets/icons/patient2.png";
 
+const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
+
 const ViewMap = () => {
   const [longitude, setLongitude] = useState(0);
   const [latitude, setLatitude] = useState(0);
@@ -16,9 +18,7 @@ const ViewMap = () => {
   const { id, user, user_type } = useParams();
 
   useEffect(() => {
-    const newSocket = io(
-      "http://localhost:4000" || "https://staging-capstone.onrender.com/"
-    );
+    const newSocket = io(SOCKET_ENDPOINT);
 
     newSocket.on("connect", () => {
       console.log(`Connected with socket id ${newSocket.id}`);
@@ -78,7 +78,7 @@ const ViewMap = () => {
         Clear locations
       </Button>
       {latitude !== 0 && longitude !== 0 && (
-        <Box w="100%" h="100vh">
+        <Box w="100%" h="100vh" overflowY="hidden">
           <MapContainer
             center={{
               lat: latitude,
