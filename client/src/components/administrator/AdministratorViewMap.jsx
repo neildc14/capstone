@@ -1,35 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import osm from "../../utils/osm-provider";
 import "leaflet/dist/leaflet.css";
-import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import { Button, Box, Flex } from "@chakra-ui/react";
 import L from "leaflet";
+import AuthContext from "../../context/AuthContext";
 
 import ambulance_icon from "../../assets/icons/ambulance3.png";
 import patient_icon from "../../assets/icons/patient3.png";
+import building_icon from "../../assets/icons/government.png";
 
 const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
 
-const ViewMap = () => {
+const AdministratorViewMap = () => {
   const [longitude, setLongitude] = useState(0);
   const [latitude, setLatitude] = useState(0);
   const [locations, setLocations] = useState([]);
   const [socket, setSocket] = useState(null);
-  const { id, user, user_type } = useParams();
+
+  const user = useContext(AuthContext);
+  const parsed_user_data = JSON.parse(user);
 
   useEffect(() => {
     const newSocket = io(SOCKET_ENDPOINT);
+
     newSocket.on("connect", () => {
       console.log(`Connected with socket id ${newSocket.id}`);
       newSocket.emit("join_rooms", {
-        rooms: [id, "admin"],
+        rooms: ["admin"],
       });
     });
 
     newSocket.on("receive_location", (data) => {
-      console.log({ data });
       console.log(`Received location data: ${data.lat}, ${data.lng}`);
       setLocations((prevLocations) => [
         ...prevLocations,
@@ -46,17 +49,17 @@ const ViewMap = () => {
     setSocket(newSocket);
 
     return () => newSocket.disconnect();
-  }, [id]);
+  }, ["admin"]);
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         const locationData = {
-          name: user,
-          user_type: user_type,
+          name: "Office",
+          user_type: parsed_user_data.user_type,
           lat: position.coords.latitude,
           lng: position.coords.longitude,
-          rooms: [id, "admin"],
+          rooms: ["admin"], // Emit to the patient/driver room
         };
         socket.emit("send_location", locationData);
 
@@ -69,43 +72,7 @@ const ViewMap = () => {
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
-  }, [id, socket]);
-
-  const handleWatchPositionClick = () => {
-    const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        const locationData = {
-          name: user,
-          user_type: user_type,
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          rooms: [id, "admin"], // Emit to the patient/driver room
-        };
-        socket.emit("send_location", locationData);
-
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-    console.log(watchId);
-
-    socket.on("receive_location", (data) => {
-      console.log(`Received location data: ${data.lat}, ${data.lng}`);
-      setLocations((prevLocations) => [
-        ...prevLocations,
-        {
-          name: data.name,
-          user_type: data.user_type,
-          lat: data.lat,
-          lng: data.lng,
-          rooms: data.room,
-        },
-      ]);
-    });
-  };
+  }, ["admin", socket]);
 
   const ambulanceIcon = new L.Icon({
     iconUrl: ambulance_icon,
@@ -119,26 +86,26 @@ const ViewMap = () => {
     iconSize: [35, 35],
   });
 
+  const buildingIcon = new L.Icon({
+    iconUrl: building_icon,
+    iconRetinaUrl: building_icon,
+    iconSize: [40, 40],
+  });
+
   const iconByUserType = (userType) => {
     if (userType === "ambulance_personnel") {
       return ambulanceIcon;
     }
-    return patientIcon;
+    if (userType === "requestor") {
+      return patientIcon;
+    }
+    return buildingIcon;
   };
 
   console.log(locations);
-  locations.map((loc) => console.log(loc.rooms.includes(id)));
   return (
     <>
       <Flex gap={4} mb={2}>
-        <Button
-          size="md"
-          mb={{ base: 2, md: 4 }}
-          width={{ base: "100%", md: "inherit" }}
-          onClick={handleWatchPositionClick}
-        >
-          Locate
-        </Button>
         <Button
           size="md"
           mb={{ base: 2, md: 4 }}
@@ -159,7 +126,7 @@ const ViewMap = () => {
           >
             <TileLayer url={osm.mapTiler.url} />
             {locations
-              .filter((location) => location.rooms?.includes(id))
+              .filter((location) => location.rooms.includes("admin"))
               .map((location, index) => (
                 <Marker
                   key={index}
@@ -175,4 +142,4 @@ const ViewMap = () => {
     </>
   );
 };
-export default ViewMap;
+export default AdministratorViewMap;

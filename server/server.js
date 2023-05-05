@@ -44,19 +44,29 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`USER CONNECTED ${socket.id}`);
 
-  socket.on("admin_room", (data) => {
-    socket.join(data);
+  socket.on("join_rooms", ({ rooms }) => {
+    for (const room of rooms) {
+      socket.join(room);
+      console.log(`Socket ${socket.id} joined room ${room}`);
+    }
   });
 
-  socket.on("patient_driver_room", (data) => {
-    console.log(data, "data");
-    socket.join(data);
+  socket.on("leave_room", (room) => {
+    console.log(`Socket ${socket.id} leaving room ${room}`);
+    socket.leave(room);
   });
 
-  socket.on("send_location", (data) => {
-    console.log(data);
+  socket.on("send_location", (locationData) => {
+    console.log(
+      `Received location data: ${locationData.lat}, ${locationData.lng}`
+    );
+    console.log(locationData);
+    console.log(locationData.rooms, "ROOM");
+    io.to(locationData.rooms).emit("receive_location", locationData);
+  });
 
-    io.to(...data.room).emit("receive_location", data);
+  socket.on("disconnect", () => {
+    console.log(`Client disconnected with socket id ${socket.id}`);
   });
 });
 

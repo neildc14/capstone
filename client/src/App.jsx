@@ -26,8 +26,10 @@ import AdministratorDashboardPanel from "./components/administrator/Administrato
 import AdministratorReports from "./components/administrator/AdministratorReports";
 import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAllRequests2";
 import PersonnelAmbulance from "./components/ambulance-personnel/PersonnelAmbulance2";
+import AdministratorViewMap from "./components/administrator/AdministratorViewMap";
 
 const ViewMap = lazy(() => import("./components/global/ViewMap"));
+
 const AdministratorDashboard = lazy(() =>
   import("./pages/AdministratorDashboard")
 );
@@ -185,7 +187,11 @@ function App() {
                         path="trip_tickets"
                         element={<AdministratorTripTickets />}
                       />
-                      <Route exact path="map" element={<ViewMap />} />
+                      <Route
+                        exact
+                        path="map"
+                        element={<AdministratorViewMap />}
+                      />
                       <Route
                         exact
                         path="reports"

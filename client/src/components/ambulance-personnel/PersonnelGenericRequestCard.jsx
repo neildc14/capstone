@@ -32,7 +32,7 @@ const PersonnelGenericRequestCard = ({
   const [isOpen, setOpen] = useState(false);
   const [toastStatus, setToastStatus] = useState(null);
   const [mutationFunctionType, setMutationFunctionType] = useState("");
-  const location = useLocation();
+  const pathlocation = useLocation();
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
@@ -339,23 +339,24 @@ const PersonnelGenericRequestCard = ({
               >
                 <UilCheck color="white" /> Fulfill
               </Button>
-              {location.pathname === "/ambulance_personnel" && ticket_id && (
-                <Button
-                  as="a"
-                  href={`/ambulance_personnel/map/${ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}
-                  size="sm"
-                  display="inline-flex"
-                  gap={1}
-                  width={{ base: "100%", md: "inherit" }}
-                  px={6}
-                  bgColor="blue.600"
-                  color="white"
-                  _hover={{ bgColor: "blue.800" }}
-                >
-                  <UilUserLocation color="white" />
-                  Locate
-                </Button>
-              )}
+              {pathlocation.pathname === "/ambulance_personnel" &&
+                ticket_id && (
+                  <Button
+                    as="a"
+                    href={`/ambulance_personnel/map/${ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}
+                    size="sm"
+                    display="inline-flex"
+                    gap={1}
+                    width={{ base: "100%", md: "inherit" }}
+                    px={6}
+                    bgColor="blue.600"
+                    color="white"
+                    _hover={{ bgColor: "blue.800" }}
+                  >
+                    <UilUserLocation color="white" />
+                    Locate
+                  </Button>
+                )}
             </Flex>
           </Flex>
         </CardBody>
