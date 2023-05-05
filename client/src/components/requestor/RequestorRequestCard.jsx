@@ -12,7 +12,7 @@ import { UilEye, UilTrashAlt, UilUserLocation } from "@iconscout/react-unicons";
 import RequestCardDetailsModal from "../RequestCardDetailsModal";
 import DeleteConfirmationModal from "./RequestorDeleteConfirmationModal";
 import { useLocation } from "react-router-dom";
-import AuthContext from "../../context/AuthContext"
+import AuthContext from "../../context/AuthContext";
 
 const RequestCard = ({
   refetch,
@@ -103,7 +103,8 @@ const RequestCard = ({
               </Button>
 
               {location.pathname === "/requestor" &&
-                request_data?.ticket_id && (
+                request_data?.ticket_id &&
+                request_data?.status !== "fulfilled" && (
                   <Button
                     as="a"
                     href={`/requestor/map/${request_data?.ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}

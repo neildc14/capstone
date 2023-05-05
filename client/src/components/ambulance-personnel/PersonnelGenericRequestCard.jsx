@@ -120,6 +120,7 @@ const PersonnelGenericRequestCard = ({
 
       queryClient.invalidateQueries([queryKey]);
       queryClient.invalidateQueries(["ambulance_request"]);
+      queryClient.invalidateQueries(["ambulance_request_with_ticket"]);
     },
   });
 
@@ -340,7 +341,8 @@ const PersonnelGenericRequestCard = ({
                 <UilCheck color="white" /> Fulfill
               </Button>
               {pathlocation.pathname === "/ambulance_personnel" &&
-                ticket_id && (
+                ticket_id &&
+                status !== "fulfilled" && (
                   <Button
                     as="a"
                     href={`/ambulance_personnel/map/${ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}

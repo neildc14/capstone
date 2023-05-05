@@ -111,7 +111,7 @@ const ViewMap = () => {
         console.error(error);
       }
     );
-    console.log(watchId);
+  
 
     socket.on("receive_location", (data) => {
       console.log(`Received location data: ${data.lat}, ${data.lng}`);
