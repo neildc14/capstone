@@ -16,7 +16,9 @@ const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
 const AdministratorViewMap = () => {
   const [longitude, setLongitude] = useState(0);
   const [latitude, setLatitude] = useState(0);
-  const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState(
+    JSON.parse(localStorage.getItem("locations")) || []
+  );
   const [socket, setSocket] = useState(null);
 
   const user = useContext(AuthContext);
@@ -74,6 +76,25 @@ const AdministratorViewMap = () => {
     return () => navigator.geolocation.clearWatch(watchId);
   }, ["admin", socket]);
 
+  useEffect(() => {
+    const cacheLocations = JSON.parse(localStorage.getItem("locations"));
+    if (cacheLocations) {
+      setLocations(cacheLocations);
+    }
+  }, [locations]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      localStorage.removeItem("locations");
+    }, 60000); // Clear the cache every 1 minute
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("locations", JSON.stringify(locations));
+  }, [locations]);
+
   const ambulanceIcon = new L.Icon({
     iconUrl: ambulance_icon,
     iconRetinaUrl: ambulance_icon,
@@ -102,7 +123,6 @@ const AdministratorViewMap = () => {
     return buildingIcon;
   };
 
-  console.log(locations);
   return (
     <>
       <Flex gap={4} mb={2}>

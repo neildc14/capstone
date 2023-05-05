@@ -51,10 +51,10 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("leave_room", (room) => {
-    console.log(`Socket ${socket.id} leaving room ${room}`);
-    socket.leave(room);
-  });
+  // socket.on("leave_room", (room) => {
+  //   console.log(`Socket ${socket.id} leaving room ${room}`);
+  //   socket.leave(room);
+  // });
 
   socket.on("send_location", (locationData) => {
     console.log(
