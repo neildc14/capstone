@@ -13,12 +13,13 @@ import {
   Link,
   Heading,
   useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import ThemeButton from "../components/global/ThemeButton";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
@@ -27,6 +28,8 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const [email, bindEmail] = useInput();
   const [password, bindPassword] = useInput();
+  const [incorrectPassword, setIncorrectPassword] = useState(false);
+  const [incorrectEmail, setIncorrectEmail] = useState(false);
   const toast = useToast();
 
   const loginnUpUser = (user) => {
@@ -54,7 +57,13 @@ const Login = () => {
   const mutation = useMutation({
     mutationFn: loginnUpUser,
     onError: (error) => {
-      console.log(error);
+      console.log(error.response.data === "Incorrect password");
+      if (error.response.data === "User account not found.") {
+        setIncorrectEmail(error.response.data);
+      }
+      if (error.response.data === "Incorrect password") {
+        setIncorrectPassword(error.response.data);
+      }
     },
 
     onSuccess: (response) => {
@@ -110,16 +119,19 @@ const Login = () => {
           </Heading>
 
           <Box as="form" onSubmit={handleSubmit}>
-            <FormControl my={2}>
+            <FormControl my={2} isInvalid={incorrectEmail}>
               <FormLabel>Email</FormLabel>
               <Input
                 type="email"
                 size={{ base: "sm", md: "md" }}
                 {...bindEmail}
               />
+              {incorrectEmail && (
+                <FormErrorMessage>User not found.</FormErrorMessage>
+              )}
             </FormControl>
 
-            <FormControl my={2}>
+            <FormControl my={2} isInvalid={incorrectPassword}>
               <FormLabel>Password</FormLabel>
               <InputGroup size="md">
                 <Input
@@ -139,6 +151,9 @@ const Login = () => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
+              {incorrectPassword && (
+                <FormErrorMessage>Incorrect Password.</FormErrorMessage>
+              )}
             </FormControl>
 
             <Button

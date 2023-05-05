@@ -101,38 +101,16 @@ function App() {
           <div className="App">
             <React.Fragment>
               <Routes>
-                <Route
-                  exact
-                  path="/"
-                  element={
-                    user === null ? (
-                      <Login />
-                    ) : (
-                      <Navigate to={`/${user_type}`} />
-                    )
-                  }
-                />
+                <Route exact path="/" element={!user && <Login />} />
                 <Route
                   exact
                   path="/account/login"
-                  element={
-                    user === null ? (
-                      <Login />
-                    ) : (
-                      <Navigate to={`/${user_type}`} />
-                    )
-                  }
+                  element={!user && <Login />}
                 />
                 <Route
                   exact
                   path="/account/signup"
-                  element={
-                    user === null ? (
-                      <SignUp />
-                    ) : (
-                      <Navigate to={`/${user_type}`} />
-                    )
-                  }
+                  element={!user && <SignUp />}
                 />
               </Routes>
 

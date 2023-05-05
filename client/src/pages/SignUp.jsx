@@ -13,19 +13,15 @@ import {
   Link,
   Select,
   Heading,
-  Image,
-  Grid,
-  AspectRatio,
   useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import useSelect from "../hooks/useSelect";
 import ThemeButton from "../components/global/ThemeButton";
-import ARMSlogo1 from "../assets/images/ARMSlogo1.png";
-import ARMSlogo2 from "../assets/images/ARMSlogo2.png";
-import ARMSwhite from "../assets/images/ARMSwhite.png";
+
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -41,7 +37,10 @@ const SignUp = () => {
   const [email, bindEmail] = useInput();
   const [password, bindPassword] = useInput();
   const [value, selectChange] = useSelect("requestor");
-  console.log({ value });
+  const [firstNameError, setFirstNameError] = useState([]);
+  const [lastNameError, setLastNameError] = useState([]);
+  const [emailError, setEmailError] = useState([]);
+  const [passwordError, setPasswordError] = useState([]);
 
   const signUpUser = (user) => {
     return axios.post(`${ENDPOINT}auth/signup`, user);
@@ -69,6 +68,23 @@ const SignUp = () => {
     mutationFn: signUpUser,
     onError: (error) => {
       console.log(error);
+
+      let errors = error.response.data.validationErrors;
+      const [firstNameErr] = errors.filter(
+        (error) => error.field === "firstname"
+      );
+      const [lastNameErr] = errors.filter(
+        (error) => error.field === "lastname"
+      );
+      const [emailErr] = errors.filter((error) => error.field === "email");
+      const [passwordErr] = errors.filter(
+        (error) => error.field === "password"
+      );
+      console.log(firstNameErr);
+      setFirstNameError(firstNameErr);
+      setLastNameError(lastNameErr);
+      setEmailError(emailErr);
+      setPasswordError(passwordErr);
     },
     onSuccess: (response) => {
       if (response.data.user_type === "ambulance_personnel") {
@@ -124,7 +140,7 @@ const SignUp = () => {
           </Heading>
 
           <Box as="form" onSubmit={handleSubmit}>
-            <FormControl my={2}>
+            <FormControl my={2} isInvalid={firstNameError}>
               <FormLabel>First Name</FormLabel>
               <Input
                 type="text"
@@ -132,9 +148,12 @@ const SignUp = () => {
                 name="firstname"
                 {...bindFirstName}
               />
+              {firstNameError && (
+                <FormErrorMessage>{firstNameError.message}</FormErrorMessage>
+              )}
             </FormControl>
 
-            <FormControl my={2}>
+            <FormControl my={2} isInvalid={lastNameError}>
               <FormLabel>Last Name</FormLabel>
               <Input
                 type="text"
@@ -142,9 +161,12 @@ const SignUp = () => {
                 name="lastname"
                 {...bindLastName}
               />
+              {lastNameError && (
+                <FormErrorMessage>{lastNameError.message}</FormErrorMessage>
+              )}
             </FormControl>
 
-            <FormControl my={2}>
+            <FormControl my={2} isInvalid={emailError}>
               <FormLabel>Email</FormLabel>
               <Input
                 type="email"
@@ -152,9 +174,12 @@ const SignUp = () => {
                 name="email"
                 {...bindEmail}
               />
+              {emailError && (
+                <FormErrorMessage>{emailError.message}</FormErrorMessage>
+              )}
             </FormControl>
 
-            <FormControl my={2}>
+            <FormControl my={2} isInvalid={passwordError}>
               <FormLabel>Password</FormLabel>
               <InputGroup size="md">
                 <Input
@@ -175,6 +200,9 @@ const SignUp = () => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
+              {passwordError && (
+                <FormErrorMessage>{passwordError.message}</FormErrorMessage>
+              )}
             </FormControl>
 
             <FormControl my={2}>
@@ -187,7 +215,6 @@ const SignUp = () => {
               >
                 <option value="requestor">Requestor</option>
                 <option value="ambulance_personnel">Ambulance Personnel</option>
-                {/* <option value="administrator">Administrator</option> */}
               </Select>
             </FormControl>
 
