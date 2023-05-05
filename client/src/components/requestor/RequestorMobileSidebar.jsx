@@ -56,7 +56,6 @@ const RequestorMobileSidebar = ({
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
           }}
           onClick={onClose}
         >
@@ -78,35 +77,12 @@ const RequestorMobileSidebar = ({
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
           }}
           onClick={onClose}
         >
           <UilFilePlusAlt /> Request Ambulance
         </Link>
-        <Link
-          as={RouterLink}
-          to="/requestor/map"
-          variant="ghost"
-          display="flex"
-          alignItems="center"
-          gap=".5rem"
-          width="100%"
-          my={8}
-          p="0"
-          borderRadius="none"
-          textAlign="left"
-          fontSize={{ base: "xl", md: "sm", lg: "md" }}
-          color="whiteAlpha.900"
-          _hover={{
-            color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
-          }}
-          onClick={onClose}
-        >
-          <UilLocationPinAlt />
-          Locate Ambulance
-        </Link>
+
         <Link
           as={RouterLink}
           to="/requestor/requests"
@@ -123,11 +99,10 @@ const RequestorMobileSidebar = ({
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
           }}
           onClick={onClose}
         >
-           <UilFileInfoAlt />
+          <UilFileInfoAlt />
           All Requests
         </Link>
       </Box>

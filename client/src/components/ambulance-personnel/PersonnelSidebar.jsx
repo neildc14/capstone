@@ -204,38 +204,6 @@ const PersonnelSidebar = () => {
               <UilAmbulance />
               Ambulance
             </Link>
-            {/* <Link
-              as={RouterLink}
-              to="/ambulance_personnel/map"
-              variant="ghost"
-              display="flex"
-              justifyContent="flex-start"
-              gap=".5rem"
-              width="100%"
-              my={4}
-              ps={2}
-              py={2}
-              borderRadius="none"
-              textAlign="left"
-              fontSize={{ md: "sm", lg: "md" }}
-              fontWeight="semibold"
-              color={
-                location.pathname === "/ambulance_personnel/map"
-                  ? "#FF7A00"
-                  : "whiteAlpha.900"
-              }
-              bgColor={
-                location.pathname === "/ambulance_personnel/map" &&
-                "whiteAlpha.900"
-              }
-              _hover={{
-                color: "#FF7A00",
-              }}
-              {...bindHoverRequestMap}
-            >
-              <UilLocationPinAlt />
-              Locate Patient
-            </Link> */}
           </Box>
         </Box>
       </Box>

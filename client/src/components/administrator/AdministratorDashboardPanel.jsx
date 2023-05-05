@@ -384,7 +384,7 @@ const AdministratorDashboardPanel = () => {
           fontWeight="semibold"
           color="blackAlpha"
         >
-          Weekly Requests Overview
+          Requests Statistical Graph
         </Heading>
         <AreaChart data={requestData} />
       </Box>

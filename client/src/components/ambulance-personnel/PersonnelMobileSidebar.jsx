@@ -52,7 +52,6 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
           }}
           onClick={onClose}
         >
@@ -74,7 +73,6 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
           }}
           onClick={onClose}
         >
@@ -96,7 +94,6 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
           }}
           onClick={onClose}
         >
@@ -119,7 +116,6 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
           }}
           onClick={onClose}
         >
@@ -143,36 +139,11 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           color="whiteAlpha.900"
           _hover={{
             color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
           }}
           onClick={onClose}
         >
           <UilAmbulance />
           Ambulance
-        </Link>
-
-        <Link
-          as={RouterLink}
-          to="/ambulance_personnel/map"
-          variant="ghost"
-          display="flex"
-          alignItems="center"
-          gap=".5rem"
-          width="100%"
-          my={8}
-          p="0"
-          borderRadius="none"
-          textAlign="left"
-          fontSize={{ base: "xl", md: "sm", lg: "md" }}
-          color="whiteAlpha.900"
-          _hover={{
-            color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
-          }}
-          onClick={onClose}
-        >
-          <UilLocationPinAlt />
-          Locate Patient
         </Link>
       </Box>
     </MobileSidebar>
