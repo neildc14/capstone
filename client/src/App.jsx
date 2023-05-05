@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, lazy, Suspense } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -38,7 +38,11 @@ const AmbulancePersonnelDashboard = lazy(() =>
 );
 const RequestorDashboard = lazy(() => import("./pages/RequestorDashboard"));
 
-const DashboardContext = React.createContext();
+const DashboardContext = React.createContext({
+  toggleDashboard: () => {},
+  isOpen: false,
+  onClose: () => {},
+});
 export const useDashboardContext = () => useContext(DashboardContext);
 
 const FallbackLoading = () => {
@@ -71,6 +75,7 @@ function App() {
     let userLoggedIn = localStorage.getItem("user");
     let schedule = localStorage.getItem("schedule");
     let ambulance = localStorage.getItem("ambulance");
+
     if (userLoggedIn) {
       setUser(userLoggedIn);
     }
@@ -96,16 +101,37 @@ function App() {
           <div className="App">
             <React.Fragment>
               <Routes>
-                <Route exact path="/" element={<Login />} />
-                <Route exact path="/account/login" element={<Login />} />
-                <Route exact path="/account/signup" element={<SignUp />} />
                 <Route
                   exact
-                  path="/map"
+                  path="/"
                   element={
-                    <Suspense fallback={<FallbackLoading />}>
-                      <ViewMap />
-                    </Suspense>
+                    user === null ? (
+                      <Login />
+                    ) : (
+                      <Navigate to={`/${user_type}`} />
+                    )
+                  }
+                />
+                <Route
+                  exact
+                  path="/account/login"
+                  element={
+                    user === null ? (
+                      <Login />
+                    ) : (
+                      <Navigate to={`/${user_type}`} />
+                    )
+                  }
+                />
+                <Route
+                  exact
+                  path="/account/signup"
+                  element={
+                    user === null ? (
+                      <SignUp />
+                    ) : (
+                      <Navigate to={`/${user_type}`} />
+                    )
                   }
                 />
               </Routes>
