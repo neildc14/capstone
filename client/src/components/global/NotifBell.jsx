@@ -1,16 +1,44 @@
 import { UilBell } from "@iconscout/react-unicons";
-import { Tooltip, IconButton } from "@chakra-ui/react";
+
+import { useState } from "react";
+import { BellIcon } from "@chakra-ui/icons";
+import {
+  IconButton,
+  Tooltip,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+  Button,
+  Select,
+  Box,
+  Text,
+  Badge,
+  Icon,
+} from "@chakra-ui/react";
 
 const NotifBell = () => {
+  const [notificationsCount, setNotificationsCount] = useState(10);
   return (
-    <Tooltip label="Notifications">
-      <IconButton
+    <Menu overflow="hidden" alignSelf="center">
+      <MenuButton
+        as={Badge}
         variant="ghost"
+        size="sm"
         borderRadius={0}
-        _hover={{ bgColor: "none" }}
-        icon={<UilBell color="#ff7a00" />}
-      />
-    </Tooltip>
+        px="2"
+        py={1}
+        cursor="pointer"
+        alignSelf="center"
+      >
+        <Icon as={UilBell} boxSize={6} color="#FF7A00" />
+        {notificationsCount}
+      </MenuButton>
+      <MenuList>
+        <MenuItem>Logout</MenuItem>
+      </MenuList>
+    </Menu>
   );
 };
 

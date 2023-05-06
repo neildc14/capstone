@@ -81,7 +81,7 @@ const AdministratorDashboardPanel = () => {
     [queryKey],
     fetchDetails,
     {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
     }
   );
 

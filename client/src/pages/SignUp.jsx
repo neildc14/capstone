@@ -37,10 +37,10 @@ const SignUp = () => {
   const [email, bindEmail] = useInput();
   const [password, bindPassword] = useInput();
   const [value, selectChange] = useSelect("requestor");
-  const [firstNameError, setFirstNameError] = useState([]);
-  const [lastNameError, setLastNameError] = useState([]);
-  const [emailError, setEmailError] = useState([]);
-  const [passwordError, setPasswordError] = useState([]);
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastNameError, setLastNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   const signUpUser = (user) => {
     return axios.post(`${ENDPOINT}auth/signup`, user);
