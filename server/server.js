@@ -51,11 +51,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // socket.on("leave_room", (room) => {
-  //   console.log(`Socket ${socket.id} leaving room ${room}`);
-  //   socket.leave(room);
-  // });
-
   socket.on("send_location", (locationData) => {
     console.log(
       `Received location data: ${locationData.lat}, ${locationData.lng}`
@@ -67,6 +62,11 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log(`Client disconnected with socket id ${socket.id}`);
+  });
+
+  socket.on("leave_rooms", (room) => {
+    console.log(`Socket ${socket.id} leaving room ${room}`);
+    socket.leave(room);
   });
 });
 

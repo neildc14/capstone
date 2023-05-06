@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import osm from "../../utils/osm-provider";
 import "leaflet/dist/leaflet.css";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { Button, Box, Flex } from "@chakra-ui/react";
 import L from "leaflet";
@@ -92,42 +92,13 @@ const ViewMap = () => {
     localStorage.setItem("locations", JSON.stringify(locations));
   }, [locations]);
 
-  const handleWatchPositionClick = () => {
-    const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        const locationData = {
-          name: user,
-          user_type: user_type,
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          rooms: [id, "admin"], // Emit to the patient/driver room
-        };
-        socket.emit("send_location", locationData);
-
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  
-
-    socket.on("receive_location", (data) => {
-      console.log(`Received location data: ${data.lat}, ${data.lng}`);
-      setLocations((prevLocations) => [
-        ...prevLocations,
-        {
-          name: data.name,
-          user_type: data.user_type,
-          lat: data.lat,
-          lng: data.lng,
-          rooms: data.room,
-        },
-      ]);
-    });
+  const navigate = useNavigate();
+  const exitMap = () => {
+    socket.emit("leave_rooms", id);
+    socket.emit("leave_rooms", "admin");
+    localStorage.removeItem("locations");
+    navigate(`/${user_type}`);
   };
-
   const ambulanceIcon = new L.Icon({
     iconUrl: ambulance_icon,
     iconRetinaUrl: ambulance_icon,
@@ -147,26 +118,28 @@ const ViewMap = () => {
     return patientIcon;
   };
 
-  console.log(locations);
-  locations.map((loc) => console.log(loc.rooms.includes(id)));
+  const reload = () => {
+    location.reload();
+  };
+
   return (
     <>
       <Flex gap={4} mb={2}>
         <Button
-          size="md"
+          size="sm"
           mb={{ base: 2, md: 4 }}
           width={{ base: "100%", md: "inherit" }}
-          onClick={handleWatchPositionClick}
+          onClick={exitMap}
         >
-          Locate
+          Exit Map
         </Button>
         <Button
-          size="md"
+          size="sm"
           mb={{ base: 2, md: 4 }}
           width={{ base: "100%", md: "inherit" }}
-          onClick={() => setLocations([])}
+          onClick={reload}
         >
-          Clear locations
+          Refresh
         </Button>
       </Flex>
       {latitude !== 0 && longitude !== 0 && (
