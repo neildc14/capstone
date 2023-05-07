@@ -27,7 +27,7 @@ import ScheduleContext from "../../context/ScheduleContext";
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const PersonnelDashboardPanel = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const [requestData, setRequestData] = useState([]);
   const [handledRequesData, setHandledRequestData] = useState([]);
   const [ambulanceData, setAmbulanceData] = useState([]);

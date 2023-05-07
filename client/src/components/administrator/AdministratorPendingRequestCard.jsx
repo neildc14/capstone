@@ -69,11 +69,11 @@ const AdministratorPendingRequestCard = ({
     const response = await axios.get(`${ENDPOINT}schedule/all_schedule`, {
       headers,
     });
-    return response.queryData;
+    return response.data;
   };
 
   const {
-    queryData: queryData,
+    data: queryData,
     isLoading,
     isFetching,
     error,
@@ -94,9 +94,7 @@ const AdministratorPendingRequestCard = ({
 
     return driverOnDuty[0];
   }, [queryData]);
-
   const driverOnDuty = filterDriver();
-  console.log(driverOnDuty);
 
   const updateRequest = (data) => {
     return axios.put(
@@ -169,7 +167,7 @@ const AdministratorPendingRequestCard = ({
         const requestBody = {
           pickup_location: request_data?.pickup_location,
           status: "approved",
-          handled_by: parsed_user_data?.id,
+          handled_by: driverOnDuty?.scheduled_personnel?._id,
           ticket_id: response.data._id,
         };
         requestMutation.mutate(requestBody);
@@ -196,7 +194,7 @@ const AdministratorPendingRequestCard = ({
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "rejected",
-      handled_by: parsed_user_data?.id,
+      handled_by: driverOnDuty?.scheduled_personnel?._id,
     };
     requestMutation.mutate(body);
 

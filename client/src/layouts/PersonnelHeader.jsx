@@ -82,6 +82,7 @@ const PersonnelHeader = () => {
         isClosable: true,
       });
       queryClient.invalidateQueries(["ambulance"]);
+      queryClient.invalidateQueries(["admin_all_informations"]);
     },
   });
 
