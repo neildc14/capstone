@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useContext,
   Suspense,
+  useRef,
 } from "react";
 import {
   Box,
@@ -31,6 +32,8 @@ import AreaChart from "../global/AreaChart";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
+import notif from "../../assets/notif.wav";
+import AlertNotif from "../global/AlertNotif";
 
 const AdministratorAddDriverModal = React.lazy(() =>
   import("./AdministratorAddDriverModal")
@@ -53,7 +56,10 @@ const AdministratorDashboardPanel = () => {
   const [scheduleData, setScheduleData] = useState([]);
   const [isOpenAddDriverModal, setOpenAddDriverModal] = useState(false);
   const [isOpenAddAmbulanceModal, setOpenAddAmbulanceModal] = useState(false);
+  const [isOpenNotifModal, setOpenNotifModal] = useState(false);
   const [displayMobileAddbuttons, setDisplayMobileAddbuttons] = useState(false);
+  const [newRequestCount, setNewRequestCount] = useState(0);
+  const audioRef = useRef(null);
 
   const navigateToRequests = () => {
     navigate("requests");
@@ -68,7 +74,6 @@ const AdministratorDashboardPanel = () => {
   const fetchDetails = useCallback(async () => {
     const results = await Promise.allSettled([
       axios.get(`${ENDPOINT}request/all`, { headers }),
-      axios.get(`${ENDPOINT}ticket`, { headers }),
       axios.get(`${ENDPOINT}ambulance/all`, { headers }),
       axios.get(`${ENDPOINT}schedule/all_schedule`, { headers }),
     ]);
@@ -82,6 +87,8 @@ const AdministratorDashboardPanel = () => {
     fetchDetails,
     {
       refetchOnWindowFocus: true,
+      refetchInterval: 10000,
+      refetchIntervalInBackground: true,
     }
   );
 
@@ -90,6 +97,16 @@ const AdministratorDashboardPanel = () => {
       setRequestData(data[0]?.value?.data);
       setAmbulanceData(data[2]?.value?.data);
       setScheduleData(data[3]?.value?.data);
+      const newRequestDataLength = data[0]?.value?.data?.length;
+      if (
+        newRequestDataLength > requestData?.length &&
+        newRequestDataLength !== 0 &&
+        requestData.length !== 0
+      ) {
+        setNewRequestCount(newRequestDataLength - requestData.length);
+        audioRef.current.play();
+        handleOpenNotifModal();
+      }
     }
   }, [data, isLoading, isFetching]);
 
@@ -136,20 +153,37 @@ const AdministratorDashboardPanel = () => {
   }, [scheduleData]);
   const [driverOnDuty, driverDriving] = filterDriver();
 
-  const requestToday = useCallback(() => {
-    const today = new Date().toISOString().slice(0, 10);
-    const startOfDay = new Date(today);
-    const endOfDay = new Date(today);
-    startOfDay.setHours(0, 0, 0, 0);
-    endOfDay.setHours(23, 59, 59, 999);
-    const filteredData = requestData?.filter(
-      (item) =>
-        item.createdAt >= startOfDay.toISOString() &&
-        item.createdAt <= endOfDay.toISOString()
-    );
-    const requestsLength = filteredData?.length;
-    return requestsLength;
-  }, [requestData]);
+  const requestToday = useCallback(
+    function () {
+      const today = new Date();
+      const startOfDay = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        0,
+        0,
+        0,
+        0
+      );
+      const endOfDay = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        23,
+        59,
+        59,
+        999
+      );
+      const filteredData = requestData?.filter(
+        (item) =>
+          item.createdAt >= startOfDay.toISOString() &&
+          item.createdAt <= endOfDay.toISOString()
+      );
+      const requestsLength = filteredData?.length;
+      return requestsLength;
+    },
+    [requestData]
+  );
 
   const requestsLength = requestToday();
 
@@ -182,8 +216,16 @@ const AdministratorDashboardPanel = () => {
     setOpenAddAmbulanceModal(!isOpenAddAmbulanceModal);
   };
 
+  function handleOpenNotifModal() {
+    setOpenNotifModal(!isOpenNotifModal);
+  }
+console.log(newRequestCount)
   return (
     <>
+      {requestData && (
+        <audio ref={audioRef} src={notif} style={{ display: "none" }} />
+      )}
+
       <Box>
         <Flex
           display="flex"
@@ -388,7 +430,6 @@ const AdministratorDashboardPanel = () => {
         </Heading>
         <AreaChart data={requestData} />
       </Box>
-
       <Suspense>
         <AdministratorAddDriverModal
           handleOpenModal={handleOpenAddDriverModal}
@@ -399,6 +440,13 @@ const AdministratorDashboardPanel = () => {
         <AdministratorAddAmbulanceModal
           handleOpenModal={handleOpenAddAmbulanceModal}
           isOpen={isOpenAddAmbulanceModal}
+        />
+      </Suspense>
+      <Suspense>
+        <AlertNotif
+          handleOpenModal={handleOpenNotifModal}
+          isOpen={isOpenNotifModal}
+          newRequestCount={newRequestCount}
         />
       </Suspense>
     </>

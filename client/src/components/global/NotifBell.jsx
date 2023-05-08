@@ -35,8 +35,15 @@ const NotifBell = () => {
         <Icon as={UilBell} boxSize={6} color="#FF7A00" />
         {notificationsCount}
       </MenuButton>
-      <MenuList>
-        <MenuItem>Logout</MenuItem>
+      <MenuList maxWidth="400px" bgColor="orange.200">
+        <MenuItem>
+          lorem10 impsum set amet. lorem10 impsum set amet. lorem10 impsum set
+          amet.lorem10 impsum set amet.
+        </MenuItem>
+        <MenuItem>
+          lorem10 impsum set amet. lorem10 impsum set amet. lorem10 impsum set
+          amet.lorem10 impsum set amet.
+        </MenuItem>
       </MenuList>
     </Menu>
   );
