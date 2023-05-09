@@ -16,6 +16,7 @@ import {
   GridItem,
   Card,
   CardBody,
+  Text,
 } from "@chakra-ui/react";
 import PersonnelPanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
@@ -338,10 +339,18 @@ const PersonnelDashboardPanel = () => {
       </Box>
       <Suspense>
         <AlertNotif
-        newRequestCount={newRequestCount}
+          newRequestCount={newRequestCount}
           handleOpenModal={handleOpenNotifModal}
           isOpen={isOpenNotifModal}
-        />
+          title=" New Request!"
+          status="info"
+        >
+          <Text fontWeight="bold" fontSize="xl">
+            {newRequestCount}
+          </Text>{" "}
+          New request has been submitted by the requestor(s). Please check your
+          dashboard for more details.
+        </AlertNotif>
       </Suspense>
     </>
   );

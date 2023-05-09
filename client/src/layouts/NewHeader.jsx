@@ -5,7 +5,6 @@ import DateTime from "../components/global/DisplayTime";
 import Settings from "../components/Settings";
 import ThemeButton from "../components/global/ThemeButton";
 import NewSettings from "../components/global/NewSettings";
-import NotifBell from "../components/global/NotifBell";
 
 const NewHeader = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -19,7 +18,6 @@ const NewHeader = () => {
         {!isLargerThan768 && <TopNav />}
         {isLargerThan768 && <DateTime />}
         <Flex alignItems="baseline" gap="4px" me={{ md: 4 }} ms="auto">
-          <NotifBell />
           <ThemeButton />
           {isLargerThan768 ? <NewSettings /> : <Settings />}
         </Flex>

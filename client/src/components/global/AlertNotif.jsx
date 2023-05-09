@@ -13,7 +13,7 @@ import {
 
 import React from "react";
 
-const AlertNotif = ({ isOpen, handleOpenModal, newRequestCount }) => {
+const AlertNotif = ({ isOpen, handleOpenModal, title, status, children }) => {
   return (
     <>
       <Modal isOpen={isOpen} onClose={handleOpenModal}>
@@ -23,7 +23,7 @@ const AlertNotif = ({ isOpen, handleOpenModal, newRequestCount }) => {
           <ModalBody pt={10} pb={5} px={5}>
             <Alert
               py={10}
-              status="info"
+              status={status}
               variant="subtle"
               flexDirection="column"
               alignItems="center"
@@ -32,15 +32,9 @@ const AlertNotif = ({ isOpen, handleOpenModal, newRequestCount }) => {
             >
               <AlertIcon boxSize="40px" mr={0} />
               <AlertTitle mt={4} mb={1} fontSize="lg">
-                New Request!
+                {title}
               </AlertTitle>
-              <AlertDescription maxWidth="sm">
-                <Text fontWeight="bold" fontSize="xl">
-                  {newRequestCount}
-                </Text>{" "}
-                New request has been submitted by the requestor(s). Please check
-                your dashboard for more details.
-              </AlertDescription>
+              <AlertDescription maxWidth="sm">{children}</AlertDescription>
             </Alert>
           </ModalBody>
         </ModalContent>

@@ -60,6 +60,11 @@ io.on("connection", (socket) => {
     io.to(locationData.rooms).emit("receive_location", locationData);
   });
 
+  socket.on("send_notif", (data) => {
+    console.log(data,'NOTIFSS')
+    io.to(data.rooms).emit("receive_notif", data);
+  });
+
   socket.on("disconnect", () => {
     console.log(`Client disconnected with socket id ${socket.id}`);
   });

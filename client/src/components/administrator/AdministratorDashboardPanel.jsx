@@ -219,7 +219,7 @@ const AdministratorDashboardPanel = () => {
   function handleOpenNotifModal() {
     setOpenNotifModal(!isOpenNotifModal);
   }
-console.log(newRequestCount)
+  console.log(newRequestCount);
   return (
     <>
       {requestData && (
@@ -447,7 +447,15 @@ console.log(newRequestCount)
           handleOpenModal={handleOpenNotifModal}
           isOpen={isOpenNotifModal}
           newRequestCount={newRequestCount}
-        />
+          title=" New Request!"
+          status="info"
+        >
+          <Text fontWeight="bold" fontSize="xl">
+            {newRequestCount}
+          </Text>{" "}
+          New request has been submitted by the requestor(s). Please check your
+          dashboard for more details.
+        </AlertNotif>
       </Suspense>
     </>
   );

@@ -19,8 +19,10 @@ import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import ScheduleContext from "../../context/ScheduleContext";
 import { useLocation } from "react-router-dom";
+import { io } from "socket.io-client";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
+const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
 
 const PersonnelGenericRequestCard = ({
   queryKey,
@@ -45,7 +47,6 @@ const PersonnelGenericRequestCard = ({
 
   const { ambulance, id, updateScheduleData } = useContext(ScheduleContext);
 
-  console.log(ambulance, "card");
   const dt = DateTime.fromISO(date_time);
   const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
 
@@ -65,6 +66,25 @@ const PersonnelGenericRequestCard = ({
   const name = `${first_name} ${last_name}`;
   const toast = useToast();
   const queryClient = useQueryClient();
+
+  const [socket, setSocket] = useState(null);
+  const joinRoom = () => {
+    const socket = io(SOCKET_ENDPOINT);
+    socket.on("connect", () => {
+      socket.emit("join_rooms", {
+        rooms: [`notifications_${_id}`],
+      });
+    });
+
+    setSocket(socket);
+  };
+
+  const sendNotif = () => {
+    socket.emit("send_notif", {
+      message: "Your request has been approved.",
+      rooms: [`notifications_${_id}`],
+    });
+  };
 
   const updateRequest = async (data) => {
     return axios.put(
@@ -227,6 +247,7 @@ const PersonnelGenericRequestCard = ({
       status: "driving",
       ambulance: ambulance,
     });
+    sendNotif();
     setOpen(false);
   };
 
@@ -253,9 +274,9 @@ const PersonnelGenericRequestCard = ({
 
   const handleOpenModal = () => {
     setOpen(!isOpen);
+    joinRoom();
   };
 
-  console.log(mutationFunctionType);
   return (
     <>
       <Card

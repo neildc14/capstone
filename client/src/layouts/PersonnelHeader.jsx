@@ -5,7 +5,6 @@ import DateTime from "../components/global/DisplayTime";
 import ThemeButton from "../components/global/ThemeButton";
 import PersonnelSettings from "../components/ambulance-personnel/PersonnelSettings";
 import PersonnelDesktopSettings from "../components/ambulance-personnel/PersonnelDesktopSettings";
-import NotifBell from "../components/global/NotifBell";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -118,7 +117,6 @@ const PersonnelHeader = () => {
         {!isLargerThan768 && <TopNav />}
         {isLargerThan768 && <DateTime />}
         <Flex alignItems="baseline" gap="4px" me={{ md: 4 }} ms="auto">
-          <NotifBell />
           <ThemeButton />
           {isLargerThan768 ? (
             <PersonnelDesktopSettings

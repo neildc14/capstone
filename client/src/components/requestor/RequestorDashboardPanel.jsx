@@ -2,8 +2,10 @@ import React, {
   useEffect,
   useState,
   useCallback,
-  useMemo,
   useContext,
+  Suspense,
+  useRef,
+  useMemo,
 } from "react";
 import {
   Box,
@@ -28,10 +30,14 @@ import RequestorTripTicket from "./RequestorTripTicket";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PanelCard from "../global/PanelCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
+import AlertNotif from "../global/AlertNotif";
+import notif from "../../assets/notif.wav";
+import { io } from "socket.io-client";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
+const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
 
 const RequestorDashboardPanel = () => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -39,14 +45,16 @@ const RequestorDashboardPanel = () => {
     useState(false);
   const [requestData, setRequestData] = useState([]);
   const [tripTicketData, setTripTicketData] = useState([]);
+  const [isOpenNotifModal, setOpenNotifModal] = useState(false);
+  const location = useLocation();
+  const audioRef = useRef(null);
+
   const user = useContext(AuthContext);
 
   const parsed_user_data = JSON.parse(user);
 
   const fetchRecentRequestAndTicket = useCallback(async () => {
     const token = await parsed_user_data.token;
-
-    console.log(token);
 
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -62,11 +70,13 @@ const RequestorDashboardPanel = () => {
   }, [parsed_user_data?.token]);
 
   const queryKey = "ambulance_request_with_ticket";
-  const { data, isLoading, isFetching, error, isFetched, refetch } = useQuery(
+  const { data, isLoading, isFetching, refetch } = useQuery(
     [queryKey],
     fetchRecentRequestAndTicket,
     {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
+      refetchInterval: 10000,
+      refetchIntervalInBackground: true,
     }
   );
 
@@ -81,25 +91,48 @@ const RequestorDashboardPanel = () => {
     setDisplayMobileRequestbutton(true);
   }, []);
 
-  const memoizeRequestData = useMemo(() => {
+  const memoizedData = useMemo(() => {
     return requestData;
   }, [requestData]);
+
+  const memoizedTripTicket = useMemo(() => {
+    return tripTicketData;
+  }, [tripTicketData]);
+
+  useEffect(() => {
+    const socket = io(SOCKET_ENDPOINT);
+    if (memoizedData) {
+      socket.on("connect", () => {
+        socket.emit("join_rooms", {
+          rooms: [`notifications_${memoizedData[0]?._id}`],
+        });
+      });
+
+      socket.on("receive_notif", (data) => {
+        audioRef.current.play();
+        handleOpenNotifModal();
+      });
+
+      return () => socket.disconnect();
+    }
+  }, [memoizedData]);
 
   let pending;
   let approved;
   let fulfilled;
   let rejected;
-
-  console.log(memoizeRequestData);
-
   const totalRequestCounts = () => {
-    if (Array.isArray(requestData)) {
-      pending = requestData?.filter((req) => req.status === "pending").length;
-      approved = requestData?.filter((req) => req.status === "approved").length;
-      fulfilled = requestData?.filter(
+    if (Array.isArray(memoizedData)) {
+      pending = memoizedData?.filter((req) => req.status === "pending").length;
+      approved = memoizedData?.filter(
+        (req) => req.status === "approved"
+      ).length;
+      fulfilled = memoizedData?.filter(
         (req) => req.status === "fulfilled"
       ).length;
-      rejected = requestData?.filter((req) => req.status === "rejected").length;
+      rejected = memoizedData?.filter(
+        (req) => req.status === "rejected"
+      ).length;
     }
   };
   totalRequestCounts();
@@ -124,10 +157,15 @@ const RequestorDashboardPanel = () => {
     navigate("request");
   };
 
-  console.log({ data });
+  function handleOpenNotifModal() {
+    setOpenNotifModal(!isOpenNotifModal);
+  }
 
   return (
     <>
+      {requestData && (
+        <audio ref={audioRef} src={notif} style={{ display: "none" }} />
+      )}
       <Box>
         <Flex
           display="flex"
@@ -221,32 +259,28 @@ const RequestorDashboardPanel = () => {
 
               <Divider />
               <Box px={4} py={4}>
-                {!isLoading &&
-                  !isFetching &&
-                  data[0]?.status === "fulfilled" && (
-                    <RequestorRequestCard
-                      request_data={requestData[0]}
-                      request_id={requestData[0]?._id}
-                      request_status={requestData[0]?.status}
-                      refetch={refetch}
-                      queryKey={queryKey}
-                    />
-                  )}
-                {!isLoading &&
-                  !isFetching &&
-                  data[0]?.status === "rejected" && (
-                    <Card bgColor="orange.300">
-                      <CardBody
-                        display="inline-flex"
-                        alignItems="center"
-                        gap={2}
-                        color="white"
-                        fontWeight="semibold"
-                      >
-                        <UilFileSlash color="white" /> No requests found.
-                      </CardBody>
-                    </Card>
-                  )}
+                {memoizedData && (
+                  <RequestorRequestCard
+                    request_data={memoizedData[0]}
+                    request_id={memoizedData[0]?._id}
+                    request_status={memoizedData[0]?.status}
+                    refetch={refetch}
+                    queryKey={queryKey}
+                  />
+                )}
+                {!memoizedData && (
+                  <Card bgColor="orange.300">
+                    <CardBody
+                      display="inline-flex"
+                      alignItems="center"
+                      gap={2}
+                      color="white"
+                      fontWeight="semibold"
+                    >
+                      <UilFileSlash color="white" /> No requests found.
+                    </CardBody>
+                  </Card>
+                )}
               </Box>
             </Box>
             <Box as="section">
@@ -265,33 +299,40 @@ const RequestorDashboardPanel = () => {
                 </Heading>
                 <Divider />
 
-                {!isLoading &&
-                  !isFetching &&
-                  data[1]?.status === "fulfilled" && (
-                    <RequestorTripTicket
-                      trip_ticket_data={tripTicketData[0]}
-                      ticket_id={tripTicketData[0]?._id}
-                      ambulance_personnel={
-                        tripTicketData[0]?.ambulance_personnel?.fullName
-                      }
-                      ambulance_plate={
-                        tripTicketData[0]?.ambulance?.license_plate
-                      }
-                      destination={tripTicketData[0]?.destination}
-                    />
-                  )}
-                {!isLoading &&
-                  !isFetching &&
-                  data[1]?.status === "rejected" && (
-                    <Card bgColor="gray.50">
-                      <CardBody>No trip ticket found</CardBody>
-                    </Card>
-                  )}
+                {memoizedTripTicket && (
+                  <RequestorTripTicket
+                    trip_ticket_data={memoizedTripTicket[0]}
+                    ticket_id={memoizedTripTicket[0]?._id}
+                    ambulance_personnel={
+                      memoizedTripTicket[0]?.ambulance_personnel?.fullName
+                    }
+                    ambulance_plate={
+                      memoizedTripTicket[0]?.ambulance?.license_plate
+                    }
+                    destination={memoizedTripTicket[0]?.destination}
+                  />
+                )}
+                {!memoizedTripTicket && (
+                  <Card bgColor="gray.50">
+                    <CardBody>No trip ticket found</CardBody>
+                  </Card>
+                )}
               </Box>
             </Box>
           </Box>
         </Flex>
       </Box>
+      <Suspense>
+        <AlertNotif
+          handleOpenModal={handleOpenNotifModal}
+          isOpen={isOpenNotifModal}
+          title="Request Approved!"
+          status="success"
+        >
+          Your ambulance request has been approved. See the details below for.
+          more information.
+        </AlertNotif>
+      </Suspense>
     </>
   );
 };
