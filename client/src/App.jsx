@@ -101,7 +101,6 @@ function App() {
             <React.Fragment>
               <Routes>
                 <Route exact path="/" element={<Login />} />
-                <Route exact path="/account/login" element={<Login />} />
                 <Route exact path="/account/signup" element={<SignUp />} />
               </Routes>
 

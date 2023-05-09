@@ -21,9 +21,9 @@ import { Link as RouterLink } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import useSelect from "../hooks/useSelect";
 import ThemeButton from "../components/global/ThemeButton";
-
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import Logo from "../components/global/Logo";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -134,8 +134,16 @@ const SignUp = () => {
           justifyContent="center"
           width={{ md: "70%", lg: "50%" }}
           px={{ base: "1.5rem", md: "2rem", lg: "4rem" }}
+          overflowY="scroll"
         >
-          <Heading as="h1" mt={6} mb={10} fontSize="2xl" textAlign="center">
+          <Heading
+            as="h1"
+            mt={6}
+            mb={10}
+            fontSize="2xl"
+            textAlign="center"
+            fontFamily="'Roboto', sans-serif"
+          >
             Sign up your account.
           </Heading>
 
@@ -214,7 +222,6 @@ const SignUp = () => {
                 onChange={selectChange}
               >
                 <option value="requestor">Requestor</option>
-                <option value="ambulance_personnel">Ambulance Personnel</option>
               </Select>
             </FormControl>
 
@@ -222,9 +229,9 @@ const SignUp = () => {
               type="submit"
               w="100%"
               my={6}
-              bgColor="red.600"
+              bgColor="teal.700"
               color="white"
-              _hover={{ bgColor: "red.700" }}
+              _hover={{ bgColor: "teal.800" }}
             >
               Sign up
             </Button>
@@ -232,12 +239,7 @@ const SignUp = () => {
 
           <Text fontSize="sm">
             Already have an account?{" "}
-            <Link
-              as={RouterLink}
-              to="/account/login"
-              color="blue.500"
-              fontWeight="semibold"
-            >
+            <Link as={RouterLink} to="/" color="blue.500" fontWeight="semibold">
               Login
             </Link>
           </Text>
@@ -247,8 +249,10 @@ const SignUp = () => {
           height="100vh"
           width="100%"
           display={{ base: "none", md: "block" }}
-          bgColor="teal.700"
-        ></Box>
+          bgColor="teal.900"
+        >
+          <Logo />
+        </Box>
       </Flex>
     </Container>
   );

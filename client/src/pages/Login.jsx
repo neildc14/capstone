@@ -21,6 +21,7 @@ import useInput from "../hooks/useInput";
 import ThemeButton from "../components/global/ThemeButton";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import Logo from "../components/global/Logo";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -114,7 +115,14 @@ const Login = () => {
           width={{ md: "70%", lg: "50%" }}
           px={{ base: "1.5rem", md: "2rem", lg: "4rem" }}
         >
-          <Heading as="h1" mt={6} mb={10} fontSize="2xl" textAlign="center">
+          <Heading
+            as="h1"
+            mt={6}
+            mb={10}
+            fontSize="2xl"
+            textAlign="center"
+            fontFamily="'Roboto', sans-serif"
+          >
             Log in to your account.
           </Heading>
 
@@ -160,9 +168,9 @@ const Login = () => {
               type="submit"
               w="100%"
               my={6}
-              bgColor="green.600"
+              bgColor="green.800"
               color="white"
-              _hover={{ bgColor: "green.700" }}
+              _hover={{ bgColor: "green.900" }}
             >
               Log in
             </Button>
@@ -185,8 +193,10 @@ const Login = () => {
           height="100vh"
           width="100%"
           display={{ base: "none", md: "block" }}
-          bgColor="green.700"
-        ></Box>
+          bgColor="green.900"
+        >
+          <Logo />
+        </Box>
       </Flex>
     </Container>
   );

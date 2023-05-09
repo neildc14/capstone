@@ -11,8 +11,9 @@ const DashboardLogo = () => {
           fontSize="2xl"
           fontWeight="bold"
           color="#FF7A00"
+          fontFamily="'Merriweather', serif"
         >
-          AMRES
+          A.M.RE.S.
         </Text>
       </Flex>
       <Divider />
