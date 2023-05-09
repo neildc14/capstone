@@ -136,6 +136,7 @@ const RequestForm = () => {
               width="100%"
               size={{ base: "sm", md: "md" }}
               border="1px solid #C2BDBD"
+              placeholder="ex: Juan"
               {...bindFirstName}
             />
           </FormControl>
@@ -154,6 +155,7 @@ const RequestForm = () => {
               width="100%"
               size={{ base: "sm", md: "md" }}
               border="1px solid #C2BDBD"
+              placeholder="ex: Dela Cruz"
               {...bindLastName}
             />
           </FormControl>
@@ -173,6 +175,7 @@ const RequestForm = () => {
             width="100%"
             size={{ base: "sm", md: "md" }}
             border="1px solid #C2BDBD"
+            placeholder="ex: house number, street, barangay, city/municipality"
             {...bindLocation}
           />
         </FormControl>
@@ -194,6 +197,7 @@ const RequestForm = () => {
             width="100%"
             size={{ base: "sm", md: "md" }}
             border="1px solid #C2BDBD"
+            placeholder="ex: Philippine General Hospital"
             {...bindDestination}
           />
         </FormControl>
@@ -211,6 +215,7 @@ const RequestForm = () => {
             name="patient_condtion"
             size={{ base: "sm", md: "md" }}
             border="1px solid #C2BDBD"
+            placeholder="Kaunting impormasyon ukol sa kalagayan ng pasyente."
             {...bindPatientCondition}
           ></Textarea>
         </FormControl>
