@@ -1,17 +1,16 @@
-import Reac, { useEffect } from "react";
-import { Box, Divider, Link, Text } from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import { Box, Link } from "@chakra-ui/react";
 import Sidebar from "../global/Sidebar";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import useHover from "../../hooks/useHover";
 import {
   UilFileInfoAlt,
-  UilFilePlusAlt,
-  UilLocationPinAlt,
   UilThLarge,
   UilFolder,
   UilTicket,
   UilAmbulance,
 } from "@iconscout/react-unicons";
+import DashboardLogo from "../global/DashboardLogo";
 
 const PersonnelSidebar = () => {
   const location = useLocation();
@@ -23,23 +22,13 @@ const PersonnelSidebar = () => {
 
   useEffect(() => {
     if (location.pathname.includes("/ambulance_personnel")) {
-      document.title = "ARMS-Personnel";
+      document.title = "AMRES-Personnel";
     }
   }, [location.pathname]);
   return (
     <Sidebar bgColor="teal.900">
       <Box>
-        <Box py={1}>
-          <Text
-            textAlign="center"
-            fontSize="2xl"
-            fontWeight="bold"
-            color="#FF7A00"
-          >
-            LDRRMO-ARMS
-          </Text>
-          <Divider />
-        </Box>
+        <DashboardLogo />
         <Box ps={4} py={1}>
           <Box as="section" my={4}>
             <Link

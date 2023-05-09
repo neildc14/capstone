@@ -11,6 +11,7 @@ import {
   UilAmbulance,
   UilUserSquare,
 } from "@iconscout/react-unicons";
+import DashboardLogo from "../global/DashboardLogo";
 
 const AdministratorSidebar = () => {
   const location = useLocation();
@@ -22,24 +23,14 @@ const AdministratorSidebar = () => {
 
   useEffect(() => {
     if (location.pathname.includes("/administrator")) {
-      document.title = "ARMS-Admin";
+      document.title = "AMRES-Admin";
     }
   }, [location.pathname]);
 
   return (
     <Sidebar bgColor="teal.900">
       <Box>
-        <Box py={1}>
-          <Text
-            textAlign="center"
-            fontSize="2xl"
-            fontWeight="bold"
-            color="#FF7A00"
-          >
-            LDRRMO-ARMS
-          </Text>
-          <Divider />
-        </Box>
+        <DashboardLogo />
         <Box ps={4} py={1}>
           <Box as="section" my={4}>
             <Link

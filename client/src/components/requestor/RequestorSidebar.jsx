@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Heading, Divider, Text, Flex, Link } from "@chakra-ui/react";
+import { Box, Divider, Text, Link } from "@chakra-ui/react";
 import Sidebar from "../global/Sidebar";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import useHover from "../../hooks/useHover";
@@ -7,9 +7,9 @@ import {
   UilThLarge,
   UilFileInfoAlt,
   UilFilePlusAlt,
-  UilLocationPinAlt,
   UilTicket,
 } from "@iconscout/react-unicons";
+import DashboardLogo from "../global/DashboardLogo";
 
 const RequestorSidebar = () => {
   const location = useLocation();
@@ -22,23 +22,13 @@ const RequestorSidebar = () => {
 
   useEffect(() => {
     if (location.pathname.includes("/requestor")) {
-      document.title = "ARMS-Requestor";
+      document.title = "AMRES-Requestor";
     }
   }, [location.pathname]);
 
   return (
     <Sidebar bgColor="teal.900">
-      <Box py={1}>
-        <Text
-          textAlign="center"
-          fontSize="2xl"
-          fontWeight="bold"
-          color="#FF7A00"
-        >
-          LDRRMO-ARMS
-        </Text>
-        <Divider />
-      </Box>
+      <DashboardLogo />
       <Box ps={4} py={1}>
         <Box>
           <Box as="section" my={4}>

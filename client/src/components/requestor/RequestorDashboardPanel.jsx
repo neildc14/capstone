@@ -113,13 +113,12 @@ const RequestorDashboardPanel = () => {
       });
 
       socket.on("receive_notif", (data) => {
-        console.log(data.message, data.status);
         setNotifcations({
           message: data.message,
           status: data.status,
           title: data.title,
         });
-        
+
         audioRef.current.play();
         setOpenNotifModal(true);
       });
@@ -171,7 +170,6 @@ const RequestorDashboardPanel = () => {
   function handleOpenNotifModal() {
     setOpenNotifModal(!isOpenNotifModal);
   }
-  console.log(isOpenNotifModal);
 
   return (
     <>
