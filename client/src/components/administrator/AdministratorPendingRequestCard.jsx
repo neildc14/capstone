@@ -204,7 +204,7 @@ const AdministratorPendingRequestCard = ({
   const approveRequest = (e) => {
     e.preventDefault();
     if (driverOnDuty?.length === 0 || driverOnDuty === undefined) {
-      alert("No driver on duty found");
+      alert("No driver on duty found. Please contact your drivers.");
       return;
     }
     setToastStatus("Approved");
