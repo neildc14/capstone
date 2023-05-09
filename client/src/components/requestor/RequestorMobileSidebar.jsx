@@ -1,30 +1,15 @@
 import React from "react";
 
 import MobileSidebar from "../global/MobileSidebar";
-import {
-  Box,
-  Heading,
-  Divider,
-  Text,
-  Button,
-  Flex,
-  Link,
-} from "@chakra-ui/react";
+import { Box, Heading, Divider, Link } from "@chakra-ui/react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import {
   UilCreateDashboard,
   UilFileInfoAlt,
   UilFilePlusAlt,
-  UilLocationPinAlt,
 } from "@iconscout/react-unicons";
 
-const RequestorMobileSidebar = ({
-  isOpen,
-  onClose,
-  handleRequestForm,
-  handleViewRequest,
-  handleViewMap,
-}) => {
+const RequestorMobileSidebar = ({ isOpen, onClose }) => {
   return (
     <MobileSidebar bgColor="teal.900" isOpen={isOpen} onClose={onClose}>
       <Box>
@@ -55,7 +40,7 @@ const RequestorMobileSidebar = ({
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
+            color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -76,7 +61,7 @@ const RequestorMobileSidebar = ({
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
+            color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -98,7 +83,7 @@ const RequestorMobileSidebar = ({
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
+            color: "#FF7A00",
           }}
           onClick={onClose}
         >

@@ -10,18 +10,15 @@ import {
   UilTicket,
   UilAmbulance,
   UilUserSquare,
-  UilFileGraph,
 } from "@iconscout/react-unicons";
 
 const AdministratorSidebar = () => {
   const location = useLocation();
   const [hoverRequestDashboard, bindHoverRequestDashboard] = useHover();
-  const [hoverRequest, bindHoverRequest] = useHover();
   const [hoverAllRequests, bindHoverAllRequests] = useHover();
   const [hoverTripTickets, bindHoverTripTickets] = useHover();
   const [hoveDrivers, bindHoverDrivers] = useHover();
   const [hoverRequestMap, bindHoverRequestMap] = useHover();
-  const [hoverReports, bindHoverReports] = useHover();
 
   useEffect(() => {
     if (location.pathname.includes("/administrator")) {
@@ -238,39 +235,6 @@ const AdministratorSidebar = () => {
             >
               <UilLocationPinAlt />
               Map
-            </Link>
-
-            <Link
-              as={RouterLink}
-              to="/administrator/reports"
-              variant="ghost"
-              display="flex"
-              justifyContent="flex-start"
-              gap=".5rem"
-              width="100%"
-              my={4}
-              ps={2}
-              py={2}
-              borderRadius="none"
-              textAlign="left"
-              fontSize={{ md: "sm", lg: "md" }}
-              fontWeight="semibold"
-              color={
-                location.pathname === "/administrator/reports"
-                  ? "#FF7A00"
-                  : "whiteAlpha.900"
-              }
-              bgColor={
-                location.pathname === "/administrator/reports" &&
-                "whiteAlpha.900"
-              }
-              _hover={{
-                color: "#FF7A00",
-              }}
-              {...bindHoverReports}
-            >
-              <UilFileGraph />
-              Reports
             </Link>
           </Box>
         </Box>

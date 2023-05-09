@@ -32,7 +32,6 @@ const PersonnelAmbulanceCard = ({
   const [mutationFunctionType, setMutationFunctionType] = useState("");
   const status = ambulance_data?.status;
 
-  
   const toast = useToast();
   const queryClient = useQueryClient();
 
@@ -44,7 +43,6 @@ const PersonnelAmbulanceCard = ({
       "Content-Type": "application/json",
     },
   };
-  console.log(config, "CONFIG");
 
   const handleMutationFunctionType = (data) => {
     let axiosMethod;
@@ -94,7 +92,6 @@ const PersonnelAmbulanceCard = ({
       status: selectValue,
     };
     mutation.mutate(body);
-    console.log(selectValue);
     setToastStatus("updated");
     setOpenUpdate(!isOpenUpdate);
   };

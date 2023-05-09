@@ -63,7 +63,6 @@ const HandledRequest = () => {
 
   const approvedRequests = filterApprovedRequests(data);
   const recentApprovedRequest = approvedRequests[approvedRequests.length - 1];
-  console.log(approvedRequests?.length, "REQUEST LENGTH");
 
   return (
     <Box>

@@ -1,18 +1,9 @@
 import React from "react";
 
 import MobileSidebar from "../global/MobileSidebar";
+import { Box, Heading, Divider, Link } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 import {
-  Box,
-  Heading,
-  Divider,
-  Text,
-  Button,
-  Flex,
-  Link,
-} from "@chakra-ui/react";
-import { Link as RouterLink, useLocation } from "react-router-dom";
-import {
-  UilLocationPinAlt,
   UilThLarge,
   UilFolder,
   UilTicket,
@@ -51,7 +42,7 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
+            color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -72,7 +63,7 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
+            color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -93,7 +84,7 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
+            color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -115,7 +106,7 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
+            color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -138,7 +129,7 @@ const PersonnelMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
+            color: "#FF7A00",
           }}
           onClick={onClose}
         >

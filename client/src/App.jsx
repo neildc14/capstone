@@ -23,7 +23,6 @@ import AdministratorRequests from "./components/administrator/AdministratorReque
 import AdministratorAmbulance from "./components/administrator/AdministratorAmbulance";
 import AdministratorDrivers from "./components/administrator/AdministratorDrivers";
 import AdministratorDashboardPanel from "./components/administrator/AdministratorDashboardPanel";
-import AdministratorReports from "./components/administrator/AdministratorReports";
 import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAllRequests2";
 import PersonnelAmbulance from "./components/ambulance-personnel/PersonnelAmbulance2";
 import AdministratorViewMap from "./components/administrator/AdministratorViewMap";
@@ -187,11 +186,6 @@ function App() {
                         exact
                         path="map"
                         element={<AdministratorViewMap />}
-                      />
-                      <Route
-                        exact
-                        path="reports"
-                        element={<AdministratorReports />}
                       />
                     </Route>
                   </>

@@ -1,16 +1,8 @@
 import React from "react";
 
 import MobileSidebar from "../global/MobileSidebar";
-import {
-  Box,
-  Heading,
-  Divider,
-  Text,
-  Button,
-  Flex,
-  Link,
-} from "@chakra-ui/react";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Box, Heading, Divider, Link } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   UilLocationPinAlt,
   UilThLarge,
@@ -18,7 +10,6 @@ import {
   UilTicket,
   UilAmbulance,
   UilUserSquare,
-  UilFileGraph,
 } from "@iconscout/react-unicons";
 
 const AdministratorMobileSidebar = ({ isOpen, onClose }) => {
@@ -52,8 +43,7 @@ const AdministratorMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
+            color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -74,8 +64,7 @@ const AdministratorMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
+              color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -96,8 +85,7 @@ const AdministratorMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
+              color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -119,8 +107,7 @@ const AdministratorMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
+              color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -142,8 +129,7 @@ const AdministratorMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
+              color: "#FF7A00",
           }}
           onClick={onClose}
         >
@@ -165,36 +151,12 @@ const AdministratorMobileSidebar = ({ isOpen, onClose }) => {
           fontSize={{ base: "xl", md: "sm", lg: "md" }}
           color="whiteAlpha.900"
           _hover={{
-            color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
+              color: "#FF7A00",
           }}
           onClick={onClose}
         >
           <UilLocationPinAlt />
           Map
-        </Link>
-        <Link
-          as={RouterLink}
-          to="/administrator/reports"
-          variant="ghost"
-          display="flex"
-          alignItems="center"
-          gap=".5rem"
-          width="100%"
-          my={8}
-          p="0"
-          borderRadius="none"
-          textAlign="left"
-          fontSize={{ base: "xl", md: "sm", lg: "md" }}
-          color="whiteAlpha.900"
-          _hover={{
-            color: "blackAlpha.900",
-            bgColor: "whiteAlpha.900",
-          }}
-          onClick={onClose}
-        >
-          <UilFileGraph />
-          Reports
         </Link>
       </Box>
     </MobileSidebar>

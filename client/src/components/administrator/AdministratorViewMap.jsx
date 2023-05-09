@@ -28,14 +28,12 @@ const AdministratorViewMap = () => {
     const newSocket = io(SOCKET_ENDPOINT);
 
     newSocket.on("connect", () => {
-      console.log(`Connected with socket id ${newSocket.id}`);
       newSocket.emit("join_rooms", {
         rooms: ["admin"],
       });
     });
 
     newSocket.on("receive_location", (data) => {
-      console.log(`Received location data: ${data.lat}, ${data.lng}`);
       setLocations((prevLocations) => [
         ...prevLocations,
         {
