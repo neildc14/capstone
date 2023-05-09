@@ -35,7 +35,6 @@ const RequestCard = ({
     setOpenDeleteConfirmationModal(!isOpenDeleteConfirmationModal);
   };
 
-  console.log(request_data);
   const location = useLocation();
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);

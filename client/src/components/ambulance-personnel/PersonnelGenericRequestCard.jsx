@@ -79,9 +79,11 @@ const PersonnelGenericRequestCard = ({
     setSocket(socket);
   };
 
-  const sendNotif = () => {
+  const sendNotif = (message, status, title) => {
     socket.emit("send_notif", {
-      message: "Your request has been approved.",
+      message: message,
+      status: status,
+      title: title,
       rooms: [`notifications_${_id}`],
     });
   };
@@ -218,6 +220,10 @@ const PersonnelGenericRequestCard = ({
       });
     }
 
+    const message = " Your ambulance request has been rejected. ";
+    const notifStat = "error";
+    const notifTitle = "Declined";
+    sendNotif(message, notifStat, notifTitle);
     setOpen(false);
   };
 
@@ -247,7 +253,11 @@ const PersonnelGenericRequestCard = ({
       status: "driving",
       ambulance: ambulance,
     });
-    sendNotif();
+    const message =
+      " Your ambulance request has been approved. See the details below for more information.";
+    const notifStat = "success";
+    const notifTitle = "Approved";
+    sendNotif(message, notifStat, notifTitle);
     setOpen(false);
   };
 

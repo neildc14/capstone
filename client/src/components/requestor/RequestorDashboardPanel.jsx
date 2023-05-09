@@ -46,7 +46,11 @@ const RequestorDashboardPanel = () => {
   const [requestData, setRequestData] = useState([]);
   const [tripTicketData, setTripTicketData] = useState([]);
   const [isOpenNotifModal, setOpenNotifModal] = useState(false);
-  const location = useLocation();
+  const [notifications, setNotifcations] = useState({
+    message: "",
+    status: "",
+    title: "",
+  });
   const audioRef = useRef(null);
 
   const user = useContext(AuthContext);
@@ -109,8 +113,15 @@ const RequestorDashboardPanel = () => {
       });
 
       socket.on("receive_notif", (data) => {
+        console.log(data.message, data.status);
+        setNotifcations({
+          message: data.message,
+          status: data.status,
+          title: data.title,
+        });
+        
         audioRef.current.play();
-        handleOpenNotifModal();
+        setOpenNotifModal(true);
       });
 
       return () => socket.disconnect();
@@ -160,6 +171,7 @@ const RequestorDashboardPanel = () => {
   function handleOpenNotifModal() {
     setOpenNotifModal(!isOpenNotifModal);
   }
+  console.log(isOpenNotifModal);
 
   return (
     <>
@@ -326,11 +338,10 @@ const RequestorDashboardPanel = () => {
         <AlertNotif
           handleOpenModal={handleOpenNotifModal}
           isOpen={isOpenNotifModal}
-          title="Request Approved!"
-          status="success"
+          title={notifications?.title}
+          status={notifications?.status}
         >
-          Your ambulance request has been approved. See the details below for.
-          more information.
+          {notifications?.message}
         </AlertNotif>
       </Suspense>
     </>
