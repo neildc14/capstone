@@ -116,7 +116,7 @@ const Login = () => {
           px={{ base: "1.5rem", md: "2rem", lg: "4rem" }}
         >
           <Heading
-            as="h1"
+            as="h2"
             mt={6}
             mb={10}
             fontSize="2xl"

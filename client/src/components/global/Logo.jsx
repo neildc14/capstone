@@ -19,7 +19,7 @@ const Logo = () => {
         fontWeight="bold"
         fontFamily="'Merriweather', serif"
       >
-        A.M.R.E.S.
+        A.M.RE.S.
       </Heading>
       <Text color="white">Ambulance Monitoring And Requesting System</Text>
     </Flex>

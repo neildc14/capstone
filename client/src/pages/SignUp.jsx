@@ -137,14 +137,14 @@ const SignUp = () => {
           overflowY="scroll"
         >
           <Heading
-            as="h1"
+            as="h2"
             mt={6}
             mb={10}
             fontSize="2xl"
             textAlign="center"
             fontFamily="'Roboto', sans-serif"
           >
-            Sign up your account.
+            Sign up for an account.
           </Heading>
 
           <Box as="form" onSubmit={handleSubmit}>
