@@ -103,7 +103,7 @@ const PersonnelHeader = () => {
       localStorage.removeItem("schedule");
       localStorage.removeItem("ambulance_id");
       localStorage.removeItem("ambulance");
-      navigate("/account/login");
+      navigate("/");
     }
   };
 

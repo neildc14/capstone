@@ -23,7 +23,7 @@ const NewSettings = () => {
   const handleLogOut = () => {
     if (user) {
       localStorage.removeItem("user");
-      navigate("/account/login");
+      navigate("/");
     }
   };
 

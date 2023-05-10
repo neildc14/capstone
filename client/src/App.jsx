@@ -140,7 +140,7 @@ function App() {
                     </Route>
                   </>
                 ) : (
-                  <Route exact element={<Navigate to="/account/login" />} />
+                  <Route exact element={<Navigate to="/" />} />
                 )}
               </Routes>
 
@@ -189,7 +189,7 @@ function App() {
                     </Route>
                   </>
                 ) : (
-                  <Route exact element={<Navigate to="/account/login" />} />
+                  <Route exact element={<Navigate to="/" />} />
                 )}
               </Routes>
               <ScheduleProvider>
@@ -239,7 +239,7 @@ function App() {
                         </Route>
                       </>
                     ) : (
-                      <Route exact path="/account/login" element={<Login />} />
+                      <Route exact path="/" element={<Login />} />
                     )}
                   </Routes>
                 </AmbulanceContext.Provider>
