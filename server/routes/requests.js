@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../helpers/uploadImage");
-
+const multer = require("multer");
+const path = require("path");
 const {
   getAllRequests,
   getAllRequestsPerRequestor,
@@ -14,6 +14,16 @@ const {
 const corsHeaders = require("../middlewares/headers");
 const requireAuth = require("../middlewares/requireAuth");
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file?.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 router.use(requireAuth);
 
 //universal requests

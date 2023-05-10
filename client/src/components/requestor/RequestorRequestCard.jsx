@@ -13,6 +13,7 @@ import RequestCardDetailsModal from "../RequestCardDetailsModal";
 import DeleteConfirmationModal from "./RequestorDeleteConfirmationModal";
 import { useLocation } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
+import ZoomImage from "../global/ZoomImage";
 
 const RequestCard = ({
   refetch,
@@ -26,6 +27,8 @@ const RequestCard = ({
     useState(false);
   const [isOpenDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
     useState(false);
+  const [zoom, setZoom] = useState(false);
+  const [zoomImage, setZoomImage] = useState("");
 
   const toggleRequestCardDetailsModal = () => {
     setOpenRequestCardDetailsModal(!isOpenRequestCardDetailsModal);
@@ -38,6 +41,11 @@ const RequestCard = ({
   const location = useLocation();
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
+
+  const handleZoomInModal = () => {
+    setZoom(!zoom);
+    setOpenRequestCardDetailsModal(!isOpenRequestCardDetailsModal);
+  };
 
   return (
     <>
@@ -129,6 +137,8 @@ const RequestCard = ({
             isOpen={isOpenRequestCardDetailsModal}
             onClose={toggleRequestCardDetailsModal}
             request_data={request_data}
+            setZoomImage={setZoomImage}
+            handleZoomInModal={handleZoomInModal}
           />
           <DeleteConfirmationModal
             refetch={refetch}
@@ -138,6 +148,11 @@ const RequestCard = ({
             subject="request"
             isOpen={isOpenDeleteConfirmationModal}
             onClose={toggleDeleteConfirmationModal}
+          />
+          <ZoomImage
+            isOpen={zoom}
+            onClose={handleZoomInModal}
+            image={zoomImage}
           />
         </>
       )}

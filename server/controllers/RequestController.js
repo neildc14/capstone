@@ -107,9 +107,8 @@ const postRequest = async (req, res) => {
     status,
     patient_condition,
     confirmation,
-    referral_slip,
   } = req.body;
-  console.log(req.body);
+  console.log(req.file);
 
   try {
     let errorMessage = "Location is not defined";
@@ -124,13 +123,7 @@ const postRequest = async (req, res) => {
       status,
       patient_condition,
       confirmation,
-
-      /*referral_slip: {
-        data: fs.readFileSync(
-          path.join(__dirname + "/uploads/" + req.file.filename)
-        ),
-        contentType: "image/png",
-      },*/
+      referral_slip: req.file?.originalname ?? "",
     });
 
     errorMessage = "Failed to post request.";
@@ -147,7 +140,6 @@ const postRequest = async (req, res) => {
 const putRequest = async (req, res) => {
   const { id } = req.params;
   const { pickup_location } = req.body;
-  console.log(req.body, "REQ");
 
   try {
     let errorMessage = "Invalid ID";

@@ -19,7 +19,7 @@ const RequestSchema = new Schema(
       enum: ["pending", "approved", "fulfilled", "rejected"],
     },
     patient_condition: { type: String },
-    referral_slip: { data: Buffer, contentType: String },
+    referral_slip: { type:String },
     confirmation: { type: Boolean, required: true },
     handled_by: { type: Schema.Types.ObjectId, ref: "User" },
     ticket_id: { type: String },

@@ -1,4 +1,10 @@
-import React, { useState, useMemo, useContext, useCallback } from "react";
+import React, {
+  useState,
+  useMemo,
+  useContext,
+  useCallback,
+  useEffect,
+} from "react";
 import {
   Heading,
   Flex,
@@ -16,15 +22,17 @@ import {
   ModalBody,
   ModalFooter,
   Divider,
-  Image,
   useToast,
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
+import ReferralSlipImage from "../global/ReferralSlipImage";
 import { UilEye } from "@iconscout/react-unicons";
 import { useTable } from "react-table";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
+import ReferralSlip from "../../utils/fetch-referral";
+import ZoomImage from "../global/ZoomImage";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -45,9 +53,7 @@ const AdministratorPendingRequestCard = ({
     ticket_id,
     pickup_location,
     transfer_location,
-    referral_slip,
     patient_condition,
-    status,
   } = request_data || {};
 
   const name = `${first_name} ${last_name}`;
@@ -64,6 +70,19 @@ const AdministratorPendingRequestCard = ({
     },
   };
   const headers = { Authorization: `Bearer ${parsed_user_data?.token}` };
+  const [zoom, setZoom] = useState(false);
+  const [zoomImage, setZoomImage] = useState("");
+
+  const referralSlipBlob = ReferralSlip({
+    referralSlip: request_data?.referral_slip,
+    headers,
+  });
+
+  useEffect(() => {
+    if (referralSlipBlob) {
+      setZoomImage(URL?.createObjectURL(referralSlipBlob));
+    }
+  }, [referralSlipBlob]);
 
   const fetchSchedules = async () => {
     const response = await axios.get(`${ENDPOINT}schedule/all_schedule`, {
@@ -238,6 +257,11 @@ const AdministratorPendingRequestCard = ({
     setOpen(!isOpen);
   };
 
+  const handleZoomInModal = () => {
+    setOpen(!isOpen);
+    setZoom(!zoom);
+  };
+
   const viewButton = (
     <Button
       size="sm"
@@ -349,7 +373,6 @@ const AdministratorPendingRequestCard = ({
           </TableContainer>
         </CardBody>
       </Card>
-
       <ModalContainer
         header="Requestor ID"
         header_detail={_id}
@@ -357,7 +380,7 @@ const AdministratorPendingRequestCard = ({
         onClose={handleOpenModal}
       >
         <ModalBody>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+          <Heading as="h6" fontSize="md" mb={{ base: 4 }} fontWeight="semibold">
             Requestor Name:
             <Text
               as="span"
@@ -368,7 +391,7 @@ const AdministratorPendingRequestCard = ({
               {name}
             </Text>
           </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+          <Heading as="h6" fontSize="md" mb={{ base: 4 }} fontWeight="semibold">
             Pick-up Location:
             <Text
               as="span"
@@ -379,7 +402,7 @@ const AdministratorPendingRequestCard = ({
               {pickup_location}
             </Text>
           </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+          <Heading as="h6" fontSize="md" mb={{ base: 4 }} fontWeight="semibold">
             Transfer Location:
             <Text
               as="span"
@@ -390,16 +413,20 @@ const AdministratorPendingRequestCard = ({
               {transfer_location}
             </Text>
           </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+          <Heading as="h6" fontSize="md" mb={{ base: 4 }} fontWeight="semibold">
             Patient Condition:
             <Text as="span" ps={2} fontWeight="normal">
               {patient_condition}
             </Text>
           </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Referral Slip:
-          </Heading>
-          {referral_slip && <Image src={referral_slip} alt="referral slip" />}
+          {referralSlipBlob && (
+            <>
+              <ReferralSlipImage
+                handleZoomInModal={handleZoomInModal}
+                referralSlipBlob={referralSlipBlob}
+              />
+            </>
+          )}
         </ModalBody>
         <Divider />
         <ModalFooter>
@@ -424,7 +451,8 @@ const AdministratorPendingRequestCard = ({
             </Button>
           </Flex>
         </ModalFooter>
-      </ModalContainer>
+      </ModalContainer>{" "}
+      <ZoomImage isOpen={zoom} onClose={handleZoomInModal} image={zoomImage} />
     </>
   );
 };

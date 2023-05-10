@@ -10,13 +10,16 @@ import {
   Divider,
   ModalFooter,
 } from "@chakra-ui/react";
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import ModalContainer from "../global/ModalContainer";
+import ReferralSlipImage from "../global/ReferralSlipImage";
 import { UilEye } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
+import ReferralSlip from "../../utils/fetch-referral";
+import ZoomImage from "../global/ZoomImage";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -40,7 +43,6 @@ const AdministratorGenericRequestCard = ({
     ticket_id,
     pickup_location,
     transfer_location,
-    referral_slip,
     patient_condition,
     status,
   } = request_data || {};
@@ -59,6 +61,21 @@ const AdministratorGenericRequestCard = ({
     },
   };
   const headers = { Authorization: `Bearer ${parsed_user_data?.token}` };
+  const [zoom, setZoom] = useState(false);
+  const [zoomImage, setZoomImage] = useState("");
+
+  const referralSlipBlob = ReferralSlip({
+    referralSlip: request_data?.referral_slip,
+    headers: {
+      Authorization: `Bearer ${parsed_user_data?.token}`,
+    },
+  });
+
+  useEffect(() => {
+    if (referralSlipBlob) {
+      setZoomImage(URL?.createObjectURL(referralSlipBlob));
+    }
+  }, [referralSlipBlob]);
 
   const fetchSchedules = async () => {
     const response = await axios.get(`${ENDPOINT}schedule/all_schedule`, {
@@ -90,7 +107,6 @@ const AdministratorGenericRequestCard = ({
   }, [data]);
 
   const driverOnDuty = filterDriver();
-  console.log(driverOnDuty);
 
   const updateRequest = (data) => {
     return axios.put(
@@ -243,6 +259,11 @@ const AdministratorGenericRequestCard = ({
     setOpen(!isOpen);
   };
 
+  const handleZoomInModal = () => {
+    setOpen(!isOpen);
+    setZoom(!zoom);
+  };
+
   return (
     <>
       <Card
@@ -313,7 +334,6 @@ const AdministratorGenericRequestCard = ({
           </Flex>
         </CardBody>
       </Card>
-
       <ModalContainer
         header="Requestor ID"
         header_detail={_id}
@@ -360,10 +380,14 @@ const AdministratorGenericRequestCard = ({
               {patient_condition}
             </Text>
           </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Referral Slip:
-          </Heading>
-          {referral_slip && <Image src={referral_slip} alt="referral slip" />}
+          {referralSlipBlob && (
+            <>
+              <ReferralSlipImage
+                handleZoomInModal={handleZoomInModal}
+                referralSlipBlob={referralSlipBlob}
+              />
+            </>
+          )}
         </ModalBody>
         <Divider />
         {request_data?.status !== "fulfilled" && (
@@ -396,7 +420,8 @@ const AdministratorGenericRequestCard = ({
             </Flex>
           </ModalFooter>
         )}
-      </ModalContainer>
+      </ModalContainer>{" "}
+      <ZoomImage isOpen={zoom} onClose={handleZoomInModal} image={zoomImage} />
     </>
   );
 };

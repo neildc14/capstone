@@ -30,7 +30,7 @@ import RequestorTripTicket from "./RequestorTripTicket";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PanelCard from "../global/PanelCard";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import AlertNotif from "../global/AlertNotif";
 import notif from "../../assets/notif.wav";
@@ -54,7 +54,6 @@ const RequestorDashboardPanel = () => {
   const audioRef = useRef(null);
 
   const user = useContext(AuthContext);
-
   const parsed_user_data = JSON.parse(user);
 
   const fetchRecentRequestAndTicket = useCallback(async () => {

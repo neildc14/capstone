@@ -29,7 +29,7 @@ const RequestForm = () => {
   const [location, bindLocation] = useInput();
   const [destination, bindDestination] = useInput();
   const [patientCondition, bindPatientCondition] = useInput();
-  const [referralSlip, bindReferralSlip] = useInput();
+  const [referralSlip, setReferralSlip] = useState("");
   const [confirmation, setConfirrmation] = useState("");
   const user = useContext(AuthContext);
 
@@ -41,13 +41,16 @@ const RequestForm = () => {
     setConfirrmation(!confirmation);
   };
 
+  const handleReferralChange = (e) => {
+    setReferralSlip(e.target.files[0]);
+  };
+
   const parsed_user_data = JSON.parse(user);
-  console.log(parsed_user_data?.token);
 
   const config = {
     headers: {
       Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     },
   };
 
@@ -71,6 +74,7 @@ const RequestForm = () => {
       queryClient.invalidateQueries(["admin_all_informations"]);
       queryClient.invalidateQueries(["personnel_all_informations"]);
       queryClient.invalidateQueries(["ambulance_request"]);
+      queryClient.invalidateQueries(["referral_slip"]);
       navigate("/requestor/");
     },
   });
@@ -85,16 +89,16 @@ const RequestForm = () => {
       return;
     }
 
-    const body = {
-      first_name: firstName,
-      last_name: lastName,
-      pickup_location: location,
-      transfer_location: destination,
-      referral_slip: referralSlip,
-      patient_condition: patientCondition,
-      confirmation: confirmation,
-    };
-    mutation.mutate(body);
+    const formData = new FormData();
+    formData.append("first_name", firstName);
+    formData.append("last_name", lastName);
+    formData.append("pickup_location", location);
+    formData.append("transfer_location", destination);
+    formData.append("referral_slip", referralSlip);
+    formData.append("patient_condition", patientCondition);
+    formData.append("confirmation", confirmation);
+
+    mutation.mutate(formData);
   };
 
   const onRequestCancel = () => {
@@ -229,9 +233,12 @@ const RequestForm = () => {
           </FormLabel>
           <Input
             type="file"
+            id="referral_slip     "
             name="referral_slip"
+            filename="referral_slip"
             size={{ base: "sm", md: "md" }}
             border="1px solid #C2BDBD"
+            onChange={handleReferralChange}
           />
         </FormControl>
 

@@ -10,6 +10,7 @@ const ambulance = require("./routes/ambulance");
 const ticket = require("./routes/ticket");
 const users = require("./routes/users");
 const schedule = require("./routes/schedule");
+const referral_slip = require("./routes/referral_slip");
 
 require("dotenv").config();
 
@@ -32,6 +33,7 @@ app.use("/api/ambulance", ambulance);
 app.use("/api/ticket", ticket);
 app.use("/api/auth", users);
 app.use("/api/schedule", schedule);
+app.use("/api/referral_slip", referral_slip);
 
 //websocket
 const io = new Server(server, {
@@ -61,7 +63,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_notif", (data) => {
-    console.log(data,'NOTIFSS')
+    console.log(data, "NOTIFSS");
     io.to(data.rooms).emit("receive_notif", data);
   });
 

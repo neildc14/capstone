@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Heading,
   Flex,
@@ -14,12 +14,15 @@ import {
 import ModalContainer from "../global/ModalContainer";
 import { UilEye, UilCheck, UilUserLocation } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import ScheduleContext from "../../context/ScheduleContext";
 import { useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
+import ZoomImage from "../global/ZoomImage";
+import ReferralSlip from "../../utils/fetch-referral";
+import ReferralSlipImage from "../global/ReferralSlipImage";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
@@ -44,6 +47,10 @@ const PersonnelGenericRequestCard = ({
       "Content-Type": "application/json",
     },
   };
+  const headers = {
+    Authorization: `Bearer ${parsed_user_data?.token}`,
+    responseType: "arraybuffer",
+  };
 
   const { ambulance, id, updateScheduleData } = useContext(ScheduleContext);
 
@@ -58,7 +65,6 @@ const PersonnelGenericRequestCard = ({
     ticket_id,
     pickup_location,
     transfer_location,
-    referral_slip,
     patient_condition,
     status,
   } = request_data || {};
@@ -66,6 +72,8 @@ const PersonnelGenericRequestCard = ({
   const name = `${first_name} ${last_name}`;
   const toast = useToast();
   const queryClient = useQueryClient();
+  const [zoom, setZoom] = useState(false);
+  const [zoomImage, setZoomImage] = useState("");
 
   const [socket, setSocket] = useState(null);
   const joinRoom = () => {
@@ -87,6 +95,17 @@ const PersonnelGenericRequestCard = ({
       rooms: [`notifications_${_id}`],
     });
   };
+
+  const referralSlipBlob = ReferralSlip({
+    referralSlip: request_data?.referral_slip,
+    headers,
+  });
+
+  useEffect(() => {
+    if (referralSlipBlob) {
+      setZoomImage(URL?.createObjectURL(referralSlipBlob));
+    }
+  }, [referralSlipBlob]);
 
   const updateRequest = async (data) => {
     return axios.put(
@@ -287,6 +306,11 @@ const PersonnelGenericRequestCard = ({
     joinRoom();
   };
 
+  const handleZoomInModal = () => {
+    setOpen(!isOpen);
+    setZoom(!zoom);
+  };
+
   return (
     <>
       <Card
@@ -402,7 +426,7 @@ const PersonnelGenericRequestCard = ({
         onClose={handleOpenModal}
       >
         <ModalBody>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+          <Heading as="h6" fontSize="md" mb={{ base: 4 }} fontWeight="semibold">
             Requestor Name:
             <Text
               as="span"
@@ -413,7 +437,7 @@ const PersonnelGenericRequestCard = ({
               {name}
             </Text>
           </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+          <Heading as="h6" fontSize="md" mb={{ base: 4 }} fontWeight="semibold">
             Pick-up Location:
             <Text
               as="span"
@@ -424,7 +448,7 @@ const PersonnelGenericRequestCard = ({
               {pickup_location}
             </Text>
           </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+          <Heading as="h6" fontSize="md" mb={{ base: 4 }} fontWeight="semibold">
             Transfer Location:
             <Text
               as="span"
@@ -435,16 +459,20 @@ const PersonnelGenericRequestCard = ({
               {transfer_location}
             </Text>
           </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
+          <Heading as="h6" fontSize="md" mb={{ base: 4 }} fontWeight="semibold">
             Patient Condition:
             <Text as="span" ps={2} fontWeight="normal">
               {patient_condition}
             </Text>
           </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Referral Slip:
-          </Heading>
-          {referral_slip && <Image src={referral_slip} alt="referral slip" />}
+          {referralSlipBlob && (
+            <>
+              <ReferralSlipImage
+                handleZoomInModal={handleZoomInModal}
+                referralSlipBlob={referralSlipBlob}
+              />
+            </>
+          )}
         </ModalBody>
         <Divider />
         {request_data?.status !== "fulfilled" && (
@@ -476,6 +504,7 @@ const PersonnelGenericRequestCard = ({
           </ModalFooter>
         )}
       </ModalContainer>
+      <ZoomImage isOpen={zoom} onClose={handleZoomInModal} image={zoomImage} />
     </>
   );
 };

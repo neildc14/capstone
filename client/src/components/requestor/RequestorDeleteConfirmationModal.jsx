@@ -51,6 +51,7 @@ const DeleteConfirmationModal = ({
     mutationFn: deleteRequest,
     onSettled: () => {
       queryClient.invalidateQueries([queryKey]);
+      queryClient.invalidateQueries(["referral_slip"]);
     },
     onSuccess: () => {
       toast({
