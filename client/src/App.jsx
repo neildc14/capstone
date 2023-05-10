@@ -8,6 +8,7 @@ import AuthContext from "./context/AuthContext";
 import ScheduleContext, { ScheduleProvider } from "./context/ScheduleContext";
 import AmbulanceContext from "./context/AmbulanceContext";
 import ambulanceIcon from "./assets/icons/ambulance.png";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
@@ -26,6 +27,7 @@ import AdministratorDashboardPanel from "./components/administrator/Administrato
 import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAllRequests2";
 import PersonnelAmbulance from "./components/ambulance-personnel/PersonnelAmbulance2";
 import AdministratorViewMap from "./components/administrator/AdministratorViewMap";
+import PageNotFound from "./components/global/PageNotFound";
 
 const ViewMap = lazy(() => import("./components/global/ViewMap"));
 
@@ -63,6 +65,7 @@ function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [user, setUser] = useState(null);
   const [ambulance, setAmbulance] = useState(null);
+  const [loaded, setLoaded] = useState(false);
 
   const toggleDashboard = () => {
     onOpen();
@@ -76,7 +79,9 @@ function App() {
     let ambulance = localStorage.getItem("ambulance");
 
     if (userLoggedIn) {
+      console.log(userLoggedIn);
       setUser(userLoggedIn);
+      setLoaded(true);
     }
     if (schedule) {
       updateScheduleData({
@@ -92,118 +97,116 @@ function App() {
 
   const parsed_user_data = JSON.parse(user);
   const user_type = parsed_user_data?.user_type;
-
+  console.log(user_type, loaded, user);
   return (
     <QueryClientProvider client={queryClient}>
       <DashboardContext.Provider value={{ toggleDashboard, isOpen, onClose }}>
         <AuthContext.Provider value={user}>
           <div className="App">
             <React.Fragment>
-              <Routes>
-                <Route exact path="/" element={<Login />} />
-                <Route exact path="/account/signup" element={<SignUp />} />
-              </Routes>
-
-              <Routes>
-                {user !== null && user_type === "requestor" ? (
-                  <>
-                    <Route
-                      exact
-                      path="/requestor"
-                      element={
-                        <Suspense fallback={<FallbackLoading />}>
-                          <RequestorDashboard />
-                        </Suspense>
-                      }
-                    >
-                      <Route
-                        exact
-                        path=""
-                        element={<RequestorDashboardPanel />}
-                      />
-                      <Route exact path="request" element={<RequestForm />} />
-                      <Route
-                        exact
-                        path="requests"
-                        element={<RequestorAllRequests />}
-                      />
-                      <Route
-                        exact
-                        path="trip_tickets"
-                        element={<RequestorTripTickets />}
-                      />
-                      <Route
-                        exact
-                        path="map/:id/:user_type/:user"
-                        element={<ViewMap />}
-                      />
-                    </Route>
-                  </>
-                ) : (
-                  <Route exact element={<Navigate to="/" />} />
-                )}
-              </Routes>
-
-              <Routes>
-                {user !== null && user_type === "administrator" ? (
-                  <>
-                    <Route
-                      exact
-                      path="/administrator"
-                      element={
-                        <Suspense fallback={<FallbackLoading />}>
-                          <AdministratorDashboard />
-                        </Suspense>
-                      }
-                    >
-                      <Route
-                        exact
-                        path=""
-                        element={<AdministratorDashboardPanel />}
-                      />
-                      <Route
-                        exact
-                        path="requests"
-                        element={<AdministratorRequests />}
-                      />
-                      <Route
-                        exact
-                        path="ambulance"
-                        element={<AdministratorAmbulance />}
-                      />
-                      <Route
-                        exact
-                        path="drivers"
-                        element={<AdministratorDrivers />}
-                      />
-                      <Route
-                        exact
-                        path="trip_tickets"
-                        element={<AdministratorTripTickets />}
-                      />
-                      <Route
-                        exact
-                        path="map"
-                        element={<AdministratorViewMap />}
-                      />
-                    </Route>
-                  </>
-                ) : (
-                  <Route exact element={<Navigate to="/" />} />
-                )}
-              </Routes>
               <ScheduleProvider>
                 <AmbulanceContext.Provider value={ambulance}>
                   <Routes>
-                    {user !== null && user_type === "ambulance_personnel" ? (
+                    <Route exact path="/" element={<Login />} />
+                    <Route exact path="/account/signup" element={<SignUp />} />
+                    {loaded && (
                       <>
+                        <Route
+                          exact
+                          path="/requestor"
+                          element={
+                            <ProtectedRoute user={user}>
+                              {user_type === "requestor" && (
+                                <Suspense fallback={<FallbackLoading />}>
+                                  <RequestorDashboard />
+                                </Suspense>
+                              )}
+                            </ProtectedRoute>
+                          }
+                        >
+                          <Route
+                            exact
+                            path=""
+                            element={<RequestorDashboardPanel />}
+                          />
+                          <Route
+                            exact
+                            path="request"
+                            element={<RequestForm />}
+                          />
+                          <Route
+                            exact
+                            path="requests"
+                            element={<RequestorAllRequests />}
+                          />
+                          <Route
+                            exact
+                            path="trip_tickets"
+                            element={<RequestorTripTickets />}
+                          />
+                          <Route
+                            exact
+                            path="map/:id/:user_type/:user"
+                            element={<ViewMap />}
+                          />
+                        </Route>
+
+                        <Route
+                          exact
+                          path="/administrator"
+                          element={
+                            <ProtectedRoute user={user}>
+                              {user_type === "administrator" && (
+                                <Suspense fallback={<FallbackLoading />}>
+                                  <AdministratorDashboard />
+                                </Suspense>
+                              )}
+                            </ProtectedRoute>
+                          }
+                        >
+                          <Route
+                            exact
+                            path=""
+                            element={<AdministratorDashboardPanel />}
+                          />
+                          <Route
+                            exact
+                            path="requests"
+                            element={<AdministratorRequests />}
+                          />
+                          <Route
+                            exact
+                            path="ambulance"
+                            element={<AdministratorAmbulance />}
+                          />
+                          <Route
+                            exact
+                            path="drivers"
+                            element={<AdministratorDrivers />}
+                          />
+                          <Route
+                            exact
+                            path="trip_tickets"
+                            element={<AdministratorTripTickets />}
+                          />
+                          <Route
+                            exact
+                            path="map"
+                            element={<AdministratorViewMap />}
+                          />
+                        </Route>
+
                         <Route
                           exact
                           path="/ambulance_personnel"
                           element={
-                            <Suspense fallback={<FallbackLoading />}>
-                              <AmbulancePersonnelDashboard />
-                            </Suspense>
+                            <ProtectedRoute user={user}>
+                              {user_type === "ambulance_personnel" && (
+                                <Suspense fallback={<FallbackLoading />}>
+                                  <AmbulancePersonnelDashboard />
+                                </Suspense>
+                              )}
+                            </ProtectedRoute>
                           }
                         >
                           <Route
@@ -238,9 +241,8 @@ function App() {
                           />
                         </Route>
                       </>
-                    ) : (
-                      <Route exact path="/" element={<Login />} />
                     )}
+                    <Route exact path="*" element={<PageNotFound />} />
                   </Routes>
                 </AmbulanceContext.Provider>
               </ScheduleProvider>
