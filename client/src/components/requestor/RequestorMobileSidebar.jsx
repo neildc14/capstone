@@ -7,6 +7,7 @@ import {
   UilCreateDashboard,
   UilFileInfoAlt,
   UilFilePlusAlt,
+  UilTicket,
 } from "@iconscout/react-unicons";
 
 const RequestorMobileSidebar = ({ isOpen, onClose }) => {
@@ -89,6 +90,29 @@ const RequestorMobileSidebar = ({ isOpen, onClose }) => {
         >
           <UilFileInfoAlt />
           All Requests
+        </Link>
+
+        <Link
+          as={RouterLink}
+          to="/requestor/trip_tickets"
+          variant="ghost"
+          display="flex"
+          alignItems="center"
+          gap=".5rem"
+          width="100%"
+          my={8}
+          p="0"
+          borderRadius="none"
+          textAlign="left"
+          fontSize={{ base: "xl", md: "sm", lg: "md" }}
+          color="whiteAlpha.900"
+          _hover={{
+            color: "#FF7A00",
+          }}
+          onClick={onClose}
+        >
+          <UilTicket />
+          Trip Tickets
         </Link>
       </Box>
     </MobileSidebar>
