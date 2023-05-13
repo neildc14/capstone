@@ -18,7 +18,6 @@ const NewHeader = () => {
         {!isLargerThan768 && <TopNav />}
         {isLargerThan768 && <DateTime />}
         <Flex alignItems="baseline" gap="4px" me={{ md: 4 }} ms="auto">
-          <ThemeButton />
           {isLargerThan768 ? <NewSettings /> : <Settings />}
         </Flex>
       </Flex>

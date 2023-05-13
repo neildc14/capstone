@@ -86,7 +86,6 @@ const PersonnelHeader = () => {
   });
 
   const changeStatusHandler = (e) => {
-    console.log(schedule.ambulance);
     scheduleMutation.mutate({
       status: e.target.value,
       ambulance: ambulance,
@@ -117,7 +116,6 @@ const PersonnelHeader = () => {
         {!isLargerThan768 && <TopNav />}
         {isLargerThan768 && <DateTime />}
         <Flex alignItems="baseline" gap="4px" me={{ md: 4 }} ms="auto">
-          <ThemeButton />
           {isLargerThan768 ? (
             <PersonnelDesktopSettings
               handleLogOut={handleLogOut}

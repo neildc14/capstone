@@ -14,7 +14,6 @@ const Header = () => {
         <Flex alignItems="center" gap="4px" me={{ md: 4 }} ms="auto">
           {isLargerThan768 && <DateTime />}
           <Settings />
-          <ThemeButton />
         </Flex>
       </Flex>
       <Divider mb={4} />
