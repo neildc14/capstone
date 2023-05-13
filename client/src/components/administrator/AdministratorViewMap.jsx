@@ -16,10 +16,9 @@ const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
 const AdministratorViewMap = () => {
   const [longitude, setLongitude] = useState(0);
   const [latitude, setLatitude] = useState(0);
-  const [locations, setLocations] = useState(
-    JSON.parse(localStorage.getItem("locations")) || []
-  );
+  const [locations, setLocations] = useState([]);
   const [socket, setSocket] = useState(null);
+  //  JSON.parse(localStorage.getItem("locations")) ||
 
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
@@ -74,24 +73,24 @@ const AdministratorViewMap = () => {
     return () => navigator.geolocation.clearWatch(watchId);
   }, ["admin", socket]);
 
-  useEffect(() => {
-    const cacheLocations = JSON.parse(localStorage.getItem("locations"));
-    if (cacheLocations) {
-      setLocations(cacheLocations);
-    }
-  }, [locations]);
+  // useEffect(() => {
+  //   const cacheLocations = JSON.parse(localStorage.getItem("locations"));
+  //   if (cacheLocations) {
+  //     setLocations(cacheLocations);
+  //   }
+  // }, [locations]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      localStorage.removeItem("locations");
-    }, 60000); // Clear the cache every 1 minute
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     localStorage.removeItem("locations");
+  //   }, 60000); // Clear the cache every 1 minute
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
-  useEffect(() => {
-    localStorage.setItem("locations", JSON.stringify(locations));
-  }, [locations]);
+  // useEffect(() => {
+  //   localStorage.setItem("locations", JSON.stringify(locations));
+  // }, [locations]);
 
   const ambulanceIcon = new L.Icon({
     iconUrl: ambulance_icon,
