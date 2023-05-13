@@ -13,7 +13,7 @@ const DashboardLogo = () => {
           color="#FF7A00"
           fontFamily="'Merriweather', serif"
         >
-          A.M.RE.S.
+          WEB-ARMS
         </Text>
       </Flex>
       <Divider />

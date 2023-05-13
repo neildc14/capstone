@@ -19,9 +19,9 @@ const Logo = () => {
         fontWeight="bold"
         fontFamily="'Merriweather', serif"
       >
-        A.M.RE.S.
+        WEB-ARMS
       </Heading>
-      <Text color="white">Ambulance Monitoring And Requesting System</Text>
+      <Text color="white">Web-Based Ambulance Monitoring And Requesting System</Text>
     </Flex>
   );
 };

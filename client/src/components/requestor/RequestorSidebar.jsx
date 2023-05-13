@@ -22,7 +22,7 @@ const RequestorSidebar = () => {
 
   useEffect(() => {
     if (location.pathname.includes("/requestor")) {
-      document.title = "AMRES-Requestor";
+      document.title = "WEB-ARMS | Requestor";
     }
   }, [location.pathname]);
 

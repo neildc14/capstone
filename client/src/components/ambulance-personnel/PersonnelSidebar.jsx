@@ -22,7 +22,7 @@ const PersonnelSidebar = () => {
 
   useEffect(() => {
     if (location.pathname.includes("/ambulance_personnel")) {
-      document.title = "AMRES-Personnel";
+      document.title = "WEB-ARMS | Personnel";
     }
   }, [location.pathname]);
   return (

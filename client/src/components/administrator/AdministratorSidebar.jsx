@@ -23,7 +23,7 @@ const AdministratorSidebar = () => {
 
   useEffect(() => {
     if (location.pathname.includes("/administrator")) {
-      document.title = "AMRES-Admin";
+      document.title = "WEB-ARMS | Admin";
     }
   }, [location.pathname]);
 
