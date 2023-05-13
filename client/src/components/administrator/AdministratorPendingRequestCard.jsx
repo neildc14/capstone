@@ -33,6 +33,7 @@ import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import ReferralSlip from "../../utils/fetch-referral";
 import ZoomImage from "../global/ZoomImage";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -62,14 +63,7 @@ const AdministratorPendingRequestCard = ({
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "application/json",
-    },
-  };
+  const { headers, config } = Authorization();
   const [zoom, setZoom] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
 
