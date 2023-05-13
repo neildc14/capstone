@@ -56,14 +56,14 @@ const AdministratorViewMap = () => {
         const locationData = {
           name: "Office",
           user_type: parsed_user_data.user_type,
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
+          lat: 15.792329447470083,
+          lng: 120.98882375670816,
           rooms: ["admin"], // Emit to the patient/driver room
         };
         socket.emit("send_location", locationData);
 
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
+        setLatitude(15.792329447470083);
+        setLongitude(120.98882375670816);
       },
       (error) => {
         console.error(error);
