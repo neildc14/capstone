@@ -15,15 +15,16 @@ import {
   Heading,
   useToast,
   FormErrorMessage,
+  Image,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import useSelect from "../hooks/useSelect";
-import ThemeButton from "../components/global/ThemeButton";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Logo from "../components/global/Logo";
+import logoIcon from "../assets/icons/ARMSorange.png";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -120,9 +121,6 @@ const SignUp = () => {
 
   return (
     <Container height="100%" maxW="full" px={0} position="relative">
-      <Box position="absolute" top="5px" right="10px">
-        <ThemeButton />
-      </Box>
       <Flex
         flexDirection={{ base: "column", md: "row-reverse" }}
         justifyContent={{ base: "center", md: "space-between" }}
@@ -136,6 +134,13 @@ const SignUp = () => {
           px={{ base: "1.5rem", md: "2rem", lg: "4rem" }}
           overflowY="scroll"
         >
+          <Image
+            src={logoIcon}
+            mt={40}
+            boxSize={20}
+            alignSelf="center"
+            display={{ base: "block", md: "none" }}
+          />
           <Heading
             as="h2"
             mt={6}
