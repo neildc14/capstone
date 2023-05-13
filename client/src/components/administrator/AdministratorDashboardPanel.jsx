@@ -2,7 +2,6 @@ import React, {
   useState,
   useCallback,
   useEffect,
-  useContext,
   Suspense,
   useRef,
 } from "react";
@@ -31,9 +30,9 @@ import PaginatedItems from "../global/PaginatedItems";
 import AreaChart from "../global/AreaChart";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
 import notif from "../../assets/notif.wav";
 import AlertNotif from "../global/AlertNotif";
+import Authorization from "../../utils/auth";
 
 const AdministratorAddDriverModal = React.lazy(() =>
   import("./AdministratorAddDriverModal")
@@ -65,11 +64,7 @@ const AdministratorDashboardPanel = () => {
     navigate("requests");
   };
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const headers = {
-    Authorization: `Bearer ${parsed_user_data?.token}`,
-  };
+  const { headers } = Authorization();
 
   const fetchDetails = useCallback(async () => {
     const results = await Promise.allSettled([

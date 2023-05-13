@@ -111,7 +111,7 @@ const PersonnelTripTicketCard = ({
                 Driver:
               </Heading>
               <Text as="span" fontWeight="normal" textTransform="capitalize">
-                {trip_ticket?.ambulance_personnel.fullName}
+                {trip_ticket?.ambulance_personnel?.fullName}
               </Text>
             </VStack>
             <VStack align="left" spacing={1} pb={2}>

@@ -15,7 +15,6 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -25,15 +24,6 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
   const [validationErrors, setValidationErrors] = useState({});
   const toast = useToast();
   const queryClient = useQueryClient();
-
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "application/json",
-    },
-  };
 
   const makeDriver = (new_driver) => {
     return axios.post(`${ENDPOINT}auth/signup`, new_driver);

@@ -78,7 +78,6 @@ const getDrivers = async (req, res) => {
           address: user.address,
         };
       });
-    console.log(all_drivers);
 
     let errorMessage = "No trip ambulance drivers were found";
     if (all_drivers.length === 0) {
@@ -94,7 +93,7 @@ const getDrivers = async (req, res) => {
 
 const deleteDriver = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
+
   try {
     let errorMessage = "Invalid ID.";
     if (isNotValidObjectId(id)) {
@@ -106,22 +105,19 @@ const deleteDriver = async (req, res) => {
     errorMessage = "Failed to delete driver";
     validateInstanceMethod(deleted_driver, errorMessage);
 
-    if (Schedule.findOne({ scheduled_personnel: id })) {
-      const deleted_schedule = Schedule.findOneAndDelete({
-        scheduled_personnel: id,
-      });
-      console.log({ deleted_schedule }, "DELETED");
+    const query = { scheduled_personnel: id };
+    if (Schedule.find(query)) {
+      const deleted_schedule = await Schedule.deleteMany(query);
+      errorMessage = "Failed to delete schedule";
+      validateInstanceMethod(deleted_schedule, errorMessage);
     }
 
-    errorMessage = "Failed to delete schedule";
-    validateInstanceMethod(deleted_schedule, errorMessage);
     const success = new HTTPResponse(res, 200, {
       message: "Driver deleted successfully!",
     });
-    console.log(success);
+
     return success.sendResponse();
   } catch (error) {
-    console.log(error);
     const failure = new HTTPResponse(res, 400, error.message);
     return failure.sendResponse();
   }

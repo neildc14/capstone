@@ -34,8 +34,6 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
     email = driver_data?.scheduled_personnel?.email,
     firstname = driver_data?.scheduled_personnel?.firstname,
     lastname = driver_data?.scheduled_personnel?.lastname,
-    contact = driver_data?.scheduled_personnel?.contact,
-    address = driver_data?.scheduled_personnel?.address,
     user_type = driver_data?.scheduled_personnel?.user_type,
   } = driver_data || {};
 
@@ -168,12 +166,6 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
             </Text>
           </Heading>
           <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
-            Contact:
-            <Text as="span" ps={2} fontWeight="normal">
-              {contact}
-            </Text>
-          </Heading>
-          <Heading as="h6" fontSize="md" mb={2} fontWeight="semibold">
             Type:
             <Text as="span" ps={2} fontWeight="normal">
               {user_type}
@@ -190,7 +182,7 @@ const DriverCard = ({ driver_data, name, borderRadius = "md" }) => {
       >
         <ModalBody my={4}>
           <Text my={4}>
-            Are you sure that you want to delete this ambulance?
+            Are you sure that you want to delete this ambulance personnel?
           </Text>
           <Button
             size={{ base: "sm", md: "md" }}

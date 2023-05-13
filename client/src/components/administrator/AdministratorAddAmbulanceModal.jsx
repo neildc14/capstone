@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import ModalContainer from "../global/ModalContainer";
 import PropTypes from "prop-types";
 import {
@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -20,15 +20,7 @@ const AdministratorAddAmbulanceModal = ({ handleOpenModal, isOpen }) => {
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "application/json",
-    },
-  };
-
+  const { config } = Authorization();
   const makeAmbulance = (new_ambulance) => {
     return axios.post(`${ENDPOINT}ambulance/all`, new_ambulance, config);
   };

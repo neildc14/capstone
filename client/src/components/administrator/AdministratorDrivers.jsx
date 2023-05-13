@@ -26,7 +26,6 @@ const AdministratorDrivers = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [allDrivers, setAllDrivers] = useState([]);
   const [driverSchedules, setDriverSchedules] = useState([]);
-  const [nonAssignedDrivers, setNonAssignedDrivers] = useState([]);
   const [search, setSearch] = useState([]);
 
   const stand_by = [];
@@ -58,29 +57,42 @@ const AdministratorDrivers = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    const nonAssignedDrivers = allDrivers?.filter((driver) => {
-      if (driverSchedules?.length !== 0) {
-        return !driverSchedules?.some(
-          (schedule) =>
-            schedule.scheduled_personnel?._id === driver._id ||
-            schedule.scheduled_personnel?._id === ""
-        );
-      }
-      return [];
-    });
-
-    setNonAssignedDrivers(nonAssignedDrivers);
-  }, [allDrivers, driverSchedules]);
+  const now = new Date();
+  const startOfDay = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    0,
+    0,
+    0
+  );
+  const endOfDay = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    23,
+    59,
+    59
+  );
 
   const filterDrivers = () => {
     if (Array.isArray(driverSchedules) && driverSchedules !== undefined) {
       stand_by.push(
-        ...driverSchedules?.filter((driver) => driver.status === "stand-by")
+        ...driverSchedules?.filter(
+          (driver) =>
+            driver.status === "stand-by" &&
+            new Date(driver.createdAt) >= startOfDay &&
+            new Date(driver.createdAt) <= endOfDay
+        )
       );
 
       driving.push(
-        ...driverSchedules?.filter((driver) => driver.status === "driving")
+        ...driverSchedules?.filter(
+          (driver) =>
+            driver.status === "driving" &&
+            new Date(driver.createdAt) >= startOfDay &&
+            new Date(driver.createdAt) <= endOfDay
+        )
       );
 
       off_duty.push(
@@ -90,19 +102,26 @@ const AdministratorDrivers = () => {
   };
   filterDrivers();
 
-  const checkIfEmptyDrivers = () => {
-    const driversWithNoDuty = [];
-    if (nonAssignedDrivers !== undefined) {
-      driversWithNoDuty.push(...nonAssignedDrivers);
+  const resultOffDuty = off_duty.reduce((acc, curr) => {
+    if (!acc[curr.scheduled_personnel?._id]) {
+      acc[curr.scheduled_personnel?._id] = curr;
     }
-    if (off_duty.length !== 0) {
-      driversWithNoDuty.push(off_duty);
-    }
-    return driversWithNoDuty;
-  };
+    return acc;
+  }, {});
 
-  const driversWithNoDuty = checkIfEmptyDrivers();
+  const flattenedOffDutyArray = Object.values(resultOffDuty).flatMap(
+    (obj) => obj
+  );
+  console.log(flattenedOffDutyArray, "DDD", driving);
 
+  const filteredOffDutyArray = flattenedOffDutyArray.filter((flatItem) =>
+    driving.some(
+      (driving) =>
+        driving.scheduled_personnel?._id !== flatItem?.scheduled_personnel?._id
+    )
+  );
+
+  console.log(filteredOffDutyArray);
   const tabs = [
     {
       label: "All",
@@ -130,7 +149,7 @@ const AdministratorDrivers = () => {
     {
       label: "Off-duty",
 
-      items: driversWithNoDuty,
+      items: filteredOffDutyArray,
       get counter() {
         return this?.items?.length;
       },

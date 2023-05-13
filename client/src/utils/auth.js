@@ -14,7 +14,7 @@ const Authorization = () => {
       "Content-Type": "application/json",
     },
   };
-  return { headers, config, parsed_user_data };
+  return { headers, config, parsed_user_data, user };
 };
 
 export default Authorization;
