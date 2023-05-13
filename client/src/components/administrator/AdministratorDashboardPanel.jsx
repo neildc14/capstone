@@ -95,8 +95,8 @@ const AdministratorDashboardPanel = () => {
   useEffect(() => {
     if (!isLoading && !isFetching) {
       setRequestData(data[0]?.value?.data);
-      setAmbulanceData(data[2]?.value?.data);
-      setScheduleData(data[3]?.value?.data);
+      setAmbulanceData(data[1]?.value?.data);
+      setScheduleData(data[2]?.value?.data);
       const newRequestDataLength = data[0]?.value?.data?.length;
       if (
         newRequestDataLength > requestData?.length &&
@@ -134,46 +134,50 @@ const AdministratorDashboardPanel = () => {
   }, [requestData]);
   const pendingRequests = filterPendingRequests();
 
+  const now = new Date();
+  const startOfDay = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    0,
+    0,
+    0
+  );
+  const endOfDay = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    23,
+    59,
+    59
+  );
+
   const filterDriver = useCallback(() => {
-    const today = new Date().toISOString().slice(0, 10);
     let driverOnDuty;
     let driverDriving;
+
     if (Array.isArray(scheduleData)) {
       driverOnDuty = scheduleData?.filter(
         (driver) =>
           driver.status === "stand-by" &&
-          driver.createdAt.slice(0, 10) === today
+          new Date(driver.createdAt) >= startOfDay &&
+          new Date(driver.createdAt) <= endOfDay
       );
+
       driverDriving = scheduleData?.filter(
         (driver) =>
-          driver.status === "driving" && driver.createdAt.slice(0, 10) === today
+          driver.status === "driving" &&
+          new Date(driver.createdAt) >= startOfDay &&
+          new Date(driver.createdAt) <= endOfDay
       );
     }
+
     return [driverOnDuty, driverDriving];
   }, [scheduleData]);
   const [driverOnDuty, driverDriving] = filterDriver();
 
   const requestToday = useCallback(
     function () {
-      const today = new Date();
-      const startOfDay = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate(),
-        0,
-        0,
-        0,
-        0
-      );
-      const endOfDay = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate(),
-        23,
-        59,
-        59,
-        999
-      );
       const filteredData = requestData?.filter(
         (item) =>
           item.createdAt >= startOfDay.toISOString() &&
@@ -219,7 +223,7 @@ const AdministratorDashboardPanel = () => {
   function handleOpenNotifModal() {
     setOpenNotifModal(!isOpenNotifModal);
   }
-  console.log(newRequestCount);
+
   return (
     <>
       {requestData && (
@@ -384,6 +388,7 @@ const AdministratorDashboardPanel = () => {
                               <AdministratorPendingRequestCard
                                 key={item._id}
                                 request_data={item}
+                                driverOnDuty={driverOnDuty && driverOnDuty[0]}
                                 bgColor="white"
                                 borderRadius="sm"
                               />

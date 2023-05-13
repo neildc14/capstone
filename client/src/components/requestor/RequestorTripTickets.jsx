@@ -40,7 +40,7 @@ const RequestorTripTickets = () => {
   }, []);
 
   const queryKey = "trip_ticket";
-  const { data, isLoading, isFetching, error } = useQuery(
+  const { data,  error } = useQuery(
     [queryKey],
     fetchTripTickets,
     {
@@ -51,8 +51,6 @@ const RequestorTripTickets = () => {
   const memoizedData = useMemo(() => {
     return data;
   }, [data]);
-
-  console.log({ memoizedData, ticketDetails });
 
   const showTripTicketDetails = () => {
     setShow(true);

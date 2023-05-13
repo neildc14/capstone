@@ -178,7 +178,7 @@ const AdministratorGenericRequestCard = ({
         const requestBody = {
           pickup_location: request_data?.pickup_location,
           status: "approved",
-          handled_by: parsed_user_data?.id,
+          handled_by: driverOnDuty._id,
           ticket_id: response.data._id,
         };
         requestMutation.mutate(requestBody);
@@ -231,7 +231,7 @@ const AdministratorGenericRequestCard = ({
     setToastStatus("Approved");
 
     const ticketBody = {
-      ambulance_personnel: parsed_user_data?.id,
+      ambulance_personnel: driverOnDuty.scheduled_personnel?._id,
       requestor: user_id,
       request_id: _id,
       personnel_fullname: driverOnDuty.scheduled_personnel.fullName,
@@ -264,6 +264,7 @@ const AdministratorGenericRequestCard = ({
     setZoom(!zoom);
   };
 
+  console.log(driverOnDuty);
   return (
     <>
       <Card

@@ -38,6 +38,7 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const AdministratorPendingRequestCard = ({
   request_data,
+  driverOnDuty,
   bgColor = "#F5F5F5",
   borderRadius = "md",
 }) => {
@@ -69,7 +70,6 @@ const AdministratorPendingRequestCard = ({
       "Content-Type": "application/json",
     },
   };
-  const headers = { Authorization: `Bearer ${parsed_user_data?.token}` };
   const [zoom, setZoom] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
 
@@ -83,37 +83,6 @@ const AdministratorPendingRequestCard = ({
       setZoomImage(URL?.createObjectURL(referralSlipBlob));
     }
   }, [referralSlipBlob]);
-
-  const fetchSchedules = async () => {
-    const response = await axios.get(`${ENDPOINT}schedule/all_schedule`, {
-      headers,
-    });
-    return response.data;
-  };
-
-  const {
-    data: queryData,
-    isLoading,
-    isFetching,
-    error,
-  } = useQuery(["schedules"], fetchSchedules, {
-    refetchOnWindowFocus: true,
-  });
-
-  const filterDriver = useCallback(() => {
-    const today = new Date().toISOString().slice(0, 10);
-    let driverOnDuty = [];
-    if (Array.isArray(queryData)) {
-      driverOnDuty = queryData?.filter(
-        (driver) =>
-          driver.status === "stand-by" &&
-          driver.createdAt.slice(0, 10) === today
-      );
-    }
-
-    return driverOnDuty[0];
-  }, [queryData]);
-  const driverOnDuty = filterDriver();
 
   const updateRequest = (data) => {
     return axios.put(
@@ -171,7 +140,7 @@ const AdministratorPendingRequestCard = ({
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: (response) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(["ambulance"]);
     },
   });
@@ -229,7 +198,7 @@ const AdministratorPendingRequestCard = ({
     setToastStatus("Approved");
 
     const ticketBody = {
-      ambulance_personnel: parsed_user_data?.id,
+      ambulance_personnel: driverOnDuty?.scheduled_personnel?._id,
       requestor: user_id,
       request_id: _id,
       personnel_fullname: driverOnDuty.scheduled_personnel.fullName,

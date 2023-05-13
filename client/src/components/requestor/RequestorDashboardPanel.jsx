@@ -52,7 +52,7 @@ const RequestorDashboardPanel = () => {
     title: "",
   });
   const audioRef = useRef(null);
-
+  console.log(tripTicketData);
   const user = useContext(AuthContext);
   const parsed_user_data = JSON.parse(user);
 
