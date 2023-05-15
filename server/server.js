@@ -20,7 +20,7 @@ const server = http.createServer(app);
 //middlewares
 app.use(
   cors({
-    origin: ["http://127.0.0.1:5173", "https://staging-capstone.netlify.app"],
+    origin: "*",
   })
 );
 app.use(bodyParser.urlencoded({ extended: false }));
