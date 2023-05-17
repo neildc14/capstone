@@ -10,6 +10,8 @@ import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ScheduleContext from "../context/ScheduleContext";
+import Authorization from "../utils/auth";
+import FetchLocation from "../utils/send-location";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -22,15 +24,8 @@ const PersonnelHeader = () => {
   const [schedule, setSchedule] = useState(null);
   const { ambulance, updateScheduleData } = useContext(ScheduleContext);
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "application/json",
-    },
-  };
+  const { config, parsed_user_data } = Authorization();
+  FetchLocation();
 
   useEffect(() => {
     const schedule = localStorage.getItem("schedule");
