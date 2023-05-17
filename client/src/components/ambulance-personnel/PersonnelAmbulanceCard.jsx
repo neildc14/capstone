@@ -44,6 +44,7 @@ const PersonnelAmbulanceCard = ({
     },
   };
 
+  console.log(ambulance_data, "AMB");
   const handleMutationFunctionType = (data) => {
     let axiosMethod;
 
@@ -87,9 +88,15 @@ const PersonnelAmbulanceCard = ({
   const handleClickUpdateStatus = (e) => {
     e.preventDefault();
 
+    let assigned;
+    if (ambulance_data?.status !== "available") {
+      assigned = false;
+    }
+
     const body = {
       license_plate: ambulance_data?.license_plate,
       status: selectValue,
+      assigned: assigned,
     };
     mutation.mutate(body);
     setToastStatus("updated");

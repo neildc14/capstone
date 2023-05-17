@@ -151,11 +151,12 @@ const putSchedule = async (req, res) => {
     }
 
     const ambulance_id = ambulance !== undefined ? ambulance : available._id;
+
     const assigned_ambulance = await Ambulance.findByIdAndUpdate(
       ambulance_id,
       {
         assigned,
-        status:amb_status,
+        status: amb_status,
       },
       {
         new: true,
