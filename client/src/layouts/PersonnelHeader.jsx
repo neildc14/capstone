@@ -6,7 +6,6 @@ import ThemeButton from "../components/global/ThemeButton";
 import PersonnelSettings from "../components/ambulance-personnel/PersonnelSettings";
 import PersonnelDesktopSettings from "../components/ambulance-personnel/PersonnelDesktopSettings";
 import axios from "axios";
-import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ScheduleContext from "../context/ScheduleContext";
@@ -24,7 +23,7 @@ const PersonnelHeader = () => {
   const [schedule, setSchedule] = useState(null);
   const { ambulance, updateScheduleData } = useContext(ScheduleContext);
 
-  const { config, parsed_user_data } = Authorization();
+  const { config, parsed_user_data, user } = Authorization();
   FetchLocation();
 
   useEffect(() => {
