@@ -24,6 +24,8 @@ const PersonnelHeader = () => {
   const { ambulance, updateScheduleData } = useContext(ScheduleContext);
 
   const { config, parsed_user_data, user } = Authorization();
+  console.log(schedule?.status);
+
   FetchLocation();
 
   useEffect(() => {
@@ -52,7 +54,13 @@ const PersonnelHeader = () => {
   const scheduleMutation = useMutation({
     mutationFn: updateSchedule,
     onError: (error) => {
-      console.log(error);
+      console.log(error.response.data);
+      if (
+        error.response.data ===
+        "Cannot read properties of undefined (reading '_id')"
+      ) {
+        alert("Sorry. No ambulance available and assigned for you.");
+      }
     },
     onSuccess: (response) => {
       updateData(response.data);
