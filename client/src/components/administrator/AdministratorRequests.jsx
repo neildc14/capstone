@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useContext } from "react";
+import React, { useState, useCallback, useMemo, } from "react";
 import {
   Box,
   Divider,
@@ -19,7 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AdministratorGenericRequestCard from "./AdministratorGenericRequestCard";
 import SearchBar from "../global/SearchBar";
-import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -27,11 +27,7 @@ const AdministratorRequests = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [search, setSearch] = useState([]);
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const headers = {
-    Authorization: `Bearer ${parsed_user_data?.token}`,
-  };
+  const { headers } = Authorization();
 
   const fetchAllRequests = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}request/all`, { headers });

@@ -10,16 +10,16 @@ import {
   Divider,
   ModalFooter,
 } from "@chakra-ui/react";
-import React, { useState, useContext, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import ModalContainer from "../global/ModalContainer";
 import ReferralSlipImage from "../global/ReferralSlipImage";
 import { UilEye } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
 import ReferralSlip from "../../utils/fetch-referral";
 import ZoomImage from "../global/ZoomImage";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -52,23 +52,13 @@ const AdministratorGenericRequestCard = ({
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "application/json",
-    },
-  };
-  const headers = { Authorization: `Bearer ${parsed_user_data?.token}` };
+  const { headers, config } = Authorization();
   const [zoom, setZoom] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
 
   const referralSlipBlob = ReferralSlip({
     referralSlip: request_data?.referral_slip,
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-    },
+    headers,
   });
 
   useEffect(() => {
@@ -163,7 +153,7 @@ const AdministratorGenericRequestCard = ({
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: (response) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(["ambulance"]);
     },
   });
@@ -205,7 +195,7 @@ const AdministratorGenericRequestCard = ({
     const body = {
       pickup_location: request_data?.pickup_location,
       status: "rejected",
-      handled_by: driverOnDuty._id,
+      handled_by: driverOnDuty?._id || request_data?.handled_by,
     };
     requestMutation.mutate(body);
 
@@ -264,7 +254,6 @@ const AdministratorGenericRequestCard = ({
     setZoom(!zoom);
   };
 
-  console.log(driverOnDuty);
   return (
     <>
       <Card

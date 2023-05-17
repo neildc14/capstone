@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState,} from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import osm from "../../utils/osm-provider";
 import "leaflet/dist/leaflet.css";
 import { io } from "socket.io-client";
 import { Button, Box, Flex } from "@chakra-ui/react";
 import L from "leaflet";
-import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 import ambulance_icon from "../../assets/icons/ambulance3.png";
 import patient_icon from "../../assets/icons/patient3.png";
@@ -18,10 +18,8 @@ const AdministratorViewMap = () => {
   const [latitude, setLatitude] = useState(0);
   const [locations, setLocations] = useState([]);
   const [socket, setSocket] = useState(null);
-  //  JSON.parse(localStorage.getItem("locations")) ||
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
+  const { parsed_user_data } = Authorization();
 
   useEffect(() => {
     const newSocket = io(SOCKET_ENDPOINT);
@@ -72,25 +70,6 @@ const AdministratorViewMap = () => {
 
     return () => navigator.geolocation.clearWatch(watchId);
   }, ["admin", socket]);
-
-  // useEffect(() => {
-  //   const cacheLocations = JSON.parse(localStorage.getItem("locations"));
-  //   if (cacheLocations) {
-  //     setLocations(cacheLocations);
-  //   }
-  // }, [locations]);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     localStorage.removeItem("locations");
-  //   }, 60000); // Clear the cache every 1 minute
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem("locations", JSON.stringify(locations));
-  // }, [locations]);
 
   const ambulanceIcon = new L.Icon({
     iconUrl: ambulance_icon,
@@ -146,7 +125,7 @@ const AdministratorViewMap = () => {
               .filter((location) => location.rooms.includes("admin"))
               .map((location, index) => (
                 <Marker
-                  key={index}
+                  key={index + location.name}
                   position={{ lat: location.lat, lng: location.lng }}
                   icon={iconByUserType(location.user_type)}
                 >

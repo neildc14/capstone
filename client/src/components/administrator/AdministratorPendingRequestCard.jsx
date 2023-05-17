@@ -1,8 +1,7 @@
 import React, {
   useState,
   useMemo,
-  useContext,
-  useCallback,
+
   useEffect,
 } from "react";
 import {
@@ -28,9 +27,9 @@ import ModalContainer from "../global/ModalContainer";
 import ReferralSlipImage from "../global/ReferralSlipImage";
 import { UilEye } from "@iconscout/react-unicons";
 import { useTable } from "react-table";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient, } from "@tanstack/react-query";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
+
 import ReferralSlip from "../../utils/fetch-referral";
 import ZoomImage from "../global/ZoomImage";
 import Authorization from "../../utils/auth";
