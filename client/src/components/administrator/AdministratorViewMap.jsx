@@ -1,4 +1,4 @@
-import React, { useEffect, useState,} from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import osm from "../../utils/osm-provider";
 import "leaflet/dist/leaflet.css";
@@ -99,6 +99,10 @@ const AdministratorViewMap = () => {
     return buildingIcon;
   };
 
+  const reload = () => {
+    location.reload();
+  };
+
   return (
     <>
       <Flex gap={4} mb={2}>
@@ -109,6 +113,15 @@ const AdministratorViewMap = () => {
           onClick={() => setLocations([])}
         >
           Clear locations
+        </Button>
+
+        <Button
+          size="md"
+          mb={{ base: 2, md: 4 }}
+          width={{ base: "100%", md: "inherit" }}
+          onClick={reload}
+        >
+          Refresh
         </Button>
       </Flex>
       {latitude !== 0 && longitude !== 0 && (
