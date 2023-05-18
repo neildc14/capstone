@@ -42,7 +42,7 @@ const PersonnelGenericRequestCard = ({
 
   const { parsed_user_data, config, headers } = Authorization();
 
-  const { ambulance_plate, id, updateScheduleData } =
+  const { ambulance, ambulance_plate, id, updateScheduleData } =
     useContext(ScheduleContext);
 
   const dt = DateTime.fromISO(date_time);
