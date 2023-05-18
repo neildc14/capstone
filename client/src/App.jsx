@@ -146,7 +146,7 @@ function App() {
                           />
                           <Route
                             exact
-                            path="map/:id/:user_type/:user"
+                            path="map/:id/:user_type/:user/"
                             element={<ViewMap />}
                           />
                         </Route>
@@ -236,7 +236,7 @@ function App() {
                           />
                           <Route
                             exact
-                            path="map/:id/:user_type/:user"
+                            path="map/:id/:user_type/:user/:ambulance"
                             element={<PersonnelViewMap />}
                           />
                         </Route>

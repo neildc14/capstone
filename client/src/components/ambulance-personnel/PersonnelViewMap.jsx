@@ -19,7 +19,7 @@ const PersonnelViewMap = () => {
     JSON.parse(localStorage.getItem("locations")) || []
   );
   const [socket, setSocket] = useState(null);
-  const { id, user, user_type } = useParams();
+  const { id, user, user_type, ambulance } = useParams();
 
   useEffect(() => {
     const newSocket = io(SOCKET_ENDPOINT);
@@ -54,7 +54,7 @@ const PersonnelViewMap = () => {
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         const locationData = {
-          name: user,
+          name: `Ambulance:${ambulance},  Driver:${user}`,
           user_type: user_type,
           lat: position.coords.latitude,
           lng: position.coords.longitude,
