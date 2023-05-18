@@ -33,6 +33,7 @@ import AuthContext from "../../context/AuthContext";
 import ScheduleContext from "../../context/ScheduleContext";
 import notif from "../../assets/notif.wav";
 import AlertNotif from "../global/AlertNotif";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -46,22 +47,15 @@ const PersonnelDashboardPanel = () => {
 
   const audioRef = useRef(null);
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-
+  const { parsed_user_data, headers } = Authorization();
   const { status, ambulance_plate } = useContext(ScheduleContext);
+  console.log(status, "STATUS");
 
   const navigateToAllRequests = () => {
     navigate("pending_requests");
   };
 
   const fetchDetails = useCallback(async () => {
-    const token = await parsed_user_data.token;
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
     const results = await Promise.allSettled([
       axios.get(`${ENDPOINT}request/handled`, { headers }),
       axios.get(`${ENDPOINT}request/all`, { headers }),
@@ -168,6 +162,11 @@ const PersonnelDashboardPanel = () => {
       total: ambulance_plate ?? "None",
       type: "Today",
     },
+    {
+      title: "Your Status ",
+      total: `${status.charAt(0).toLocaleUpperCase()}${status.slice(1)}` ?? "",
+      type: "Today",
+    },
   ];
 
   function handleOpenNotifModal() {
@@ -208,7 +207,7 @@ const PersonnelDashboardPanel = () => {
               <Grid
                 templateColumns={{
                   base: "repeat(1, 1fr)",
-                  md: "repeat(3, 1fr)",
+                  md: "repeat(4, 1fr)",
                 }}
                 gap={6}
               >
