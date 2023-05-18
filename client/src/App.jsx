@@ -80,7 +80,6 @@ function App() {
     let ambulance = localStorage.getItem("ambulance");
 
     if (userLoggedIn) {
-     
       setUser(userLoggedIn);
       setLoaded(true);
     }
@@ -98,7 +97,7 @@ function App() {
 
   const parsed_user_data = JSON.parse(user);
   const user_type = parsed_user_data?.user_type;
- 
+
   return (
     <QueryClientProvider client={queryClient}>
       <DashboardContext.Provider value={{ toggleDashboard, isOpen, onClose }}>
@@ -238,7 +237,7 @@ function App() {
                           <Route
                             exact
                             path="map/:id/:user_type/:user"
-                            element={<PersonnelViewMap/>}
+                            element={<PersonnelViewMap />}
                           />
                         </Route>
                       </>

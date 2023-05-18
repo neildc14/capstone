@@ -68,7 +68,10 @@ const SignUp = () => {
   const mutation = useMutation({
     mutationFn: signUpUser,
     onError: (error) => {
-      console.log(error);
+      if (error.response.data.includes("This email is already in use.")) {
+        console.log(true);
+        setEmailError({ message: "This email is already in use." });
+      }
 
       let errors = error.response.data.validationErrors;
       const [firstNameErr] = errors.filter(
@@ -81,10 +84,13 @@ const SignUp = () => {
       const [passwordErr] = errors.filter(
         (error) => error.field === "password"
       );
-      console.log(firstNameErr);
+
+      if (emailErr) {
+        setEmailError(emailErr);
+      }
+
       setFirstNameError(firstNameErr);
       setLastNameError(lastNameErr);
-      setEmailError(emailErr);
       setPasswordError(passwordErr);
     },
     onSuccess: (response) => {
@@ -119,6 +125,7 @@ const SignUp = () => {
     mutation.mutate(body);
   };
 
+  console.log(emailError);
   return (
     <Container height="100%" maxW="full" px={0} position="relative">
       <Flex

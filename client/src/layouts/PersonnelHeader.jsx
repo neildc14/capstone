@@ -19,12 +19,10 @@ const PersonnelHeader = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const toast = useToast();
-
   const [schedule, setSchedule] = useState(null);
   const { ambulance, updateScheduleData } = useContext(ScheduleContext);
 
   const { config, parsed_user_data, user } = Authorization();
-  console.log(schedule?.status);
 
   FetchLocation();
 
@@ -54,12 +52,13 @@ const PersonnelHeader = () => {
   const scheduleMutation = useMutation({
     mutationFn: updateSchedule,
     onError: (error) => {
-      console.log(error.response.data);
       if (
         error.response.data ===
         "Cannot read properties of undefined (reading '_id')"
       ) {
-        alert("Sorry. No ambulance available and assigned for you.");
+        alert(
+          "Sorry. No ambulance available and assigned for you. Check all the ambulance"
+        );
       }
     },
     onSuccess: (response) => {
@@ -104,8 +103,8 @@ const PersonnelHeader = () => {
       localStorage.removeItem("schedule");
       localStorage.removeItem("ambulance_id");
       localStorage.removeItem("ambulance");
-      navigate("/");
     }
+    navigate("/");
   };
 
   return (
