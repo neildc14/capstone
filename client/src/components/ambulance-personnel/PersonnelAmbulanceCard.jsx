@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Heading,
   Flex,
@@ -17,7 +17,7 @@ import { UilEdit } from "@iconscout/react-unicons";
 import useSelect from "../../hooks/useSelect";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -35,16 +35,8 @@ const PersonnelAmbulanceCard = ({
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "application/json",
-    },
-  };
+  const { config } = Authorization();
 
-  console.log(ambulance_data, "AMB");
   const handleMutationFunctionType = (data) => {
     let axiosMethod;
 

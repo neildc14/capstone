@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-  useContext,
-  useEffect,
-} from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Box,
   Heading,
@@ -23,18 +17,14 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PersonnelGenericRequestCard from "./PersonnelGenericRequestCard";
 import SearchBar from "../global/SearchBar";
-import AuthContext from "../../context/AuthContext";
+
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const HandledRequest = () => {
   const [search, setSearch] = useState([]);
-  const user = useContext(AuthContext);
-
-  const parsed_user_data = JSON.parse(user);
-  const headers = {
-    Authorization: `Bearer ${parsed_user_data.token}`,
-  };
+  const { headers } = Authorization();
 
   const fetchHandledRequests = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}request/handled`, { headers });

@@ -14,9 +14,8 @@ import {
 import ModalContainer from "../global/ModalContainer";
 import { UilEye, UilCheck, UilUserLocation } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
 import ScheduleContext from "../../context/ScheduleContext";
 import { useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
