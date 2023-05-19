@@ -17,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import SearchBar from "../global/SearchBar";
 import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -26,11 +27,7 @@ const RequestorTripTickets = () => {
   const [ticketDetails, setTicketDetails] = useState({});
   const [search, setSearch] = useState([]);
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const headers = {
-    Authorization: `Bearer ${parsed_user_data?.token}`,
-  };
+  const { headers } = Authorization();
 
   const fetchTripTickets = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}ticket/requestor`, {
@@ -40,13 +37,9 @@ const RequestorTripTickets = () => {
   }, []);
 
   const queryKey = "trip_ticket";
-  const { data,  error } = useQuery(
-    [queryKey],
-    fetchTripTickets,
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
+  const { data, error } = useQuery([queryKey], fetchTripTickets, {
+    refetchOnWindowFocus: false,
+  });
 
   const memoizedData = useMemo(() => {
     return data;

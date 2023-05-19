@@ -1,4 +1,4 @@
-import React, { useState, useContext,} from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   Button,
@@ -14,6 +14,7 @@ import DeleteConfirmationModal from "./RequestorDeleteConfirmationModal";
 import { useLocation } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import ZoomImage from "../global/ZoomImage";
+import Authorization from "../../utils/auth";
 
 const RequestCard = ({
   refetch,
@@ -39,8 +40,7 @@ const RequestCard = ({
   };
 
   const location = useLocation();
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
+  const { parsed_user_data } = Authorization();
 
   const handleZoomInModal = () => {
     setZoom(!zoom);

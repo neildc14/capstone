@@ -15,20 +15,19 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import SearchBar from "../global/SearchBar";
 import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
 const RequestorAllRequests = () => {
   const [search, setSearch] = useState([]);
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const headers = {
-    Authorization: `Bearer ${parsed_user_data?.token}`,
-  };
+  const { headers } = Authorization();
 
   const fetchAllRequests = useCallback(async () => {
-    const response = await axios.get(`${ENDPOINT}request/requestor`, { headers });
+    const response = await axios.get(`${ENDPOINT}request/requestor`, {
+      headers,
+    });
     return response.data;
   }, []);
 
@@ -84,46 +83,44 @@ const RequestorAllRequests = () => {
           mt={4}
           overflowY="scroll"
         >
-          <Skeleton isLoaded={!isLoading} height={{ base: "40vh", md: "100%" }}>
-            {!error &&
-              search?.length <= 0 &&
-              memoizedData?.map((request) => (
-                <RequestCard
-                  key={request._id}
-                  request_data={request}
-                  request_id={request._id}
-                  request_status={request.status}
-                  refetch={refetch}
-                  queryKey={queryKey}
-                />
-              ))}
-            {!error &&
-              search?.length > 0 &&
-              search?.map((request) => (
-                <RequestCard
-                  key={request._id}
-                  request_data={request}
-                  request_id={request._id}
-                  request_status={request.status}
-                  refetch={refetch}
-                  queryKey={queryKey}
-                />
-              ))}
+          {!error &&
+            search?.length <= 0 &&
+            memoizedData?.map((request) => (
+              <RequestCard
+                key={request._id}
+                request_data={request}
+                request_id={request._id}
+                request_status={request.status}
+                refetch={refetch}
+                queryKey={queryKey}
+              />
+            ))}
+          {!error &&
+            search?.length > 0 &&
+            search?.map((request) => (
+              <RequestCard
+                key={request._id}
+                request_data={request}
+                request_id={request._id}
+                request_status={request.status}
+                refetch={refetch}
+                queryKey={queryKey}
+              />
+            ))}
 
-            {error && (
-              <Card bgColor="orange.300">
-                <CardBody
-                  display="inline-flex"
-                  alignItems="center"
-                  gap={2}
-                  color="white"
-                  fontWeight="semibold"
-                >
-                  <UilFileSlash color="white" /> No requests found.
-                </CardBody>
-              </Card>
-            )}
-          </Skeleton>
+          {error && (
+            <Card bgColor="orange.300">
+              <CardBody
+                display="inline-flex"
+                alignItems="center"
+                gap={2}
+                color="white"
+                fontWeight="semibold"
+              >
+                <UilFileSlash color="white" /> No requests found.
+              </CardBody>
+            </Card>
+          )}
         </Box>
       </Box>
     </Box>
