@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,} from "react";
 import {
   Box,
   Button,
@@ -109,24 +109,23 @@ const RequestCard = ({
                 Delete Request
               </Button>
 
-              {location.pathname === "/requestor" &&
-                request_data?.ticket_id &&
-                request_data?.status !== "fulfilled" && (
-                  <Button
-                    as="a"
-                    href={`/requestor/map/${request_data?.ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}
-                    size="sm"
-                    display="inline-flex"
-                    gap={1}
-                    px={6}
-                    bgColor="blue.600"
-                    color="white"
-                    _hover={{ bgColor: "blue.800" }}
-                  >
-                    <UilUserLocation color="white" />
-                    Locate
-                  </Button>
-                )}
+              {location.pathname === "/requestor/" &&
+              request_data?.status === "approved" ? (
+                <Button
+                  as="a"
+                  href={`/requestor/map/${request_data?.ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}
+                  size="sm"
+                  display="inline-flex"
+                  gap={1}
+                  px={6}
+                  bgColor="blue.600"
+                  color="white"
+                  _hover={{ bgColor: "blue.800" }}
+                >
+                  <UilUserLocation color="white" />
+                  Locate
+                </Button>
+              ) : null}
             </Flex>
           </Flex>
         </CardBody>
@@ -160,4 +159,4 @@ const RequestCard = ({
   );
 };
 
-export default React.memo(RequestCard);
+export default RequestCard;
