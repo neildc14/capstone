@@ -158,7 +158,7 @@ const PersonnelDashboardPanel = () => {
     },
     {
       title: "Assigned Ambulance ",
-      total: ambulance_plate ?? "None",
+      total: status !== "off-duty" ? ambulance_plate : "None",
       type: "Today",
     },
     {
