@@ -35,7 +35,7 @@ const ViewMap = () => {
       setLocations((prevLocations) => [
         ...prevLocations,
         {
-          name: `Patient: ${data.name}, Location: ${pickup_location}`,
+          name: data.name,
           user_type: data.user_type,
           lat: data.lat,
           lng: data.lng,
@@ -53,7 +53,7 @@ const ViewMap = () => {
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         const locationData = {
-          name: user,
+          name: `Patient: ${user}, Location: ${pickup_location}`,
           user_type: user_type,
           lat: position.coords.latitude,
           lng: position.coords.longitude,
