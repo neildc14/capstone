@@ -38,6 +38,8 @@ const SignUp = () => {
   const [email, bindEmail] = useInput();
   const [password, bindPassword] = useInput();
   const [value, selectChange] = useSelect("requestor");
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastNameError, setLastNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
@@ -67,11 +69,21 @@ const SignUp = () => {
     mutationFn: signUpUser,
     onError: (error) => {
       let errors = error.response?.data?.validationErrors;
+      const [firstNameErr] = errors.filter(
+        (error) => error.field === "firstname"
+      );
+      const [lastNameErr] = errors.filter(
+        (error) => error.field === "lastname"
+      );
+      const [emailErr] = errors.filter((error) => error.field === "email");
+
       const [passwordErr] = errors.filter(
         (error) => error.field === "password"
       );
-
+      setFirstNameError(firstNameErr);
+      setLastNameError(lastNameErr);
       setPasswordError(passwordErr);
+      setEmailError(emailErr);
     },
     onSuccess: (response) => {
       if (response.data.user_type === "ambulance_personnel") {

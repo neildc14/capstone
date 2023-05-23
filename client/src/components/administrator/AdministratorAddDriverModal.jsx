@@ -39,7 +39,6 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
 
       if (error.response?.data?.validationErrors) {
         let errors = error.response?.data?.validationErrors;
-        const [emailErr] = errors.filter((error) => error.field === "email");
 
         const [passwordErr] = errors.filter(
           (error) => error.field === "password"
@@ -84,7 +83,7 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
         <Box as="form" onSubmit={handleSubmit}>
           <FormControl mb={2}>
             <FormLabel>First Name</FormLabel>
-            <Input type="text" name="firstname" />
+            <Input type="text" name="firstname" required />
           </FormControl>
 
           <FormControl mb={2}>
