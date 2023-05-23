@@ -83,7 +83,6 @@ const RequestCard = ({
               </Heading>
             </Box>
             <Flex
-              width="100%"
               gap="1rem"
               justifyContent={{ base: "space-between", md: "end" }}
               flexDirection={{ base: "column", md: "row" }}
@@ -109,11 +108,12 @@ const RequestCard = ({
                 Delete Request
               </Button>
 
-              {location.pathname === "/requestor/" &&
-              request_data?.status === "approved" ? (
+              {location.pathname === "/requestor/" ||
+              (location.pathname === "/requestor" &&
+                request_data?.status === "approved") ? (
                 <Button
                   as="a"
-                  href={`/requestor/map/${request_data?.ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}
+                  href={`/requestor/map/${request_data?.ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}/${request_data?.pickup_location}`}
                   size="sm"
                   display="inline-flex"
                   gap={1}

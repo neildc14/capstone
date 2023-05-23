@@ -146,7 +146,7 @@ function App() {
                           />
                           <Route
                             exact
-                            path="map/:id/:user_type/:user/"
+                            path="map/:id/:user_type/:user/:pickup_location"
                             element={<ViewMap />}
                           />
                         </Route>

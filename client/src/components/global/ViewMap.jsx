@@ -19,7 +19,7 @@ const ViewMap = () => {
     JSON.parse(localStorage.getItem("locations")) || []
   );
   const [socket, setSocket] = useState(null);
-  const { id, user, user_type } = useParams();
+  const { id, user, user_type, pickup_location } = useParams();
 
   useEffect(() => {
     const newSocket = io(SOCKET_ENDPOINT);
@@ -31,12 +31,11 @@ const ViewMap = () => {
     });
 
     newSocket.on("receive_location", (data) => {
-      console.log({ data });
       console.log(`Received location data: ${data.lat}, ${data.lng}`);
       setLocations((prevLocations) => [
         ...prevLocations,
         {
-          name: data.name,
+          name: `Patient: ${data.name}, Location: ${pickup_location}`,
           user_type: data.user_type,
           lat: data.lat,
           lng: data.lng,
