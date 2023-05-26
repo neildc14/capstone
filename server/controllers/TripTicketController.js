@@ -105,6 +105,7 @@ const postTripTicket = async (req, res) => {
     patient_fullname,
     ambulance,
     destination,
+    transport_schedule,
   } = req.body;
   console.log({ ticket: ambulance });
   try {
@@ -151,6 +152,7 @@ const postTripTicket = async (req, res) => {
       patient_fullname,
       ambulance,
       destination,
+      transport_schedule,
     });
 
     errorMessage = "Failed to create new trip ticket";

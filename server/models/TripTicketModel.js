@@ -22,6 +22,7 @@ const TripTicketSchema = new Schema(
       required: true,
     },
     destination: { type: String, required: true },
+    transport_schedule: { type: String },
   },
   { timestamps: true }
 );

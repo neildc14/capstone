@@ -10,6 +10,9 @@ import {
   useToast,
   Divider,
   ModalFooter,
+  Input,
+  FormControl,
+  FormLabel,
 } from "@chakra-ui/react";
 import ModalContainer from "../global/ModalContainer";
 import { UilEye, UilCheck, UilUserLocation } from "@iconscout/react-unicons";
@@ -64,6 +67,7 @@ const PersonnelGenericRequestCard = ({
   const queryClient = useQueryClient();
   const [zoom, setZoom] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
+  const [transportSchedule, setTransportSchedule] = useState("");
 
   const [socket, setSocket] = useState(null);
   const joinRoom = () => {
@@ -90,6 +94,10 @@ const PersonnelGenericRequestCard = ({
     referralSlip: request_data?.referral_slip,
     headers,
   });
+
+  const handleTransportSchedule = (e) => {
+    setTransportSchedule(e.target.value);
+  };
 
   useEffect(() => {
     if (referralSlipBlob) {
@@ -248,6 +256,7 @@ const PersonnelGenericRequestCard = ({
       patient_fullname: name,
       ambulance: ambulance,
       destination: transfer_location,
+      transport_schedule: transportSchedule,
     };
 
     if (ticket_id === undefined || ticket_id === null) {
@@ -301,6 +310,7 @@ const PersonnelGenericRequestCard = ({
     setZoom(!zoom);
   };
 
+  console.log(transportSchedule, "trans");
   return (
     <>
       <Card
@@ -466,34 +476,50 @@ const PersonnelGenericRequestCard = ({
                 referralSlipBlob={referralSlipBlob}
               />
             </>
-          )}
+          )}{" "}
         </ModalBody>
         <Divider />
+
         {request_data?.status !== "fulfilled" && (
           <ModalFooter>
-            <Flex width="100%" justifyContent="space-between">
-              <Button
-                size="sm"
-                px={{ base: 4, md: 10 }}
-                bgColor="yellow.500"
-                color="white"
-                _hover={{ bgColor: "yellow.600" }}
-                isDisabled={status === "rejected" && true}
-                onClick={rejectRequest}
+            <Flex width="100%" justifyContent="space-between" gap={4}>
+              <FormControl>
+                <FormLabel>Transport Schedule Time</FormLabel>
+                <Input
+                  type="datetime-local"
+                  size="sm"
+                  onChange={handleTransportSchedule}
+                />
+              </FormControl>
+              <Flex
+                width="100%"
+                justifyContent="space-between"
+                flexDirection="column"
+                gap={4}
               >
-                Decline
-              </Button>
-              <Button
-                size="sm"
-                px={{ base: 4, md: 10 }}
-                bgColor="green.500"
-                color="white"
-                _hover={{ bgColor: "green.600" }}
-                isDisabled={status === "approved" && true}
-                onClick={approveRequest}
-              >
-                Approve
-              </Button>
+                <Button
+                  size="sm"
+                  px={{ base: 4, md: 10 }}
+                  bgColor="yellow.500"
+                  color="white"
+                  _hover={{ bgColor: "yellow.600" }}
+                  isDisabled={status === "rejected" && true}
+                  onClick={rejectRequest}
+                >
+                  Decline
+                </Button>
+                <Button
+                  size="sm"
+                  px={{ base: 4, md: 10 }}
+                  bgColor="green.500"
+                  color="white"
+                  _hover={{ bgColor: "green.600" }}
+                  isDisabled={status === "approved" && true}
+                  onClick={approveRequest}
+                >
+                  Approve
+                </Button>
+              </Flex>
             </Flex>
           </ModalFooter>
         )}

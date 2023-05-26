@@ -41,6 +41,19 @@ const PersonnelTripTicketCard = ({
     documentTitle: "emp-data",
   });
 
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
+
+  const formattedDateTime = new Intl.DateTimeFormat("en-US", options).format(
+    new Date(ticketDetails?.transport_schedule || null)
+  );
+
   return (
     <>
       <Card
@@ -109,6 +122,21 @@ const PersonnelTripTicketCard = ({
                 </Heading>
                 <Text as="span" fontWeight="normal">
                   {trip_ticket?._id?.slice(0, 7)}
+                </Text>
+              </VStack>
+              <VStack align="left" spacing={1} pb={3}>
+                <Heading
+                  as="h5"
+                  display="block"
+                  fontSize="md"
+                  fontWeight="semibold"
+                >
+                  Patient Transport Scheduled Time:
+                </Heading>
+                <Text as="span" fontWeight="normal">
+                  {formattedDateTime !== "January 1, 1970 at 8:00 AM"
+                    ? formattedDateTime
+                    : "No Scheduled transport yet."}
                 </Text>
               </VStack>
               <VStack align="left" spacing={1} pb={2}>
