@@ -160,7 +160,10 @@ const PersonnelViewMap = () => {
                   position={{ lat: location.lat, lng: location.lng }}
                   icon={iconByUserType(location.user_type)}
                 >
-                  <Popup>{location.name}</Popup>
+                  <Popup>
+                    {location.name}, Position:[lat: {location.lat}, lng:
+                    {location.lng}]
+                  </Popup>
                 </Marker>
               ))}
           </MapContainer>
