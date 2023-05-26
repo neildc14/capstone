@@ -80,6 +80,24 @@ const getSchedulePerDriver = async (req, res) => {
 const postSchedule = async (req, res) => {
   const { scheduled_personnel, status, ambulance } = req.body;
 
+  const now = new Date();
+  const startOfDay = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    0,
+    0,
+    0
+  );
+  const endOfDay = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    23,
+    59,
+    59
+  );
+
   try {
     let errorMessage = "Scheduled personnel is not defined.";
     isEmpty(scheduled_personnel, errorMessage);
@@ -91,6 +109,36 @@ const postSchedule = async (req, res) => {
 
     const personnel = await User.findOne({ _id: scheduled_personnel }).exec();
     validateInstanceMethod(personnel, errorMessage);
+
+    //find
+    const find_schedule = await Schedule.find({
+      scheduled_personnel,
+    }).exec();
+
+    const today_driver_schedule = find_schedule.filter(
+      (schedule) =>
+        new Date(schedule.createdAt) >= startOfDay &&
+        new Date(schedule.createdAt) <= endOfDay
+    );
+
+    if (today_driver_schedule[0]?.ambulance) {
+      const assigned_ambulance = await Ambulance.findByIdAndUpdate(
+        today_driver_schedule[0]?.ambulance,
+        {
+          assigned: false,
+          status: "available",
+        },
+        {
+          new: true,
+        }
+      );
+
+      const deleted_schedule = await Schedule.findOneAndDelete({
+        _id: today_driver_schedule[0]._id,
+      }).exec();
+    }
+
+    //end
 
     const new_schedule = await Schedule.create({
       scheduled_personnel,
