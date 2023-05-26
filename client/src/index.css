@@ -65,3 +65,9 @@ body {
 .page-link:hover {
   text-decoration: none;
 }
+
+@media print {
+  #printBtn {
+    display: none;
+  }
+}

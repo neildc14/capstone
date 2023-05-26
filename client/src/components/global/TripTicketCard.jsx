@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Button,
   Card,
@@ -8,10 +8,13 @@ import {
   Text,
   ModalBody,
   VStack,
+  Box,
   useMediaQuery,
 } from "@chakra-ui/react";
 import ModalContainer from "./ModalContainer";
 import { UilEye } from "@iconscout/react-unicons";
+import { useReactToPrint } from "react-to-print";
+import { UilPrint } from "@iconscout/react-unicons";
 
 const PersonnelTripTicketCard = ({
   showTripTicketDetails,
@@ -31,6 +34,12 @@ const PersonnelTripTicketCard = ({
     }
     setOpen(!isOpen);
   };
+
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "emp-data",
+  });
 
   return (
     <>
@@ -59,6 +68,7 @@ const PersonnelTripTicketCard = ({
                 {trip_ticket?.patient_fullname}
               </Text>
             </Heading>
+
             <Button
               size="sm"
               display="inline-flex"
@@ -81,81 +91,97 @@ const PersonnelTripTicketCard = ({
       </Card>
 
       {!isLargerThan768 && (
-        <ModalContainer
-          header="Requestor ID"
-          header_detail="pqoerjflsdakfn"
-          isOpen={isOpen}
-          onClose={handleOpenModal}
-        >
-          <ModalBody>
-            <VStack align="left" spacing={1} pb={2}>
-              <Heading
-                as="h5"
-                display="block"
-                fontSize="md"
-                fontWeight="semibold"
+        <Box>
+          <ModalContainer
+            header="Trip Ticket Details"
+            isOpen={isOpen}
+            onClose={handleOpenModal}
+          >
+            <ModalBody ref={componentRef}>
+              <VStack align="left" spacing={1} pb={2}>
+                <Heading
+                  as="h5"
+                  display="block"
+                  fontSize="md"
+                  fontWeight="semibold"
+                >
+                  Trip Ticket ID:
+                </Heading>
+                <Text as="span" fontWeight="normal">
+                  {trip_ticket?._id?.slice(0, 7)}
+                </Text>
+              </VStack>
+              <VStack align="left" spacing={1} pb={2}>
+                <Heading
+                  as="h5"
+                  display="block"
+                  fontSize="md"
+                  fontWeight="semibold"
+                >
+                  Driver:
+                </Heading>
+                <Text as="span" fontWeight="normal" textTransform="capitalize">
+                  {trip_ticket?.ambulance_personnel?.fullName}
+                </Text>
+              </VStack>
+              <VStack align="left" spacing={1} pb={2}>
+                <Heading
+                  as="h5"
+                  display="block"
+                  fontSize="md"
+                  fontWeight="semibold"
+                >
+                  Ambulance Plate:
+                </Heading>
+                <Text as="span" fontWeight="normal">
+                  {trip_ticket?.ambulance?.license_plate}
+                </Text>
+              </VStack>
+              <VStack align="left" spacing={1} pb={2}>
+                <Heading
+                  as="h5"
+                  display="block"
+                  fontSize="md"
+                  fontWeight="semibold"
+                >
+                  Destination:
+                </Heading>
+                <Text as="span" fontWeight="normal" textTransform="capitalize">
+                  {trip_ticket?.destination}
+                </Text>
+              </VStack>
+              <VStack align="left" spacing={1} pb={2}>
+                <Heading
+                  as="h5"
+                  display="block"
+                  fontSize="md"
+                  fontWeight="semibold"
+                  textTransform="capitalize"
+                >
+                  Patient Name:
+                </Heading>
+                <Text as="span" fontWeight="normal" textTransform="capitalize">
+                  {trip_ticket?.patient_fullname}
+                </Text>
+              </VStack>{" "}
+              <Button
+                id="printBtn"
+                size="sm"
+                display="inline-flex"
+                gap={1}
+                width={{ base: "100%" }}
+                mt={4}
+                px={6}
+                borderRadius="md"
+                bgColor="gray.300"
+                onClick={handlePrint}
               >
-                Trip Ticket ID:
-              </Heading>
-              <Text as="span" fontWeight="normal">
-                {trip_ticket?._id}
-              </Text>
-            </VStack>
-            <VStack align="left" spacing={1} pb={2}>
-              <Heading
-                as="h5"
-                display="block"
-                fontSize="md"
-                fontWeight="semibold"
-              >
-                Driver:
-              </Heading>
-              <Text as="span" fontWeight="normal" textTransform="capitalize">
-                {trip_ticket?.ambulance_personnel?.fullName}
-              </Text>
-            </VStack>
-            <VStack align="left" spacing={1} pb={2}>
-              <Heading
-                as="h5"
-                display="block"
-                fontSize="md"
-                fontWeight="semibold"
-              >
-                Ambulance Plate:
-              </Heading>
-              <Text as="span" fontWeight="normal">
-                {trip_ticket?.ambulance?.license_plate}
-              </Text>
-            </VStack>
-            <VStack align="left" spacing={1} pb={2}>
-              <Heading
-                as="h5"
-                display="block"
-                fontSize="md"
-                fontWeight="semibold"
-              >
-                Destination:
-              </Heading>
-              <Text as="span" fontWeight="normal" textTransform="capitalize">
-                {trip_ticket?.destination}
-              </Text>
-            </VStack>
-            <VStack align="left" spacing={1} pb={2}>
-              <Heading
-                as="h5"
-                display="block"
-                fontSize="md"
-                fontWeight="semibold"
-                textTransform="capitalize"
-              >
-                Patient Name:
-              </Heading>
-              <Text as="span" fontWeight="normal" textTransform="capitalize">
-                {trip_ticket?.patient_fullname}
-              </Text>
-            </VStack>
-          </ModalBody>
-        </ModalContainer>
+                <UilPrint />
+                Print
+              </Button>{" "}
+            </ModalBody>
+          </ModalContainer>
+        </Box>
       )}
     </>
   );

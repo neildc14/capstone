@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useContext } from "react";
+import React, { useState, useCallback, useMemo, useRef } from "react";
 import {
   Box,
   Divider,
@@ -16,8 +16,8 @@ import TripTicketDetails from "../global/TripTicketDetails";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import SearchBar from "../global/SearchBar";
-import AuthContext from "../../context/AuthContext";
 import Authorization from "../../utils/auth";
+import { useReactToPrint } from "react-to-print";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -48,6 +48,12 @@ const RequestorTripTickets = () => {
   const showTripTicketDetails = () => {
     setShow(true);
   };
+
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "emp-data",
+  });
 
   return (
     <>
@@ -133,6 +139,7 @@ const RequestorTripTickets = () => {
                   py={4}
                   bgColor="gray.50"
                   borderLeft="1px solid #D9D9D9"
+                  ref={componentRef}
                 >
                   <Box pb={4}>
                     <Flex justifyContent="space-between" alignItems="center">
@@ -145,13 +152,18 @@ const RequestorTripTickets = () => {
                         fontWeight="semibold"
                         color="gray.700"
                       >
-                        <UilFileInfoAlt color="#FF7A00" /> Trip Details
+                        <UilFileInfoAlt color="#FF7A00" /> Trip Ticket Details
                       </Heading>
                     </Flex>
                     <Divider />
                   </Box>
 
-                  {show && <TripTicketDetails ticketDetails={ticketDetails} />}
+                  {show && (
+                    <TripTicketDetails
+                      ticketDetails={ticketDetails}
+                      handlePrint={handlePrint}
+                    />
+                  )}
                 </Box>
               )}
             </GridItem>

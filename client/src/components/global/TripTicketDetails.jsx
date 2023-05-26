@@ -1,7 +1,15 @@
-import React from "react";
-import { Card, CardBody, Heading, Text, VStack } from "@chakra-ui/react";
+import React, { useRef } from "react";
+import {
+  Card,
+  CardBody,
+  Heading,
+  Text,
+  VStack,
+  Button,
+} from "@chakra-ui/react";
+import { UilPrint } from "@iconscout/react-unicons";
 
-const PersonnelTripTicketDetails = ({ ticketDetails }) => {
+const PersonnelTripTicketDetails = ({ ticketDetails, handlePrint }) => {
   return (
     <>
       <Card background="gray.100">
@@ -16,7 +24,7 @@ const PersonnelTripTicketDetails = ({ ticketDetails }) => {
               Trip Ticket ID:
             </Heading>
             <Text as="span" fontWeight="normal">
-              {ticketDetails._id}
+              {ticketDetails._id?.slice(0, 7)}
             </Text>
           </VStack>
           <VStack align="left" spacing={1} pb={3}>
@@ -68,14 +76,27 @@ const PersonnelTripTicketDetails = ({ ticketDetails }) => {
             >
               Patient Name:
             </Heading>
-            <Text
-              as="span"
-              fontWeight="normal"
-              textTransform="capitalize"
-            >{ticketDetails?.patient_fullname}</Text>
+            <Text as="span" fontWeight="normal" textTransform="capitalize">
+              {ticketDetails?.patient_fullname}
+            </Text>
           </VStack>
         </CardBody>
-      </Card>
+      </Card>{" "}
+      <Button
+        size="sm"
+        id="printBtn"
+        display="inline-flex"
+        gap={1}
+        width={{ base: "100%" }}
+        mt={4}
+        px={6}
+        borderRadius="md"
+        bgColor="gray.300"
+        onClick={handlePrint}
+      >
+        <UilPrint />
+        Print
+      </Button>{" "}
     </>
   );
 };
