@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/neildc14/capstone#readme",
   "dependencies": {
-    "concurrently": "^7.6.0",
-    "react-to-print": "^2.14.12"
+    "concurrently": "^7.6.0"
   }
 }

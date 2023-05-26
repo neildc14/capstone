@@ -24,6 +24,7 @@ export default defineConfig({
             "react-table",
             "recharts",
             "socket.io-client",
+            "react-to-print",
           ],
         },
       },

@@ -30,6 +30,7 @@
     "react-paginate": "^8.1.5",
     "react-router-dom": "^6.8.1",
     "react-table": "^7.8.0",
+    "react-to-print": "^2.14.12",
     "recharts": "^2.5.0",
     "socket.io-client": "^4.6.1"
   },
