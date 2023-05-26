@@ -68,9 +68,7 @@ const SignUp = () => {
   const mutation = useMutation({
     mutationFn: signUpUser,
     onError: (error) => {
-      console.log(error);
-
-      let errors = error.response.data.validationErrors;
+      let errors = error.response?.data?.validationErrors;
       const [firstNameErr] = errors.filter(
         (error) => error.field === "firstname"
       );
@@ -78,14 +76,14 @@ const SignUp = () => {
         (error) => error.field === "lastname"
       );
       const [emailErr] = errors.filter((error) => error.field === "email");
+
       const [passwordErr] = errors.filter(
         (error) => error.field === "password"
       );
-      console.log(firstNameErr);
       setFirstNameError(firstNameErr);
       setLastNameError(lastNameErr);
-      setEmailError(emailErr);
       setPasswordError(passwordErr);
+      setEmailError(emailErr);
     },
     onSuccess: (response) => {
       if (response.data.user_type === "ambulance_personnel") {
@@ -188,7 +186,7 @@ const SignUp = () => {
                 {...bindEmail}
               />
               {emailError && (
-                <FormErrorMessage>{emailError.message}</FormErrorMessage>
+                <FormErrorMessage>{`${emailError.message} or email has already used.`}</FormErrorMessage>
               )}
             </FormControl>
 

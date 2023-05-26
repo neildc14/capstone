@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Heading,
   Flex,
@@ -17,7 +17,7 @@ import { UilEdit } from "@iconscout/react-unicons";
 import useSelect from "../../hooks/useSelect";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -35,14 +35,7 @@ const PersonnelAmbulanceCard = ({
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "application/json",
-    },
-  };
+  const { config } = Authorization();
 
   const handleMutationFunctionType = (data) => {
     let axiosMethod;
@@ -87,9 +80,15 @@ const PersonnelAmbulanceCard = ({
   const handleClickUpdateStatus = (e) => {
     e.preventDefault();
 
+    let assigned;
+    if (ambulance_data?.status !== "available") {
+      assigned = false;
+    }
+
     const body = {
       license_plate: ambulance_data?.license_plate,
       status: selectValue,
+      assigned: assigned,
     };
     mutation.mutate(body);
     setToastStatus("updated");

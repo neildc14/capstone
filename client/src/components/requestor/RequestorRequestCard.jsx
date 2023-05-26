@@ -14,6 +14,7 @@ import DeleteConfirmationModal from "./RequestorDeleteConfirmationModal";
 import { useLocation } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import ZoomImage from "../global/ZoomImage";
+import Authorization from "../../utils/auth";
 
 const RequestCard = ({
   refetch,
@@ -39,8 +40,7 @@ const RequestCard = ({
   };
 
   const location = useLocation();
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
+  const { parsed_user_data } = Authorization();
 
   const handleZoomInModal = () => {
     setZoom(!zoom);
@@ -83,7 +83,6 @@ const RequestCard = ({
               </Heading>
             </Box>
             <Flex
-              width="100%"
               gap="1rem"
               justifyContent={{ base: "space-between", md: "end" }}
               flexDirection={{ base: "column", md: "row" }}
@@ -109,24 +108,24 @@ const RequestCard = ({
                 Delete Request
               </Button>
 
-              {location.pathname === "/requestor" &&
-                request_data?.ticket_id &&
-                request_data?.status !== "fulfilled" && (
-                  <Button
-                    as="a"
-                    href={`/requestor/map/${request_data?.ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}
-                    size="sm"
-                    display="inline-flex"
-                    gap={1}
-                    px={6}
-                    bgColor="blue.600"
-                    color="white"
-                    _hover={{ bgColor: "blue.800" }}
-                  >
-                    <UilUserLocation color="white" />
-                    Locate
-                  </Button>
-                )}
+              {location.pathname === "/requestor/" ||
+              (location.pathname === "/requestor" &&
+                request_data?.status === "approved") ? (
+                <Button
+                  as="a"
+                  href={`/requestor/map/${request_data?.ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}/${request_data?.pickup_location}`}
+                  size="sm"
+                  display="inline-flex"
+                  gap={1}
+                  px={6}
+                  bgColor="blue.600"
+                  color="white"
+                  _hover={{ bgColor: "blue.800" }}
+                >
+                  <UilUserLocation color="white" />
+                  Locate
+                </Button>
+              ) : null}
             </Flex>
           </Flex>
         </CardBody>
@@ -160,4 +159,4 @@ const RequestCard = ({
   );
 };
 
-export default React.memo(RequestCard);
+export default RequestCard;

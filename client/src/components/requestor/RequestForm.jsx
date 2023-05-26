@@ -20,6 +20,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import useInput from "../../hooks/useInput";
 import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -31,7 +32,6 @@ const RequestForm = () => {
   const [patientCondition, bindPatientCondition] = useInput();
   const [referralSlip, setReferralSlip] = useState("");
   const [confirmation, setConfirrmation] = useState("");
-  const user = useContext(AuthContext);
 
   const queryClient = useQueryClient();
   const toast = useToast();
@@ -45,14 +45,7 @@ const RequestForm = () => {
     setReferralSlip(e.target.files[0]);
   };
 
-  const parsed_user_data = JSON.parse(user);
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "multipart/form-data",
-    },
-  };
+  const { config } = Authorization();
 
   const makeRequest = (new_request) => {
     return axios.post(`${ENDPOINT}request/requestor`, new_request, config);

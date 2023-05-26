@@ -18,6 +18,7 @@ import axios from "axios";
 import PersonnelAmbulanceCard from "./PersonnelAmbulanceCard";
 import SearchBar from "../global/SearchBar";
 import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -25,12 +26,7 @@ const PersonnelAmbulance = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [search, setSearch] = useState([]);
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-
-  const headers = {
-    Authorization: `Bearer ${parsed_user_data?.token}`,
-  };
+  const { headers } = Authorization();
 
   const fetchAllAmbulance = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}ambulance/all`, { headers });

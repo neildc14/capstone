@@ -27,6 +27,7 @@ import AdministratorDashboardPanel from "./components/administrator/Administrato
 import PersonnelAllRequests2 from "./components/ambulance-personnel/PersonnelAllRequests2";
 import PersonnelAmbulance from "./components/ambulance-personnel/PersonnelAmbulance2";
 import AdministratorViewMap from "./components/administrator/AdministratorViewMap";
+import PersonnelViewMap from "./components/ambulance-personnel/PersonnelViewMap";
 import PageNotFound from "./components/global/PageNotFound";
 
 const ViewMap = lazy(() => import("./components/global/ViewMap"));
@@ -79,7 +80,6 @@ function App() {
     let ambulance = localStorage.getItem("ambulance");
 
     if (userLoggedIn) {
-      console.log(userLoggedIn);
       setUser(userLoggedIn);
       setLoaded(true);
     }
@@ -97,7 +97,7 @@ function App() {
 
   const parsed_user_data = JSON.parse(user);
   const user_type = parsed_user_data?.user_type;
-  console.log(user_type, loaded, user);
+
   return (
     <QueryClientProvider client={queryClient}>
       <DashboardContext.Provider value={{ toggleDashboard, isOpen, onClose }}>
@@ -146,7 +146,7 @@ function App() {
                           />
                           <Route
                             exact
-                            path="map/:id/:user_type/:user"
+                            path="map/:id/:user_type/:user/:pickup_location"
                             element={<ViewMap />}
                           />
                         </Route>
@@ -236,8 +236,8 @@ function App() {
                           />
                           <Route
                             exact
-                            path="map/:id/:user_type/:user"
-                            element={<ViewMap />}
+                            path="map/:id/:user_type/:user/:ambulance"
+                            element={<PersonnelViewMap />}
                           />
                         </Route>
                       </>

@@ -32,6 +32,7 @@ import axios from "axios";
 import PersonnelGenericRequestCard from "./PersonnelGenericRequestCard";
 import SearchBar from "../global/SearchBar";
 import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -39,16 +40,9 @@ const PersonnelRequests2 = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [search, setSearch] = useState([]);
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-
+  const { headers } = Authorization();
+  
   const fetchPendingRequests = useCallback(async () => {
-    const token = await parsed_user_data.token;
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
     const response = await axios.get(`${ENDPOINT}request/all`, { headers });
     return response.data;
   }, []);

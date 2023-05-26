@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useContext } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Box,
   Divider,
@@ -16,7 +16,7 @@ import TripTicketDetails from "../global/TripTicketDetails";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import SearchBar from "../global/SearchBar";
-import AuthContext from "../../context/AuthContext";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -26,11 +26,7 @@ const AdministratorTripTickets = () => {
   const [ticketDetails, setTicketDetails] = useState({});
   const [search, setSearch] = useState([]);
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const headers = {
-    Authorization: `Bearer ${parsed_user_data?.token}`,
-  };
+  const { headers } = Authorization();
 
   const fetchTripTickets = useCallback(async () => {
     const response = await axios.get(`${ENDPOINT}ticket/all`, { headers });

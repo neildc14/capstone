@@ -11,6 +11,7 @@ import {
   InputGroup,
   InputRightElement,
   useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,7 +22,9 @@ const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
   const [show, setShow] = useState(false);
   const showHidePassword = () => setShow(!show);
-  const [validationErrors, setValidationErrors] = useState({});
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
   const toast = useToast();
   const queryClient = useQueryClient();
 
@@ -33,7 +36,20 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
     mutationFn: makeDriver,
     onError: (error) => {
       console.log(error);
-      setValidationErrors(error.response?.data);
+
+      if (error.response?.data?.validationErrors) {
+        let errors = error.response?.data?.validationErrors;
+
+        const [passwordErr] = errors.filter(
+          (error) => error.field === "password"
+        );
+
+        setPasswordError(passwordErr);
+      }
+
+      if (error.response?.data.includes("This email is already in use.")) {
+        setEmailError({ message: "This email is already in use." });
+      }
     },
     onSuccess: () => {
       toast({
@@ -44,6 +60,7 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
         isClosable: true,
       });
       queryClient.invalidateQueries(["admin_all_informations"]);
+      handleOpenModal();
     },
   });
 
@@ -53,7 +70,6 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
     mutation.mutate(data);
-    handleOpenModal();
   };
 
   return (
@@ -67,18 +83,21 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
         <Box as="form" onSubmit={handleSubmit}>
           <FormControl mb={2}>
             <FormLabel>First Name</FormLabel>
-            <Input type="text" name="firstname" />
+            <Input type="text" name="firstname" required />
           </FormControl>
 
           <FormControl mb={2}>
             <FormLabel>Last Name</FormLabel>
             <Input type="text" name="lastname" required />
           </FormControl>
-          <FormControl mb={2}>
+          <FormControl mb={2} isInvalid={emailError}>
             <FormLabel>Email</FormLabel>
             <Input type="email" name="email" required />
+            {emailError && (
+              <FormErrorMessage>{emailError.message}</FormErrorMessage>
+            )}
           </FormControl>
-          <FormControl my={2}>
+          <FormControl my={2} isInvalid={passwordError}>
             <FormLabel>Password</FormLabel>
             <InputGroup size="md">
               <Input
@@ -99,6 +118,9 @@ const AdministratorAddDriverModal = ({ handleOpenModal, isOpen }) => {
                 </Button>
               </InputRightElement>
             </InputGroup>
+            {passwordError && (
+              <FormErrorMessage>{passwordError.message}</FormErrorMessage>
+            )}
           </FormControl>
 
           <Input type="hidden" name="user_type" value="ambulance_personnel" />

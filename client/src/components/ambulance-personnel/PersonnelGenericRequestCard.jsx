@@ -14,15 +14,15 @@ import {
 import ModalContainer from "../global/ModalContainer";
 import { UilEye, UilCheck, UilUserLocation } from "@iconscout/react-unicons";
 import { DateTime } from "luxon";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
 import ScheduleContext from "../../context/ScheduleContext";
 import { useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import ZoomImage from "../global/ZoomImage";
 import ReferralSlip from "../../utils/fetch-referral";
 import ReferralSlipImage from "../global/ReferralSlipImage";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
@@ -39,20 +39,10 @@ const PersonnelGenericRequestCard = ({
   const [mutationFunctionType, setMutationFunctionType] = useState("");
   const pathlocation = useLocation();
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "application/json",
-    },
-  };
-  const headers = {
-    Authorization: `Bearer ${parsed_user_data?.token}`,
-    responseType: "arraybuffer",
-  };
+  const { parsed_user_data, config, headers } = Authorization();
 
-  const { ambulance, id, updateScheduleData } = useContext(ScheduleContext);
+  const { ambulance, ambulance_plate, id, updateScheduleData } =
+    useContext(ScheduleContext);
 
   const dt = DateTime.fromISO(date_time);
   const formattedDate = dt.toFormat("MM/dd/yy hh:mm:ss");
@@ -400,7 +390,7 @@ const PersonnelGenericRequestCard = ({
                 status !== "fulfilled" && (
                   <Button
                     as="a"
-                    href={`/ambulance_personnel/map/${ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}`}
+                    href={`/ambulance_personnel/map/${ticket_id}/${parsed_user_data.user_type}/${parsed_user_data.fullName}/${ambulance_plate}`}
                     size="sm"
                     display="inline-flex"
                     gap={1}

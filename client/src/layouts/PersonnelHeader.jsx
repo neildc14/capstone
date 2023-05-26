@@ -6,10 +6,11 @@ import ThemeButton from "../components/global/ThemeButton";
 import PersonnelSettings from "../components/ambulance-personnel/PersonnelSettings";
 import PersonnelDesktopSettings from "../components/ambulance-personnel/PersonnelDesktopSettings";
 import axios from "axios";
-import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ScheduleContext from "../context/ScheduleContext";
+import Authorization from "../utils/auth";
+import FetchLocation from "../utils/send-location";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 
@@ -18,19 +19,12 @@ const PersonnelHeader = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const toast = useToast();
-
   const [schedule, setSchedule] = useState(null);
   const { ambulance, updateScheduleData } = useContext(ScheduleContext);
 
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
+  const { config, parsed_user_data, user } = Authorization();
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${parsed_user_data?.token}`,
-      "Content-Type": "application/json",
-    },
-  };
+  FetchLocation();
 
   useEffect(() => {
     const schedule = localStorage.getItem("schedule");
@@ -58,7 +52,14 @@ const PersonnelHeader = () => {
   const scheduleMutation = useMutation({
     mutationFn: updateSchedule,
     onError: (error) => {
-      console.log(error);
+      if (
+        error.response.data ===
+        "Cannot read properties of undefined (reading '_id')"
+      ) {
+        alert(
+          "Sorry. No ambulance available and assigned for you. Check all the ambulance"
+        );
+      }
     },
     onSuccess: (response) => {
       updateData(response.data);
@@ -82,6 +83,7 @@ const PersonnelHeader = () => {
       });
       queryClient.invalidateQueries(["ambulance"]);
       queryClient.invalidateQueries(["admin_all_informations"]);
+      queryClient.invalidateQueries(["personnel_all_informations"]);
     },
   });
 
@@ -102,8 +104,8 @@ const PersonnelHeader = () => {
       localStorage.removeItem("schedule");
       localStorage.removeItem("ambulance_id");
       localStorage.removeItem("ambulance");
-      navigate("/");
     }
+    navigate("/");
   };
 
   return (

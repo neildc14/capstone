@@ -2,7 +2,6 @@ import React, {
   useEffect,
   useState,
   useCallback,
-  useContext,
   Suspense,
   useRef,
   useMemo,
@@ -31,10 +30,10 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PanelCard from "../global/PanelCard";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../context/AuthContext";
 import AlertNotif from "../global/AlertNotif";
 import notif from "../../assets/notif.wav";
 import { io } from "socket.io-client";
+import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
 const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
@@ -52,16 +51,10 @@ const RequestorDashboardPanel = () => {
     title: "",
   });
   const audioRef = useRef(null);
-  console.log(tripTicketData);
-  const user = useContext(AuthContext);
-  const parsed_user_data = JSON.parse(user);
+
+  const { headers, token } = Authorization();
 
   const fetchRecentRequestAndTicket = useCallback(async () => {
-    const token = await parsed_user_data.token;
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
     const results = await Promise.allSettled([
       axios.get(`${ENDPOINT}request/requestor`, {
         headers,
@@ -70,7 +63,7 @@ const RequestorDashboardPanel = () => {
     ]);
 
     return results;
-  }, [parsed_user_data?.token]);
+  }, [token]);
 
   const queryKey = "ambulance_request_with_ticket";
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -78,8 +71,6 @@ const RequestorDashboardPanel = () => {
     fetchRecentRequestAndTicket,
     {
       refetchOnWindowFocus: true,
-      refetchInterval: 10000,
-      refetchIntervalInBackground: true,
     }
   );
 

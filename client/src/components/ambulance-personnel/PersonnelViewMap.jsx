@@ -12,25 +12,26 @@ import patient_icon from "../../assets/icons/patient3.png";
 
 const SOCKET_ENDPOINT = import.meta.env.VITE_REACT_APP_SOCKET_ENDPOINT;
 
-const ViewMap = () => {
+const PersonnelViewMap = () => {
   const [longitude, setLongitude] = useState(0);
   const [latitude, setLatitude] = useState(0);
   const [locations, setLocations] = useState(
     JSON.parse(localStorage.getItem("locations")) || []
   );
   const [socket, setSocket] = useState(null);
-  const { id, user, user_type, pickup_location } = useParams();
+  const { id, user, user_type, ambulance } = useParams();
 
   useEffect(() => {
     const newSocket = io(SOCKET_ENDPOINT);
     newSocket.on("connect", () => {
       console.log(`Connected with socket id ${newSocket.id}`);
       newSocket.emit("join_rooms", {
-        rooms: [id, "admin"],
+        rooms: [id],
       });
     });
 
     newSocket.on("receive_location", (data) => {
+      console.log({ data });
       console.log(`Received location data: ${data.lat}, ${data.lng}`);
       setLocations((prevLocations) => [
         ...prevLocations,
@@ -53,11 +54,11 @@ const ViewMap = () => {
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         const locationData = {
-          name: `Patient: ${user}, Location: ${pickup_location}`,
+          name: `Ambulance:${ambulance},  Driver:${user}`,
           user_type: user_type,
           lat: position.coords.latitude,
           lng: position.coords.longitude,
-          rooms: [id, "admin"],
+          rooms: [id],
         };
         socket.emit("send_location", locationData);
 
@@ -94,7 +95,7 @@ const ViewMap = () => {
   const navigate = useNavigate();
   const exitMap = () => {
     socket.emit("leave_rooms", id);
-    socket.emit("leave_rooms", "admin");
+    socket.emit("leave_rooms");
     localStorage.removeItem("locations");
     navigate(`/${user_type}`);
   };
@@ -168,4 +169,4 @@ const ViewMap = () => {
     </>
   );
 };
-export default ViewMap;
+export default PersonnelViewMap;
