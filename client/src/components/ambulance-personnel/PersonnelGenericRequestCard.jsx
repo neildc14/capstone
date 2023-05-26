@@ -372,19 +372,23 @@ const PersonnelGenericRequestCard = ({
               >
                 <UilEye color="white" /> View
               </Button>
-              <Button
-                size="sm"
-                display="inline-flex"
-                gap={1}
-                width={{ base: "100%", md: "inherit" }}
-                px={6}
-                bgColor="teal.600"
-                color="white"
-                _hover={{ bgColor: "teal.800" }}
-                onClick={fulfilledRequest}
-              >
-                <UilCheck color="white" /> Fulfill
-              </Button>
+              {pathlocation.pathname !==
+                "/ambulance_personnel/pending_requests" &&
+                pathlocation.pathname !== "/ambulance_personnel" && (
+                  <Button
+                    size="sm"
+                    display="inline-flex"
+                    gap={1}
+                    width={{ base: "100%", md: "inherit" }}
+                    px={6}
+                    bgColor="teal.600"
+                    color="white"
+                    _hover={{ bgColor: "teal.800" }}
+                    onClick={fulfilledRequest}
+                  >
+                    <UilCheck color="white" /> Fulfill
+                  </Button>
+                )}
               {pathlocation.pathname === "/ambulance_personnel" &&
                 ticket_id &&
                 status !== "fulfilled" && (
