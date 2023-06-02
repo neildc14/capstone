@@ -38,8 +38,8 @@ const PersonnelViewMap = () => {
         {
           name: data.name,
           user_type: data.user_type,
-          lat: data.lat,
-          lng: data.lng,
+          lat: 15.7262343,
+          lng: 120.9258602,
           rooms: data.rooms,
         },
       ]);
