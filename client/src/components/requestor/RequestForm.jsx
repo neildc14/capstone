@@ -13,13 +13,12 @@ import {
   useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import React, { useState, useContext } from "react";
+import React, { useState,  } from "react";
 import { UilFileInfoAlt } from "@iconscout/react-unicons";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import useInput from "../../hooks/useInput";
-import AuthContext from "../../context/AuthContext";
 import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;

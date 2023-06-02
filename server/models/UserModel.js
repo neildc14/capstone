@@ -7,8 +7,6 @@ const UserSchema = new Schema(
   {
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
-    contact: { type: String },
-    address: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     user_type: {
@@ -27,8 +25,6 @@ UserSchema.virtual("fullName").get(function () {
 UserSchema.statics.signup = async function (
   firstname,
   lastname,
-  contact,
-  address,
   email,
   password,
   user_type
@@ -45,8 +41,6 @@ UserSchema.statics.signup = async function (
   const user = await this.create({
     firstname,
     lastname,
-    contact,
-    address,
     email,
     user_type,
     password: hash,

@@ -1,11 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-/*
-  @request_id: requuired 
-
-*/
-
 const RequestSchema = new Schema(
   {
     user_id: { type: String, required: true },

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useContext } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Box,
   Divider,
@@ -17,7 +17,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PersonnelAmbulanceCard from "./PersonnelAmbulanceCard";
 import SearchBar from "../global/SearchBar";
-import AuthContext from "../../context/AuthContext";
 import Authorization from "../../utils/auth";
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_ENDPOINT;
