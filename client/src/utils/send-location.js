@@ -33,8 +33,8 @@ const FetchLocation = () => {
           const locationData = {
             name: `Ambulance: ${ambulance_plate},  Driver:${parsed_user_data?.fullName}`,
             user_type: "ambulance_personnel",
-            lat: 15.7262343,
-            lng: 120.9258602,
+            lat: 15.7771609,
+            lng: 120.9662739,
             rooms: ["admin"],
           };
           socket.emit("send_location", locationData);
