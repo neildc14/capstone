@@ -56,8 +56,8 @@ const PersonnelViewMap = () => {
         const locationData = {
           name: `Ambulance:${ambulance},  Driver:${user}`,
           user_type: user_type,
-          lat: 15.7262343,
-          lng: 120.9258602,
+          lat: 15.7771609,
+          lng: 120.9662739,
           rooms: [id],
         };
         socket.emit("send_location", locationData);
