@@ -72,24 +72,6 @@ const ViewMap = () => {
     return () => navigator.geolocation.clearWatch(watchId);
   }, [id, socket]);
 
-  // useEffect(() => {
-  //   const cacheLocations = JSON.parse(localStorage.getItem("locations"));
-  //   if (cacheLocations) {
-  //     setLocations(cacheLocations);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     localStorage.removeItem("locations");
-  //   }, 60000); // Clear the cache every 1 minute
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem("locations", JSON.stringify(locations));
-  // }, [locations]);
 
   const navigate = useNavigate();
   const exitMap = () => {
